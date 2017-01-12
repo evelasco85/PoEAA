@@ -6,6 +6,12 @@ namespace Framework.Data_Manipulation
     public delegate void SuccessfulInvocationDelegate(IDomainObject domainObject);
     public delegate void FailedInvocationDelegate(IDomainObject domainObject, Exception exception);
 
+    public interface IBaseMapper_Instantiator<TEntity>
+     where TEntity : IDomainObject
+    {
+        TEntity CreateEntity();
+    }
+
     public interface IBaseMapper
     {
         void Update(ref object entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
@@ -13,10 +19,9 @@ namespace Framework.Data_Manipulation
         void Delete(ref object entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
     }
 
-    public interface IBaseMapper<TEntity> : IBaseMapper
+    public interface IBaseMapper<TEntity> : IBaseMapper, IBaseMapper_Instantiator<TEntity>
         where TEntity: IDomainObject
     {
-        TEntity CreateEntity();
         void Update(ref TEntity entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
         void Insert(ref TEntity entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
         void Delete(ref TEntity entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
@@ -27,7 +32,10 @@ namespace Framework.Data_Manipulation
     {
         public TEntity CreateEntity()
         {
-            TEntity entity = (TEntity)Activator.CreateInstance(typeof(TEntity), new object[] {this});
+            TEntity entity = (TEntity)Activator.CreateInstance(typeof(TEntity));
+
+            entity.SystemId = Guid.NewGuid();
+            entity.Mapper = this;
 
             return entity;
         }

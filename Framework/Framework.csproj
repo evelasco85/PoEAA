@@ -39,9 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data Manipulation\BaseCriteria.cs" />
+    <Compile Include="Data Manipulation\BaseQueryObject.cs" />
     <Compile Include="Data Manipulation\BaseMapper.cs" />
-    <Compile Include="QueryObject.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="DataSynchronizationManager.cs" />
     <Compile Include="Domain\DomainObject.cs" />

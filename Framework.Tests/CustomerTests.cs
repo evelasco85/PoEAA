@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Framework.Tests.CriteriaList;
 using Framework.Tests.Entities;
 using Framework.Tests.Mappers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Framework.Tests.Queries;
 
 namespace Framework.Tests
 {
@@ -22,7 +22,7 @@ namespace Framework.Tests
         [TestMethod]
         public void TestGetCustomerByIdCriteria()
         {
-            GetCustomerByIdCriteria criteria = new GetCustomerByIdCriteria
+            GetCustomerByIdQuery criteria = new GetCustomerByIdQuery
             {
                 SearchInput = 2
             };

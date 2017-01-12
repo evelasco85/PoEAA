@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Framework.Data_Manipulation;
 using Framework.Tests.Entities;
 
-namespace Framework.Tests.CriteriaList
+namespace Framework.Tests.Queries
 {
-    class GetCustomerByIdCriteria  : BaseCriteria<Customer, int, Tuple<string, string>>
+    class GetCustomerByIdQuery  : BaseQueryObject<Customer, int, Tuple<string, string>>
     {
         public override Tuple<string, string> PerformSearchOperation(int searchInput)
         {
@@ -18,9 +18,9 @@ namespace Framework.Tests.CriteriaList
             return new Tuple<string, string>(searchInput.ToString(), customerList[searchInput]);
         }
 
-        public override IList<Customer> ConstructOutput(Tuple<string, string> searchResult, IBaseMapper_Instantiator<Customer> mapper)
+        public override IList<Customer> ConstructOutput(Tuple<string, string> searchResult)
         {
-            Customer customer = mapper.CreateEntity();
+            Customer customer = new Customer();
 
             customer.Number = searchResult.Item1;
             customer.Name = searchResult.Item2;

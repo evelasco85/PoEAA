@@ -50,7 +50,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="CriteriaList\CustomerCriteria.cs" />
+    <Compile Include="Queries\GetCustomerByIdQuery.cs" />
     <Compile Include="Entities\Customer.cs" />
     <Compile Include="Mappers\CustomerMapper.cs" />
     <Compile Include="CustomerTests.cs" />

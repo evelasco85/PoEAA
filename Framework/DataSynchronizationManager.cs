@@ -5,14 +5,11 @@ using Framework.Domain;
 
 namespace Framework
 {
-
     public interface IDataSynchronizationManager
     {
         void RegisterEntity<TEntity>(IBaseMapper<TEntity> mapper)
             where TEntity : IDomainObject;
         IRepository<TEntity> GetRepository<TEntity>()
-            where TEntity : IDomainObject;
-        IQueryObject<TEntity> GetQueryObject<TEntity>()
             where TEntity : IDomainObject;
         IBaseMapper<TEntity> GetMapper<TEntity>()
             where TEntity : IDomainObject;
@@ -49,7 +46,6 @@ namespace Framework
                 Mapper = mapper,
                 LoadedEntities = new List<TEntity>(),
                 Repository = new Repository<TEntity>(this),
-                QueryObject = new QueryObject<TEntity>(this)
             };
 
             string key = GetServiceContainerKey<TEntity>();
@@ -88,12 +84,6 @@ namespace Framework
             where TEntity : IDomainObject
         {
             return GetServiceContainer<TEntity>().Repository;
-        }
-
-        public IQueryObject<TEntity> GetQueryObject<TEntity>()
-            where TEntity : IDomainObject
-        {
-            return GetServiceContainer<TEntity>().QueryObject;
         }
 
         public IBaseMapper<TEntity> GetMapper<TEntity>()

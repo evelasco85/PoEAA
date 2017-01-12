@@ -9,7 +9,7 @@ namespace Framework
     public interface IRepository<TEntity>
         where TEntity : IDomainObject
     {
-        IList<TEntity> Matching(IBaseCriteria<TEntity> criteria);
+        IList<TEntity> Matching(IBaseQueryObject<TEntity> query);
     }
 
     public class Repository<TEntity> : IRepository<TEntity>
@@ -21,13 +21,14 @@ namespace Framework
         {
             _manager = manager;
         }
-
-        IList<TEntity> LocalLookup(IBaseCriteria<TEntity> criteria)
+        
+        //Given the 'query' instance, retrieve all in-memory records resulted from previously invoked 'query' if there are any
+        IList<TEntity> GetInMemoryEntities(IBaseQueryObject<TEntity> query)
         {
             throw new NotImplementedException();
         }
 
-        void ConsolidateResults(IList<TEntity> newResult)
+        void ConsolidateResultsInMemory(IList<TEntity> newResult)
         {
             if ((newResult == null) || (!newResult.Any()))
                 return;
@@ -35,18 +36,18 @@ namespace Framework
             ((List<TEntity>)_manager.GetLoadedEntities<TEntity>()).AddRange(newResult);
         }
 
-        public IList<TEntity> Matching(IBaseCriteria<TEntity> criteria)
+        public IList<TEntity> Matching(IBaseQueryObject<TEntity> query)
         {
-            IList<TEntity> localResult = LocalLookup(criteria);
+            IList<TEntity> inMemoryEntities = GetInMemoryEntities(query);
 
-            if ((localResult == null) || (!localResult.Any()))
+            if ((inMemoryEntities == null) || (!inMemoryEntities.Any()))
             {
-                localResult = _manager.GetQueryObject<TEntity>().Execute(criteria);
+                inMemoryEntities = query.Execute();
 
-                ConsolidateResults(localResult);
+                ConsolidateResultsInMemory(inMemoryEntities);
             }
 
-            return localResult;
+            return inMemoryEntities;
         }
     }
 }

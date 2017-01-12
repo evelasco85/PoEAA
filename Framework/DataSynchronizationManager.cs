@@ -8,6 +8,8 @@ namespace Framework
 
     public interface IDataSynchronizationManager
     {
+        void RegisterEntity<TEntity>(IBaseMapper<TEntity> mapper, IBaseQueryObject<TEntity> queryObject)
+            where TEntity : IDomainObject;
         IRepository<TEntity> GetRepository<TEntity>()
             where TEntity : IDomainObject;
         IBaseQueryObject<TEntity> GetQueryObject<TEntity>()

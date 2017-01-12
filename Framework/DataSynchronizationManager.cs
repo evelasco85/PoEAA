@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Management.Instrumentation;
 using System.Text;
 using System.Threading.Tasks;
 using Framework.Data_Manipulation;
@@ -26,7 +27,7 @@ namespace Framework
     {
         static IDataSynchronizationManager s_instance = new DataSynchronizationManager();
 
-        IList<object> _serviceContainerList = new List<object>();
+        IDictionary<string, object> _serviceContainerDictionary = new Dictionary<string, object>();
 
         private DataSynchronizationManager()
         {
@@ -35,6 +36,12 @@ namespace Framework
         public static IDataSynchronizationManager GetInstance()
         {
             return s_instance;
+        }
+
+        string GetServiceContainerKey<TEntity>()
+            where TEntity : IDomainObject
+        {
+            return typeof(TEntity).Name;
         }
 
         public void RegisterEntity<TEntity>(IBaseRepository<TEntity> repository, IBaseMapper<TEntity> mapper, IBaseQueryObject<TEntity> queryObject)
@@ -48,13 +55,38 @@ namespace Framework
                 Repository = repository
             };
 
-            _serviceContainerList.Add(serviceContainer);
+            string key = GetServiceContainerKey<TEntity>();
+
+            if (ServiceContainerExists(key))
+                _serviceContainerDictionary.Remove(key);
+
+            _serviceContainerDictionary.Add(key, serviceContainer);
+        }
+
+        bool ServiceContainerExists<TEntity>()
+            where TEntity : IDomainObject
+        {
+            return _serviceContainerDictionary.ContainsKey(GetServiceContainerKey<TEntity>());
+        }
+
+        bool ServiceContainerExists(string key)
+        {
+            return _serviceContainerDictionary.ContainsKey(key);
         }
 
         IEntityServiceContainer<TEntity> GetServiceContainer<TEntity>()
             where TEntity : IDomainObject
         {
-            return null;
+            IEntityServiceContainer<TEntity> serviceContainer = (IEntityServiceContainer<TEntity>)_serviceContainerDictionary[GetServiceContainerKey<TEntity>()];
+
+            if (serviceContainer == null)
+            {
+                string key = GetServiceContainerKey<TEntity>(); 
+                
+                throw new InstanceNotFoundException(string.Format("Service container with key '{0}' not found.", key));
+            }
+
+            return serviceContainer;
         }
 
         public IBaseRepository<TEntity> GetRepository<TEntity>()

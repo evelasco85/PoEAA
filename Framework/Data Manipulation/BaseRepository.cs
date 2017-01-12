@@ -16,10 +16,6 @@ namespace Framework.Data_Manipulation
         private readonly IBaseMapper<TEntity> _mapper = DataSynchronizationManager.GetInstance().GetMapper<TEntity>();
         private IList<TEntity> _loadedEntities = DataSynchronizationManager.GetInstance().GetLoadedEntities<TEntity>();
 
-        public BaseRepository()
-        {
-        }
-
         public abstract IList<TEntity> Matching(IBaseCriteria<TEntity> criteria);
 
         public IList<TEntity> GetEntities()

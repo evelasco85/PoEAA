@@ -3,20 +3,23 @@ using Framework.Domain;
 
 namespace Framework.Data_Manipulation
 {
+    public delegate void SuccessfulInvocationDelegate(IDomainObject domainObject);
+    public delegate void FailedInvocationDelegate(IDomainObject domainObject, Exception exception);
+
     public interface IBaseMapper
     {
-        void Update(object entity);
-        void Insert(object entity);
-        void Delete(object entity);
+        void Update(ref object entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
+        void Insert(ref object entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
+        void Delete(ref object entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
     }
 
     public interface IBaseMapper<TEntity> : IBaseMapper
         where TEntity: IDomainObject
     {
         TEntity CreateEntity();
-        void Update(TEntity entity);
-        void Insert(TEntity entity);
-        void Delete(TEntity entity);
+        void Update(ref TEntity entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
+        void Insert(ref TEntity entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
+        void Delete(ref TEntity entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
     }
 
     public abstract class BaseMapper<TEntity> : IBaseMapper<TEntity>
@@ -29,29 +32,29 @@ namespace Framework.Data_Manipulation
             return entity;
         }
 
-        public abstract void Update(TEntity entity);
-        public abstract void Insert(TEntity entity);
-        public abstract void Delete(TEntity entity);
+        public abstract void Update(ref TEntity entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
+        public abstract void Insert(ref TEntity entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
+        public abstract void Delete(ref TEntity entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
 
-        public void Update(object entity)
+        public void Update(ref object entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation)
         {
             TEntity instance = (TEntity) entity;
 
-            Update(instance);
+            Update(ref instance, successfulInvocation, failedInvocation);
         }
 
-        public void Insert(object entity)
+        public void Insert(ref object entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation)
         {
             TEntity instance = (TEntity)entity;
 
-            Insert(instance);
+            Insert(ref instance, successfulInvocation, failedInvocation);
         }
 
-        public void Delete(object entity)
+        public void Delete(ref object entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation)
         {
             TEntity instance = (TEntity)entity;
 
-            Delete(instance);
+            Delete(ref instance, successfulInvocation, failedInvocation);
         }
     }
 }

@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Framework.Data_Manipulation;
-using Framework.Tests.Entities;
 
-namespace Framework.Tests.Mappers
+namespace Framework.Tests.CustomerServices
 {
     class CustomerMapper : BaseMapper<Customer>
     {

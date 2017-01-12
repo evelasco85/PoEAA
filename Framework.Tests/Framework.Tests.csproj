@@ -50,10 +50,10 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Queries\GetCustomerByIdQuery.cs" />
-    <Compile Include="Entities\Customer.cs" />
-    <Compile Include="Mappers\CustomerMapper.cs" />
-    <Compile Include="CustomerTests.cs" />
+    <Compile Include="CustomerServices\GetCustomerByIdQuery.cs" />
+    <Compile Include="CustomerServices\Customer.cs" />
+    <Compile Include="CustomerServices\CustomerMapper.cs" />
+    <Compile Include="QueryObjectTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

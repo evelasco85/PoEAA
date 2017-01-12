@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Framework.Data_Manipulation;
-using Framework.Tests.Entities;
 
-namespace Framework.Tests.Queries
+namespace Framework.Tests.CustomerServices
 {
     class GetCustomerByIdQuery  : BaseQueryObject<Customer, int, Tuple<string, string>>
     {

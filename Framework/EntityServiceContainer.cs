@@ -10,7 +10,7 @@ namespace Framework
         IList<TEntity> LoadedEntities { get; set; }
         IBaseMapper<TEntity> Mapper { get; set; }
         IBaseQueryObject<TEntity> QueryObject { get; set; }
-        IBaseRepository<TEntity> Repository { get; set; }
+        IRepository<TEntity> Repository { get; set; }
     }
 
     public class EntityServiceContainer<TEntity> : IEntityServiceContainer<TEntity>
@@ -19,6 +19,6 @@ namespace Framework
         public IList<TEntity> LoadedEntities { get; set; }
         public IBaseMapper<TEntity> Mapper { get; set; }
         public IBaseQueryObject<TEntity> QueryObject { get; set; }
-        public IBaseRepository<TEntity> Repository { get; set; }
+        public IRepository<TEntity> Repository { get; set; }
     }
 }

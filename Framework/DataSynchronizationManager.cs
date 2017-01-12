@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Management.Instrumentation;
-using System.Text;
-using System.Threading.Tasks;
 using Framework.Data_Manipulation;
 using Framework.Domain;
 
@@ -12,9 +8,8 @@ namespace Framework
 
     public interface IDataSynchronizationManager
     {
-        IBaseRepository<TEntity> GetRepository<TEntity>()
+        IRepository<TEntity> GetRepository<TEntity>()
             where TEntity : IDomainObject;
-
         IBaseQueryObject<TEntity> GetQueryObject<TEntity>()
             where TEntity : IDomainObject;
         IBaseMapper<TEntity> GetMapper<TEntity>()
@@ -44,15 +39,15 @@ namespace Framework
             return typeof(TEntity).Name;
         }
 
-        public void RegisterEntity<TEntity>(IBaseRepository<TEntity> repository, IBaseMapper<TEntity> mapper, IBaseQueryObject<TEntity> queryObject)
+        public void RegisterEntity<TEntity>(IBaseMapper<TEntity> mapper, IBaseQueryObject<TEntity> queryObject)
             where TEntity : IDomainObject
         {
             IEntityServiceContainer<TEntity> serviceContainer = new EntityServiceContainer<TEntity>
             {
                 LoadedEntities = new List<TEntity>(),
+                Repository = new Repository<TEntity>(),
                 Mapper = mapper,
-                QueryObject = queryObject,
-                Repository = repository
+                QueryObject = queryObject
             };
 
             string key = GetServiceContainerKey<TEntity>();
@@ -89,7 +84,7 @@ namespace Framework
             return serviceContainer;
         }
 
-        public IBaseRepository<TEntity> GetRepository<TEntity>()
+        public IRepository<TEntity> GetRepository<TEntity>()
             where TEntity : IDomainObject
         {
             return GetServiceContainer<TEntity>().Repository;

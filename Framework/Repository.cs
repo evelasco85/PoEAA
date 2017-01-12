@@ -1,26 +1,26 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using Framework.Data_Manipulation;
 using Framework.Domain;
 
-namespace Framework.Data_Manipulation
+namespace Framework
 {
-    public interface IBaseRepository<TEntity>
+    public interface IRepository<TEntity>
         where TEntity : IDomainObject
     {
+        IList<TEntity> Matching(IBaseCriteria<TEntity> criteria);
     }
 
-    public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity>
+    public class Repository<TEntity> : IRepository<TEntity>
         where TEntity : IDomainObject
     {
         private readonly IBaseQueryObject<TEntity> _queryObject = DataSynchronizationManager.GetInstance().GetQueryObject<TEntity>();
         private readonly IBaseMapper<TEntity> _mapper = DataSynchronizationManager.GetInstance().GetMapper<TEntity>();
         private IList<TEntity> _loadedEntities = DataSynchronizationManager.GetInstance().GetLoadedEntities<TEntity>();
 
-        public abstract IList<TEntity> Matching(IBaseCriteria<TEntity> criteria);
-
-        public IList<TEntity> GetEntities()
+        public IList<TEntity> Matching(IBaseCriteria<TEntity> criteria)
         {
-            return _loadedEntities;
+            throw new NotImplementedException();
         }
     }
 }

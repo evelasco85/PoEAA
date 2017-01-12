@@ -5,6 +5,7 @@
         
     }
 
+    //Builder pattern
     public abstract class BaseCriteria<TEntity> : IBaseCriteria<TEntity>
     {
     }

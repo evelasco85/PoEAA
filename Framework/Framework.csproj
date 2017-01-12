@@ -42,7 +42,7 @@
     <Compile Include="Data Manipulation\BaseCriteria.cs" />
     <Compile Include="Data Manipulation\BaseMapper.cs" />
     <Compile Include="Data Manipulation\BaseQueryObject.cs" />
-    <Compile Include="Data Manipulation\BaseRepository.cs" />
+    <Compile Include="Repository.cs" />
     <Compile Include="DataSynchronizationManager.cs" />
     <Compile Include="Domain\DomainObject.cs" />
     <Compile Include="EntityServiceContainer.cs" />

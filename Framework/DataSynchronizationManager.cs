@@ -38,7 +38,7 @@ namespace Framework
         string GetServiceContainerKey<TEntity>()
             where TEntity : IDomainObject
         {
-            return typeof(TEntity).Name;
+            return typeof(TEntity).FullName;
         }
 
         public void RegisterEntity<TEntity>(IBaseMapper<TEntity> mapper)
@@ -48,8 +48,8 @@ namespace Framework
             {
                 Mapper = mapper,
                 LoadedEntities = new List<TEntity>(),
-                Repository = new Repository<TEntity>(),
-                QueryObject = new QueryObject<TEntity>()
+                Repository = new Repository<TEntity>(this),
+                QueryObject = new QueryObject<TEntity>(this)
             };
 
             string key = GetServiceContainerKey<TEntity>();
@@ -74,14 +74,12 @@ namespace Framework
         IEntityServiceContainer<TEntity> GetServiceContainer<TEntity>()
             where TEntity : IDomainObject
         {
-            IEntityServiceContainer<TEntity> serviceContainer = (IEntityServiceContainer<TEntity>)_serviceContainerDictionary[GetServiceContainerKey<TEntity>()];
+            string key = GetServiceContainerKey<TEntity>();
 
-            if (serviceContainer == null)
-            {
-                string key = GetServiceContainerKey<TEntity>(); 
-                
+            if (!ServiceContainerExists(key))
                 throw new InstanceNotFoundException(string.Format("Service container with key '{0}' not found.", key));
-            }
+
+            IEntityServiceContainer<TEntity> serviceContainer = (IEntityServiceContainer<TEntity>)_serviceContainerDictionary[key];
 
             return serviceContainer;
         }

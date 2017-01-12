@@ -10,51 +10,47 @@ namespace Framework.Data_Manipulation
         IList<TEntity> Execute();
     }
 
-    public interface IBaseCriteria<TEntity, TInput, TOperationResult> : IBaseCriteria<TEntity>
+    public interface IBaseCriteria<TEntity, TSearchInput, TSearchResult> : IBaseCriteria<TEntity>
         where TEntity : IDomainObject
     {
-        TInput Input { get; set; }
-        TOperationResult PerformOperation(TInput Input);
-        IList<TEntity> ConstructOutput(TOperationResult result, IBaseMapper_Instantiator<TEntity> mapper);
+        TSearchInput SearchInput { get; set; }
+        TSearchResult PerformSearchOperation(TSearchInput searchInput);
+        IList<TEntity> ConstructOutput(TSearchResult searchResult, IBaseMapper_Instantiator<TEntity> mapper);
         void ChainOperationResultToDownstreamCriteria(
-            IBaseCriteria<TEntity, TOperationResult, IList<TEntity>> downstreamCriteria);
+            IBaseCriteria<TEntity, TSearchResult, IList<TEntity>> downstreamCriteria);
     }
 
-    //Builder pattern
-    //Data source, table, and stored procedure agnostic
-    //1 criterion = 1 lookup operation
-    //conditions
-    public abstract class BaseCriteria<TEntity, TInput, TOperationResult> :
-        IBaseCriteria<TEntity, TInput, TOperationResult>
+    public abstract class BaseCriteria<TEntity, TSearchInput, TSearchResult> :
+        IBaseCriteria<TEntity, TSearchInput, TSearchResult>
         where TEntity : IDomainObject
     {
-        private IBaseCriteria<TEntity, TOperationResult, IList<TEntity>> _downstreamCriteria;
+        private IBaseCriteria<TEntity, TSearchResult, IList<TEntity>> _downstreamCriteria;
 
-        public TInput Input { get; set; }
+        public TSearchInput SearchInput { get; set; }
 
-        public abstract TOperationResult PerformOperation(TInput input);
+        public abstract TSearchResult PerformSearchOperation(TSearchInput searchInput);
 
-        public virtual IList<TEntity> ConstructOutput(TOperationResult result, IBaseMapper_Instantiator<TEntity> mapper)
+        public virtual IList<TEntity> ConstructOutput(TSearchResult searchResult, IBaseMapper_Instantiator<TEntity> mapper)
         {
             //Implementation deferred to ultimate processor
             throw new NotImplementedException();
         }
 
         public void ChainOperationResultToDownstreamCriteria(
-            IBaseCriteria<TEntity, TOperationResult, IList<TEntity>> downstreamCriteria)
+            IBaseCriteria<TEntity, TSearchResult, IList<TEntity>> downstreamCriteria)
         {
             _downstreamCriteria = downstreamCriteria;
         }
 
         public IList<TEntity> Execute()
         {
-            TOperationResult operationResult = PerformOperation(Input);
+            TSearchResult searchResult = PerformSearchOperation(SearchInput);
 
             IList<TEntity> ultimateResult;
 
             if (_downstreamCriteria != null)
             {
-                _downstreamCriteria.Input = operationResult;
+                _downstreamCriteria.SearchInput = searchResult;
 
                 ultimateResult = _downstreamCriteria.Execute();
             }
@@ -62,7 +58,7 @@ namespace Framework.Data_Manipulation
             {
                 IBaseMapper<TEntity> mapper = DataSynchronizationManager.GetInstance().GetMapper<TEntity>();
 
-                ultimateResult = ConstructOutput(operationResult, mapper);
+                ultimateResult = ConstructOutput(searchResult, mapper);
             }
 
             return ultimateResult;

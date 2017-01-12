@@ -14,6 +14,13 @@ namespace Framework
     public class QueryObject<TEntity> : IQueryObject<TEntity>
         where TEntity : IDomainObject
     {
+        private readonly IDataSynchronizationManager _manager;
+
+        public QueryObject(IDataSynchronizationManager manager)
+        {
+            _manager = manager;
+        }
+
         public IList<TEntity> Execute(IBaseCriteria<TEntity> criteria)
         {
             if(criteria == null)

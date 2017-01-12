@@ -29,11 +29,11 @@ namespace Framework.Domain
         //IMemento fields;
         //Identity fields;
 
-        public DomainObject(IBaseMapper mapper, Guid systemId)
-        {
-            _mapper = mapper;
-            _systemId = systemId;
-        }
+        //public DomainObject(IBaseMapper mapper, Guid systemId)
+        //{
+        //    _mapper = mapper;
+        //    _systemId = systemId;
+        //}
 
         /*
          * void RegisterFields<TField>(Expression<Func<bool, TField>> field)

@@ -15,8 +15,12 @@ namespace Framework
     public class Repository<TEntity> : IRepository<TEntity>
         where TEntity : IDomainObject
     {
-        private readonly IQueryObject<TEntity> _queryObject = DataSynchronizationManager.GetInstance().GetQueryObject<TEntity>();
-        private IList<TEntity> _loadedEntities = DataSynchronizationManager.GetInstance().GetLoadedEntities<TEntity>();
+        private readonly IDataSynchronizationManager _manager;
+
+        public Repository(IDataSynchronizationManager manager)
+        {
+            _manager = manager;
+        }
 
         IList<TEntity> LocalLookup(IBaseCriteria<TEntity> criteria)
         {
@@ -28,7 +32,7 @@ namespace Framework
             if ((newResult == null) || (!newResult.Any()))
                 return;
          
-            ((List<TEntity>)_loadedEntities).AddRange(newResult);
+            ((List<TEntity>)_manager.GetLoadedEntities<TEntity>()).AddRange(newResult);
         }
 
         public IList<TEntity> Matching(IBaseCriteria<TEntity> criteria)
@@ -37,7 +41,7 @@ namespace Framework
 
             if ((localResult == null) || (!localResult.Any()))
             {
-                localResult = _queryObject.Execute(criteria);
+                localResult = _manager.GetQueryObject<TEntity>().Execute(criteria);
 
                 ConsolidateResults(localResult);
             }

@@ -23,7 +23,7 @@ namespace Framework.Tests.CustomerServices
             FailedInvocationDelegate failedInvocation)
         {
             _internalData[entity.Number] = entity;
-            _sequenceDescription.Add(string.Format("{0}={1}", entity.Number, "Updated"));
+            _sequenceDescription.Add(string.Format("{0}={1}={2}", entity.Number, "Updated", entity.GetType().FullName));
             successfulInvocation(entity);
 
             return true;
@@ -33,7 +33,7 @@ namespace Framework.Tests.CustomerServices
             FailedInvocationDelegate failedInvocation)
         {
             _internalData.Remove(entity.Number);
-            _sequenceDescription.Add(string.Format("{0}={1}", entity.Number, "Deleted"));
+            _sequenceDescription.Add(string.Format("{0}={1}={2}", entity.Number, "Deleted", entity.GetType().FullName));
             successfulInvocation(entity);
 
             return true;
@@ -43,7 +43,7 @@ namespace Framework.Tests.CustomerServices
             FailedInvocationDelegate failedInvocation)
         {
             _internalData.Add(entity.Number, entity);
-            _sequenceDescription.Add(string.Format("{0}={1}", entity.Number, "Inserted"));
+            _sequenceDescription.Add(string.Format("{0}={1}={2}", entity.Number, "Inserted", entity.GetType().Name));
             successfulInvocation(entity);
 
             return true;

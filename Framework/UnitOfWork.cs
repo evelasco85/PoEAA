@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Framework.Data_Manipulation;
 using Framework.Domain;
 
@@ -13,9 +11,10 @@ namespace Framework
         void ObserveEntityForChanges<TEntity>(TEntity entity)
             where TEntity : IDomainObject;
         void Commit(SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
+        int GetUncommitedCount();
     }
 
-    class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         delegate bool OperationDelegate(ref IDomainObject entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
 
@@ -43,6 +42,14 @@ namespace Framework
             ApplyOperation(DomainObjectState.Manually_Created, _observedDomainObjects, successfulInvocation, failedInvocation);
             ApplyOperation(DomainObjectState.Dirty, _observedDomainObjects, successfulInvocation, failedInvocation);
             ApplyOperation(DomainObjectState.For_DataSource_Deletion, _observedDomainObjects, successfulInvocation, failedInvocation);
+        }
+
+        public int GetUncommitedCount()
+        {
+            return _observedDomainObjects
+                .Values
+                .Where(objects => objects.GetCurrentState() != DomainObjectState.Clean)
+                .Count();
         }
 
         void ApplyOperation(

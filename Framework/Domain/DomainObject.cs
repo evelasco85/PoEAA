@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Framework.Data_Manipulation;
 
 namespace Framework.Domain
@@ -40,8 +41,7 @@ namespace Framework.Domain
 
         public DomainObject()
         {
-            _state = DomainObjectState.Manually_Created;
-            _ticksUpdated = DateTime.Now.Ticks;
+            SetState(DomainObjectState.Manually_Created);
         }
 
         public DomainObjectState GetCurrentState()
@@ -51,10 +51,16 @@ namespace Framework.Domain
 
         void SetState(DomainObjectState state)
         {
+            //Stopwatch stopwatch = Stopwatch.StartNew();
+
             _state = state;
-            _ticksUpdated = DateTime.Now.Ticks;
+            //_ticksUpdated = DateTime.UtcNow.AddTicks(stopwatch.Elapsed.Ticks).Ticks;
+            _ticksUpdated = DateTime.UtcNow.Ticks;
+
+            //stopwatch.Stop();
         }
 
+        //If invoked, 'Update' operation will be applied from the associated mapper
         public void MarkAsDirty()
         {
             SetState(DomainObjectState.Dirty);

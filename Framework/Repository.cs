@@ -33,7 +33,15 @@ namespace Framework
         {
             if ((newResult == null) || (!newResult.Any()))
                 return;
-         
+
+            IBaseMapper<TEntity> mapper = _manager.GetMapper<TEntity>();
+
+            ((List<TEntity>)newResult).ForEach(entity =>
+            {
+                entity.Mapper = mapper;
+                entity.SystemId = Guid.NewGuid();
+            });
+
             ((List<TEntity>)_manager.GetLoadedEntities<TEntity>()).AddRange(newResult);
         }
 

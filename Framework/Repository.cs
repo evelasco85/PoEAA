@@ -9,7 +9,7 @@ namespace Framework
     public interface IRepository<TEntity>
         where TEntity : IDomainObject
     {
-        IList<TEntity> Matching(IBaseQueryObject<TEntity> query);
+        IList<TEntity> Matching<TSearchInput>(TSearchInput criteria);
     }
 
     public class Repository<TEntity> : IRepository<TEntity>
@@ -25,7 +25,8 @@ namespace Framework
         //Given the 'query' instance, retrieve all in-memory records resulted from previously invoked 'query' if there are any
         IList<TEntity> GetInMemoryEntities(IBaseQueryObject<TEntity> query)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            return null;
         }
 
         void ConsolidateResultsInMemory(IList<TEntity> newResult)
@@ -36,7 +37,7 @@ namespace Framework
             ((List<TEntity>)_manager.GetLoadedEntities<TEntity>()).AddRange(newResult);
         }
 
-        public IList<TEntity> Matching(IBaseQueryObject<TEntity> query)
+        IList<TEntity> Matching(IBaseQueryObject<TEntity> query)
         {
             IList<TEntity> inMemoryEntities = GetInMemoryEntities(query);
 
@@ -48,6 +49,20 @@ namespace Framework
             }
 
             return inMemoryEntities;
+        }
+
+        public IList<TEntity> Matching<TSearchInput>(TSearchInput criteria)
+        {
+            IBaseQueryObject<TEntity> query = GetQueryBySearchCriteria<TSearchInput>();
+
+            query.SearchInputObject = criteria;
+
+            return Matching(query);
+        }
+
+        IBaseQueryObject<TEntity> GetQueryBySearchCriteria<TSearchInput>()
+        {
+            return _manager.GetQueryBySearchCriteria<TEntity, TSearchInput>();
         }
     }
 }

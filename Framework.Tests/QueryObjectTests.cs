@@ -13,14 +13,14 @@ namespace Framework.Tests
         {
             GetCustomerByIdQuery query = new GetCustomerByIdQuery
             {
-                SearchInput = 2
+                SearchInput = GetCustomerByIdQuery.Criteria.SearchById(2)
             };
 
-            IList<Customer> customers = query.Execute();
-            Customer result = customers.First();
+            IList<Customer> resultsById = query.Execute();
+            Customer matchById = resultsById.First();
 
-            Assert.AreEqual("2", result.Number);
-            Assert.AreEqual("Jane Doe", result.Name);
+            Assert.AreEqual("2", matchById.Number);
+            Assert.AreEqual("Jane Doe", matchById.Name);
         }
     }
 }

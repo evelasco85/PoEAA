@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Management.Instrumentation;
 using Framework.Data_Manipulation;
 using Framework.Domain;
@@ -7,13 +8,15 @@ namespace Framework
 {
     public interface IDataSynchronizationManager
     {
-        void RegisterEntity<TEntity>(IBaseMapper<TEntity> mapper)
+        void RegisterEntity<TEntity>(IBaseMapper<TEntity> mapper, IList<IBaseQueryObject<TEntity>> queryList)
             where TEntity : IDomainObject;
         IRepository<TEntity> GetRepository<TEntity>()
             where TEntity : IDomainObject;
         IBaseMapper<TEntity> GetMapper<TEntity>()
             where TEntity : IDomainObject;
         IList<TEntity> GetLoadedEntities<TEntity>()
+            where TEntity : IDomainObject;
+        IBaseQueryObject<TEntity> GetQueryBySearchCriteria<TEntity, TSearchInput>()
             where TEntity : IDomainObject;
     }
 
@@ -38,7 +41,7 @@ namespace Framework
             return typeof(TEntity).FullName;
         }
 
-        public void RegisterEntity<TEntity>(IBaseMapper<TEntity> mapper)
+        public void RegisterEntity<TEntity>(IBaseMapper<TEntity> mapper, IList<IBaseQueryObject<TEntity>> queryList)
             where TEntity : IDomainObject
         {
             IEntityServiceContainer<TEntity> serviceContainer = new EntityServiceContainer<TEntity>
@@ -46,6 +49,7 @@ namespace Framework
                 Mapper = mapper,
                 LoadedEntities = new List<TEntity>(),
                 Repository = new Repository<TEntity>(this),
+                QueryDictionary = ConvertQueryListToDictionary(queryList)
             };
 
             string key = GetServiceContainerKey<TEntity>();
@@ -60,6 +64,27 @@ namespace Framework
             where TEntity : IDomainObject
         {
             return _serviceContainerDictionary.ContainsKey(GetServiceContainerKey<TEntity>());
+        }
+
+        IDictionary<string, IBaseQueryObject<TEntity>> ConvertQueryListToDictionary<TEntity>(IList<IBaseQueryObject<TEntity>> queryList)
+            where TEntity : IDomainObject
+        {
+            IDictionary<string, IBaseQueryObject<TEntity>>  queryDictionary = new Dictionary<string, IBaseQueryObject<TEntity>>();
+
+            if ((queryList == null) || (!queryList.Any()))
+                return queryDictionary;
+
+            for (int index = 0; index < queryList.Count; index++)
+            {
+                IBaseQueryObject<TEntity> query = queryList[index];
+
+                if(query == null)
+                    continue;
+
+                queryDictionary.Add(query.SearchInputType.FullName, query);
+            }
+
+            return queryDictionary;
         }
 
         bool ServiceContainerExists(string key)
@@ -96,6 +121,14 @@ namespace Framework
            where TEntity : IDomainObject
         {
             return GetServiceContainer<TEntity>().LoadedEntities;
+        }
+
+        public IBaseQueryObject<TEntity> GetQueryBySearchCriteria<TEntity, TSearchInput>()
+          where TEntity : IDomainObject
+        {
+            IEntityServiceContainer<TEntity> serviceContainer = GetServiceContainer<TEntity>();
+
+            return serviceContainer.QueryDictionary[typeof(TSearchInput).FullName];
         }
     }
 }

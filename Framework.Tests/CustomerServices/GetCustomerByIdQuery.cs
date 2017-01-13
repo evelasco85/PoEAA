@@ -4,9 +4,23 @@ using Framework.Data_Manipulation;
 
 namespace Framework.Tests.CustomerServices
 {
-    class GetCustomerByIdQuery  : BaseQueryObject<Customer, int, Tuple<string, string>>
+    class GetCustomerByIdQuery : BaseQueryObject<Customer, GetCustomerByIdQuery.Criteria, Tuple<string, string>>
     {
-        public override Tuple<string, string> PerformSearchOperation(int searchInput)
+        public class Criteria
+        {
+            public int CustomerId { get; set; }
+
+            private Criteria()
+            {
+            }
+
+            public static Criteria SearchById(int id)
+            {
+                return new Criteria {CustomerId = id};
+            }
+        }
+
+        public override Tuple<string, string> PerformSearchOperation(Criteria searchInput)
         {
             Dictionary<int, string> customerList = new Dictionary<int, string>();
 
@@ -14,7 +28,7 @@ namespace Framework.Tests.CustomerServices
             customerList.Add(2, "Jane Doe");
             customerList.Add(3, "John Doe");
 
-            return new Tuple<string, string>(searchInput.ToString(), customerList[searchInput]);
+            return new Tuple<string, string>(searchInput.CustomerId.ToString(), customerList[searchInput.CustomerId]);
         }
 
         public override IList<Customer> ConstructOutput(Tuple<string, string> searchResult)

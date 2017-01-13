@@ -50,11 +50,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="CustomerServices\GetCustomerByCivilStatusQuery.cs" />
     <Compile Include="CustomerServices\GetCustomerByIdQuery.cs" />
     <Compile Include="CustomerServices\Customer.cs" />
     <Compile Include="CustomerServices\CustomerMapper.cs" />
     <Compile Include="QueryObjectTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RepositoryTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Framework\Framework.csproj">

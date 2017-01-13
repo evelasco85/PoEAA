@@ -6,6 +6,8 @@ namespace Framework.Data_Manipulation
 {
     public interface IBaseQueryObject<TEntity>
     {
+        Type SearchInputType { get; }
+        object SearchInputObject { get; set; }
         IList<TEntity> Execute();
     }
 
@@ -20,6 +22,16 @@ namespace Framework.Data_Manipulation
         IBaseQueryObject<TEntity, TSearchInput, TSearchResult>
     {
         public TSearchInput SearchInput { get; set; }
+
+        public object SearchInputObject
+        {
+            get { return SearchInput; }
+            set { SearchInput = (TSearchInput) value; }
+        }
+
+        public Type SearchInputType {
+            get { return typeof(TSearchInput); }
+        }
 
         public abstract TSearchResult PerformSearchOperation(TSearchInput searchInput);
 

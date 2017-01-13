@@ -5,7 +5,6 @@ namespace Framework.Domain
 {
     public interface ISystemManipulation
     {
-        DomainObjectState GetCurrentState();
         long GetTicksUpdated();
         void MarkAsClean();
     }
@@ -14,6 +13,7 @@ namespace Framework.Domain
     {
         Guid SystemId { get; set; }
         IBaseMapper Mapper { get; set; }
+        DomainObjectState GetCurrentState();
         void MarkAsDirty();
         void MarkForDeletion();
     }

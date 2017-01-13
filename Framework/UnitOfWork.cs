@@ -44,7 +44,7 @@ namespace Framework
         {
             List<IDomainObject> affectedEntities = domainObjects
                 .Values
-                .Where(objects => ((ISystemManipulation)objects).GetCurrentState() == affectedStates)
+                .Where(objects => objects.GetCurrentState() == affectedStates)
                 .OrderBy(objects => ((ISystemManipulation)objects).GetTicksUpdated())
                 .ToList();
 

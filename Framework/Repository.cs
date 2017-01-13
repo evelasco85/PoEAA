@@ -31,8 +31,8 @@ namespace Framework
 
             ((List<TEntity>)newResult).ForEach(entity =>
             {
-                entity.Mapper = mapper;
-                entity.SystemId = Guid.NewGuid();
+                mapper.ApplySystemSettings(ref entity);
+                mapper.ApplyExternalSourceConfigurations(ref entity);
             });
         }
 

@@ -10,21 +10,23 @@ namespace Framework.Data_Manipulation
      where TEntity : IDomainObject
     {
         TEntity CreateEntity();
+        void ApplySystemSettings(ref TEntity entity);
+        void ApplyExternalSourceConfigurations(ref TEntity entity);
     }
 
     public interface IBaseMapper
     {
-        void Update(ref object entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
-        void Insert(ref object entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
-        void Delete(ref object entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
+        bool Update(ref IDomainObject entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
+        bool Insert(ref IDomainObject entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
+        bool Delete(ref IDomainObject entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
     }
 
     public interface IBaseMapper<TEntity> : IBaseMapper, IBaseMapper_Instantiator<TEntity>
         where TEntity: IDomainObject
     {
-        void Update(ref TEntity entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
-        void Insert(ref TEntity entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
-        void Delete(ref TEntity entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
+        bool Update(ref TEntity entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
+        bool Insert(ref TEntity entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
+        bool Delete(ref TEntity entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
     }
 
     public abstract class BaseMapper<TEntity> : IBaseMapper<TEntity>
@@ -34,35 +36,45 @@ namespace Framework.Data_Manipulation
         {
             TEntity entity = (TEntity)Activator.CreateInstance(typeof(TEntity));
 
-            entity.SystemId = Guid.NewGuid();
-            entity.Mapper = this;
+            ApplySystemSettings(ref entity);
 
             return entity;
         }
 
-        public abstract void Update(ref TEntity entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
-        public abstract void Insert(ref TEntity entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
-        public abstract void Delete(ref TEntity entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
+        public void ApplySystemSettings(ref TEntity entity)
+        {
+            entity.Mapper = this;
+            entity.SystemId = Guid.NewGuid();
+        }
 
-        public void Update(ref object entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation)
+        public void ApplyExternalSourceConfigurations(ref TEntity entity)
+        {
+            ((ISystemManipulation)entity).MarkAsClean();
+        }
+
+        public abstract bool Update(ref TEntity entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
+        public abstract bool Insert(ref TEntity entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
+        public abstract bool Delete(ref TEntity entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
+
+        public bool Update(ref IDomainObject entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation)
         {
             TEntity instance = (TEntity) entity;
 
-            Update(ref instance, successfulInvocation, failedInvocation);
+            return Update(ref instance, successfulInvocation, failedInvocation);
         }
 
-        public void Insert(ref object entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation)
+        public bool Insert(ref IDomainObject entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation)
         {
             TEntity instance = (TEntity)entity;
 
-            Insert(ref instance, successfulInvocation, failedInvocation);
+            return Insert(ref instance, successfulInvocation, failedInvocation);
         }
 
-        public void Delete(ref object entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation)
+        public bool Delete(ref IDomainObject entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation)
         {
             TEntity instance = (TEntity)entity;
 
-            Delete(ref instance, successfulInvocation, failedInvocation);
+            return Delete(ref instance, successfulInvocation, failedInvocation);
         }
     }
 }

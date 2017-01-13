@@ -24,8 +24,16 @@ namespace Framework
         public void ObserveEntityForChanges<TEntity>(TEntity entity)
             where TEntity : IDomainObject
         {
+            if(entity == null)
+                throw  new ArgumentNullException("'entity' parameter is required");
+
+            if (entity.Mapper == null)
+                throw new NullReferenceException("A 'mapper' implementation is required for an entity to be observed");
+
             if(_observedDomainObjects.ContainsKey(entity.SystemId))
                 return;
+
+            
 
             _observedDomainObjects.Add(entity.SystemId, entity);
         }

@@ -32,12 +32,6 @@ namespace Framework.Domain
 
         public IBaseMapper Mapper { get; set; }
 
-        /*Overriden when loaded by repository*/
-        public long DataSourceLoadedTicks { get; set; }
-
-        public long DataSourceUpdatedTicks { get; set; }
-        /*************************************/
-
         private DomainObjectState _state;
         private long _ticksUpdated;
 

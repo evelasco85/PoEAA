@@ -11,7 +11,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Framework.Tests
 {
     [TestClass]
-    public class UnitOfWorkTests
+    public class DomainObjectTests
     {
         private IDataSynchronizationManager _manager;
         private CustomerMapper _mapper = new CustomerMapper();
@@ -30,7 +30,7 @@ namespace Framework.Tests
         }
 
         [TestMethod]
-        public void TestUnitOfWork()
+        public void TestDomainObjectStates()
         {
             IRepository<Customer> repository = _manager.GetRepository<Customer>();
 
@@ -38,7 +38,7 @@ namespace Framework.Tests
             GetCustomerByCivilStatusQuery.Criteria criteriaByStatus = GetCustomerByCivilStatusQuery.Criteria.SearchById(GetCustomerByCivilStatusQuery.CivilStatus.Married);
             GetCustomerByIdQuery.Criteria criteriaById = GetCustomerByIdQuery.Criteria.SearchById(2);
             List<Customer> results = new List<Customer>();
-            
+
             results.AddRange(repository.Matching(criteriaByStatus));
             results.AddRange(repository.Matching(criteriaById));
 
@@ -52,6 +52,16 @@ namespace Framework.Tests
             Customer newCustomer = _mapper.CreateEntity();
 
             Assert.AreEqual(DomainObjectState.Manually_Created, newCustomer.GetCurrentState(), "Entities manually created should be marked as 'Manually_Created'");
+
+            /*Entities where 'MarkAsDirty()' is invoked will be maked as 'Dirty'*/
+            newCustomer.MarkAsDirty();
+
+            Assert.AreEqual(DomainObjectState.Dirty, newCustomer.GetCurrentState(), "Entities where 'MarkAsDirty()' is invoked should be marked as 'Dirty'");
+
+            /*Entities where 'MarkForDeletion()' is invoked will be maked as 'For_DataSource_Deletion'*/
+            newCustomer.MarkForDeletion();
+
+            Assert.AreEqual(DomainObjectState.For_DataSource_Deletion, newCustomer.GetCurrentState(), "Entities where 'MarkForDeletion()' is invoked should be marked as 'For_DataSource_Deletion'");
         }
     }
 }

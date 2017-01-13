@@ -14,8 +14,6 @@ namespace Framework
             where TEntity : IDomainObject;
         IBaseMapper<TEntity> GetMapper<TEntity>()
             where TEntity : IDomainObject;
-        IList<TEntity> GetLoadedEntities<TEntity>()
-            where TEntity : IDomainObject;
         IBaseQueryObject<TEntity> GetQueryBySearchCriteria<TEntity, TSearchInput>()
             where TEntity : IDomainObject;
     }
@@ -47,7 +45,6 @@ namespace Framework
             IEntityServiceContainer<TEntity> serviceContainer = new EntityServiceContainer<TEntity>
             {
                 Mapper = mapper,
-                LoadedEntities = new List<TEntity>(),
                 Repository = new Repository<TEntity>(this),
                 QueryDictionary = ConvertQueryListToDictionary(queryList)
             };
@@ -115,12 +112,6 @@ namespace Framework
            where TEntity : IDomainObject
         {
             return GetServiceContainer<TEntity>().Mapper;
-        }
-
-        public IList<TEntity> GetLoadedEntities<TEntity>()
-           where TEntity : IDomainObject
-        {
-            return GetServiceContainer<TEntity>().LoadedEntities;
         }
 
         public IBaseQueryObject<TEntity> GetQueryBySearchCriteria<TEntity, TSearchInput>()

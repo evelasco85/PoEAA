@@ -22,14 +22,7 @@ namespace Framework
             _manager = manager;
         }
         
-        //Given the 'query' instance, retrieve all in-memory records resulted from previously invoked 'query' if there are any
-        IList<TEntity> GetInMemoryEntities(IBaseQueryObject<TEntity> query)
-        {
-            //throw new NotImplementedException();
-            return null;
-        }
-
-        void ConsolidateResultsInMemory(IList<TEntity> newResult)
+        void ApplyDomainObjectSettings(ref IList<TEntity> newResult)
         {
             if ((newResult == null) || (!newResult.Any()))
                 return;
@@ -41,22 +34,15 @@ namespace Framework
                 entity.Mapper = mapper;
                 entity.SystemId = Guid.NewGuid();
             });
-
-            ((List<TEntity>)_manager.GetLoadedEntities<TEntity>()).AddRange(newResult);
         }
 
         IList<TEntity> Matching(IBaseQueryObject<TEntity> query)
         {
-            IList<TEntity> inMemoryEntities = GetInMemoryEntities(query);
+            IList<TEntity> results = query.Execute();
 
-            if ((inMemoryEntities == null) || (!inMemoryEntities.Any()))
-            {
-                inMemoryEntities = query.Execute();
+            ApplyDomainObjectSettings(ref results);
 
-                ConsolidateResultsInMemory(inMemoryEntities);
-            }
-
-            return inMemoryEntities;
+            return results;
         }
 
         public IList<TEntity> Matching<TSearchInput>(TSearchInput criteria)

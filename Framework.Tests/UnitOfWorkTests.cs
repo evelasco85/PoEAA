@@ -94,11 +94,19 @@ namespace Framework.Tests
 
             Assert.AreEqual(3, uow.GetUncommitedCount());
 
-            uow.Commit(domainObject => { }, (domainObject, exception) => { });
+            IList<string> sequenceDescription = new List<string>();
 
-            Assert.AreEqual("1=Inserted=Customer", _mapper.SequenceDescription[0]);
-            Assert.AreEqual("3=Inserted=Customer", _mapper.SequenceDescription[1]);
-            Assert.AreEqual("4=Inserted=Customer", _mapper.SequenceDescription[2]);
+            uow.Commit(
+                (domainObject, action, additionalInfo) =>
+                {
+                    sequenceDescription.Add(string.Format("{0}={1}={2}", (string)additionalInfo, action.ToString(), domainObject.Mapper.GetEntityTypeName()));
+                },
+                (domainObject, action, exception, additionalInfo) => { }
+                );
+
+            Assert.AreEqual("1=Insert=Customer", sequenceDescription[0]);
+            Assert.AreEqual("3=Insert=Customer", sequenceDescription[1]);
+            Assert.AreEqual("2=Insert=Customer", sequenceDescription[2]);
         }
     }
 }

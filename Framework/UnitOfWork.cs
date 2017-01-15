@@ -6,11 +6,22 @@ using Framework.Domain;
 
 namespace Framework
 {
+    public enum UnitOfWorkAction
+    {
+        None = 0,
+        Insert = 1,
+        Update = 2,
+        Delete = 3
+    }
+
+    public delegate void SuccessfulUoWInvocationDelegate(IDomainObject domainObject, UnitOfWorkAction action, object additionalInfo);
+    public delegate void FailedUoWInvocationDelegate(IDomainObject domainObject, UnitOfWorkAction action, Exception exception, object additionalInfo);
+
     public interface IUnitOfWork
     {
         void ObserveEntityForChanges<TEntity>(TEntity entity)
             where TEntity : IDomainObject;
-        void Commit(SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
+        void Commit(SuccessfulUoWInvocationDelegate successfulInvocation, FailedUoWInvocationDelegate failedInvocation);
         int GetUncommitedCount();
     }
 
@@ -37,7 +48,7 @@ namespace Framework
             _observedDomainObjects.Add(entity.SystemId, entity);
         }
 
-        public void Commit(SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation)
+        public void Commit(SuccessfulUoWInvocationDelegate successfulInvocation, FailedUoWInvocationDelegate failedInvocation)
         {
             ApplyOperation(DomainObjectState.Manually_Created, _observedDomainObjects, successfulInvocation, failedInvocation);
             ApplyOperation(DomainObjectState.Dirty, _observedDomainObjects, successfulInvocation, failedInvocation);
@@ -53,13 +64,13 @@ namespace Framework
         }
 
         void ApplyOperation(
-            DomainObjectState affectedStates, IDictionary<Guid, IDomainObject> domainObjects,
-            SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation
+            DomainObjectState affectedState, IDictionary<Guid, IDomainObject> domainObjects,
+            SuccessfulUoWInvocationDelegate successfulInvocation, FailedUoWInvocationDelegate failedInvocation
             )
         {
             List<IDomainObject> affectedEntities = domainObjects
                 .Values
-                .Where(objects => objects.GetCurrentState() == affectedStates)
+                .Where(objects => objects.GetCurrentState() == affectedState)
                 .OrderBy(objects => ((ISystemManipulation)objects).GetTicksUpdated())
                 .ToList();
 
@@ -71,32 +82,45 @@ namespace Framework
                     continue;
 
                 IBaseMapper mapper = entity.Mapper;
-                OperationDelegate operation = GetOperation(affectedStates, mapper);
-                bool success = operation(ref entity, successfulInvocation, failedInvocation);
+                Tuple<UnitOfWorkAction, OperationDelegate> operation = GetOperation(affectedState, mapper);
+
+                bool success = operation.Item2(ref entity,
+                    (domainObject, additionalInfo) =>
+                    {
+                        successfulInvocation(domainObject, operation.Item1, additionalInfo);
+                    },
+                    (domainObject, exception, additionalInfo) =>
+                    {
+                        failedInvocation(domainObject, operation.Item1, exception, additionalInfo);
+                    });
 
                 if(success)
                     ((ISystemManipulation)entity).MarkAsClean();
             }
         }
 
-        OperationDelegate GetOperation(DomainObjectState state, IBaseMapper mapper)
+        Tuple<UnitOfWorkAction, OperationDelegate> GetOperation(DomainObjectState state, IBaseMapper mapper)
         {
             OperationDelegate operation = null;
+            UnitOfWorkAction action = UnitOfWorkAction.None;
 
             switch (state)
             {
                 case DomainObjectState.Manually_Created:
+                    action = UnitOfWorkAction.Insert;
                     operation = new OperationDelegate(mapper.Insert);
                     break;
                 case DomainObjectState.Dirty:
+                    action = UnitOfWorkAction.Update;
                     operation = new OperationDelegate(mapper.Update);
                     break;
                 case DomainObjectState.For_DataSource_Deletion:
+                    action = UnitOfWorkAction.Delete;
                     operation = new OperationDelegate(mapper.Delete);
                     break;
             }
 
-            return operation;
+            return new Tuple<UnitOfWorkAction, OperationDelegate>(action, operation);
         }
     }
 }

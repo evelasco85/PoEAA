@@ -3,8 +3,8 @@ using Framework.Domain;
 
 namespace Framework.Data_Manipulation
 {
-    public delegate void SuccessfulInvocationDelegate(IDomainObject domainObject);
-    public delegate void FailedInvocationDelegate(IDomainObject domainObject, Exception exception);
+    public delegate void SuccessfulInvocationDelegate(IDomainObject domainObject, object additionalInfo);
+    public delegate void FailedInvocationDelegate(IDomainObject domainObject, Exception exception, object additionalInfo);
 
     public interface IBaseMapper_Instantiator<TEntity>
      where TEntity : IDomainObject
@@ -16,6 +16,7 @@ namespace Framework.Data_Manipulation
 
     public interface IBaseMapper
     {
+        string GetEntityTypeName();
         bool Update(ref IDomainObject entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
         bool Insert(ref IDomainObject entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
         bool Delete(ref IDomainObject entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
@@ -32,6 +33,11 @@ namespace Framework.Data_Manipulation
     public abstract class BaseMapper<TEntity> : IBaseMapper<TEntity>
         where TEntity : IDomainObject
     {
+        public string GetEntityTypeName()
+        {
+            return typeof(TEntity).Name;
+        }
+
         public TEntity CreateEntity()
         {
             TEntity entity = (TEntity)Activator.CreateInstance(typeof(TEntity));

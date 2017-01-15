@@ -36,6 +36,11 @@ namespace Framework.Domain
         private DomainObjectState _state;
         private long _ticksUpdated;
 
+        static object s_lock = new object();
+        static long s_lastTickReceived;
+        static int s_tickOffset;
+        
+
         //IMemento fields;
         //Identity fields;
 
@@ -51,13 +56,24 @@ namespace Framework.Domain
 
         void SetState(DomainObjectState state)
         {
-            //Stopwatch stopwatch = Stopwatch.StartNew();
+            long currentTick = DateTime.Now.Ticks;
+
+            lock(s_lock)
+            {
+                if(s_lastTickReceived == currentTick)
+                {
+                    s_tickOffset += 1;
+                    _ticksUpdated = currentTick + s_tickOffset;
+                }
+                else
+                {
+                    s_tickOffset = 0;
+                    s_lastTickReceived = currentTick;
+                    _ticksUpdated = currentTick;
+                }
+            }
 
             _state = state;
-            //_ticksUpdated = DateTime.UtcNow.AddTicks(stopwatch.Elapsed.Ticks).Ticks;
-            _ticksUpdated = DateTime.UtcNow.Ticks;
-
-            //stopwatch.Stop();
         }
 
         //If invoked, 'Update' operation will be applied from the associated mapper

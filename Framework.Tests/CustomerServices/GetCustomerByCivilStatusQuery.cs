@@ -41,7 +41,8 @@ namespace Framework.Tests.CustomerServices
 
         public override IList<Customer> ConstructOutput(Tuple<string, string> searchResult)
         {
-            Customer customer = new Customer();
+            IBaseMapper mapper = DataSynchronizationManager.GetInstance().GetMapper<Customer>();
+            Customer customer = new Customer(mapper);
 
             customer.Number = searchResult.Item1;
             customer.Name = searchResult.Item2;

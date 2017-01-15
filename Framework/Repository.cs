@@ -31,7 +31,6 @@ namespace Framework
 
             ((List<TEntity>)newResult).ForEach(entity =>
             {
-                mapper.ApplySystemSettings(ref entity);
                 mapper.ApplyExternalSourceConfigurations(ref entity);
             });
         }

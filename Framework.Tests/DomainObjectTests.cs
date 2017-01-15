@@ -49,7 +49,8 @@ namespace Framework.Tests
             });
 
             /*Entities manually created will be maked as 'Manually_Created'*/
-            Customer newCustomer = _mapper.CreateEntity();
+            IBaseMapper mapper = DataSynchronizationManager.GetInstance().GetMapper<Customer>();
+            Customer newCustomer = new Customer(mapper);
 
             Assert.AreEqual(DomainObjectState.Manually_Created, newCustomer.GetCurrentState(), "Entities manually created should be marked as 'Manually_Created'");
 

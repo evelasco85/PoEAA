@@ -49,9 +49,10 @@ namespace Framework.Tests
                 Assert.AreEqual(DomainObjectState.Clean, customer.GetCurrentState(), "Entities loaded from data source or repository should be marked as 'Clean'");
             });
 
-            Customer customer1 = _mapper.CreateEntity();
-            Customer customer2 = _mapper.CreateEntity();
-            Customer customer3 = _mapper.CreateEntity();
+            IBaseMapper mapper = DataSynchronizationManager.GetInstance().GetMapper<Customer>();
+            Customer customer1 = new Customer(mapper);
+            Customer customer2 = new Customer(mapper);
+            Customer customer3 = new Customer(mapper);
 
             uow.ObserveEntityForChanges(customer1);
             uow.ObserveEntityForChanges(customer2);
@@ -80,13 +81,10 @@ namespace Framework.Tests
             });
 
             //Observe sequence of instantiation
-            Customer customer1 = _mapper.CreateEntity();
-            Customer customer3 = _mapper.CreateEntity();
-            Customer customer2 = _mapper.CreateEntity();
-
-            customer1.Number = "1";
-            customer2.Number = "2";
-            customer3.Number = "3";
+            IBaseMapper mapper = DataSynchronizationManager.GetInstance().GetMapper<Customer>();
+            Customer customer1 = new Customer(mapper) { Number = "1" };
+            Customer customer3 = new Customer(mapper) { Number = "3" };
+            Customer customer2 = new Customer(mapper) { Number = "2" };
 
             uow.ObserveEntityForChanges(customer1);
             uow.ObserveEntityForChanges(customer2);

@@ -12,8 +12,8 @@ namespace Framework.Domain
 
     public interface IDomainObject
     {
-        Guid SystemId { get; set; }
-        IBaseMapper Mapper { get; set; }
+        Guid SystemId { get; }
+        IBaseMapper Mapper { get; }
         DomainObjectState GetCurrentState();
         void MarkAsDirty();
         void MarkForDeletion();
@@ -29,9 +29,18 @@ namespace Framework.Domain
 
     public class DomainObject : IDomainObject, ISystemManipulation
     {
-        public Guid SystemId { get; set; }
+        IBaseMapper _mapper;
+        Guid _systemId;
 
-        public IBaseMapper Mapper { get; set; }
+        public Guid SystemId
+        {
+            get { return _systemId; }
+        }
+
+        public IBaseMapper Mapper
+        {
+            get { return _mapper; }
+        }
 
         private DomainObjectState _state;
         private long _ticksUpdated;
@@ -44,8 +53,11 @@ namespace Framework.Domain
         //IMemento fields;
         //Identity fields;
 
-        public DomainObject()
+        public DomainObject(IBaseMapper mapper)
         {
+            _mapper = mapper;
+            _systemId = Guid.NewGuid();
+            
             SetState(DomainObjectState.Manually_Created);
         }
 

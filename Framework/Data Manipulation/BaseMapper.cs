@@ -9,8 +9,6 @@ namespace Framework.Data_Manipulation
     public interface IBaseMapper_Instantiator<TEntity>
      where TEntity : IDomainObject
     {
-        TEntity CreateEntity();
-        void ApplySystemSettings(ref TEntity entity);
         void ApplyExternalSourceConfigurations(ref TEntity entity);
     }
 
@@ -36,21 +34,6 @@ namespace Framework.Data_Manipulation
         public string GetEntityTypeName()
         {
             return typeof(TEntity).Name;
-        }
-
-        public TEntity CreateEntity()
-        {
-            TEntity entity = (TEntity)Activator.CreateInstance(typeof(TEntity));
-
-            ApplySystemSettings(ref entity);
-
-            return entity;
-        }
-
-        public void ApplySystemSettings(ref TEntity entity)
-        {
-            entity.Mapper = this;
-            entity.SystemId = Guid.NewGuid();
         }
 
         public void ApplyExternalSourceConfigurations(ref TEntity entity)

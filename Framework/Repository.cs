@@ -22,7 +22,7 @@ namespace Framework
             _manager = manager;
         }
         
-        void ApplyDomainObjectSettings(ref IList<TEntity> newResult)
+        void ApplyDomainObjectSettings(ref IList<TEntity> newResult, IBaseQueryObject query)
         {
             if ((newResult == null) || (!newResult.Any()))
                 return;
@@ -31,7 +31,8 @@ namespace Framework
 
             ((List<TEntity>)newResult).ForEach(entity =>
             {
-                mapper.ApplyExternalSourceConfigurations(ref entity);
+                ((ISystemManipulation)entity).SetQueryObject(query);
+                ((ISystemManipulation)entity).MarkAsClean();
             });
         }
 
@@ -39,7 +40,7 @@ namespace Framework
         {
             IList<TEntity> results = query.Execute();
 
-            ApplyDomainObjectSettings(ref results);
+            ApplyDomainObjectSettings(ref results, query);
 
             return results;
         }

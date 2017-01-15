@@ -4,10 +4,14 @@ using Framework.Domain;
 
 namespace Framework.Data_Manipulation
 {
-    public interface IBaseQueryObject<TEntity>
+    public interface IBaseQueryObject
     {
         Type SearchInputType { get; }
         object SearchInputObject { get; set; }
+    }
+
+    public interface IBaseQueryObject<TEntity> : IBaseQueryObject
+    {
         IList<TEntity> Execute();
     }
 

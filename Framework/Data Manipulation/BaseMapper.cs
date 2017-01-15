@@ -9,7 +9,6 @@ namespace Framework.Data_Manipulation
     public interface IBaseMapper_Instantiator<TEntity>
      where TEntity : IDomainObject
     {
-        void ApplyExternalSourceConfigurations(ref TEntity entity);
     }
 
     public interface IBaseMapper
@@ -34,11 +33,6 @@ namespace Framework.Data_Manipulation
         public string GetEntityTypeName()
         {
             return typeof(TEntity).Name;
-        }
-
-        public void ApplyExternalSourceConfigurations(ref TEntity entity)
-        {
-            ((ISystemManipulation)entity).MarkAsClean();
         }
 
         public abstract bool Update(ref TEntity entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);

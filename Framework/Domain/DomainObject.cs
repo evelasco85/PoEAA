@@ -8,10 +8,12 @@ namespace Framework.Domain
     {
         long GetTicksUpdated();
         void MarkAsClean();
+        void SetQueryObject(IBaseQueryObject queryObject);
     }
 
     public interface IDomainObject
     {
+        IBaseQueryObject QueryObject { get; }
         Guid SystemId { get; }
         IBaseMapper Mapper { get; }
         DomainObjectState GetCurrentState();
@@ -31,6 +33,12 @@ namespace Framework.Domain
     {
         IBaseMapper _mapper;
         Guid _systemId;
+        IBaseQueryObject _queryObject;
+
+        public IBaseQueryObject QueryObject
+        {
+            get { return _queryObject; }
+        }
 
         public Guid SystemId
         {
@@ -59,6 +67,11 @@ namespace Framework.Domain
             _systemId = Guid.NewGuid();
             
             SetState(DomainObjectState.Manually_Created);
+        }
+
+        public void SetQueryObject(IBaseQueryObject queryObject)
+        {
+            _queryObject = queryObject;
         }
 
         public DomainObjectState GetCurrentState()

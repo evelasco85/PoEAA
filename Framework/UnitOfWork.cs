@@ -45,10 +45,10 @@ namespace Framework
                 UnitOfWorkAction action = wrapper.GetExpectedAction();
 
                 if (action == UnitOfWorkAction.Update)
-                    throw new InvalidOperationException("'entity' already registered for update");
+                    throw new InvalidOperationException("'entity' already registered for update | [Operation Register: New]");
 
                 if (action == UnitOfWorkAction.Delete)
-                    throw new InvalidOperationException("'entity' already registered for deletion");
+                    throw new InvalidOperationException("'entity' already registered for deletion | [Operation Register: New]");
 
                 if (action == UnitOfWorkAction.Insert)
                     return wrapper;
@@ -68,7 +68,7 @@ namespace Framework
                 UnitOfWorkAction action = wrapper.GetExpectedAction();
 
                 if (action == UnitOfWorkAction.Delete)
-                    throw new InvalidOperationException("'entity' already registered for deletion");
+                    throw new InvalidOperationException("'entity' already registered for deletion | [Operation Register: Dirty]");
 
                 if ((action == UnitOfWorkAction.Insert) || (action == UnitOfWorkAction.Update))
                     return wrapper;

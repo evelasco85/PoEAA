@@ -12,7 +12,7 @@ namespace Framework.Domain
         IDomainObjectMemento CreateMemento<TEntity>(TEntity entity)
             where TEntity : IDomainObject;
 
-        void SetMemento<TEntity>(TEntity entity, IDomainObjectMemento memento)
+        void SetMemento<TEntity>(ref TEntity entity, IDomainObjectMemento memento)
             where TEntity : IDomainObject;
     }
 
@@ -33,7 +33,7 @@ namespace Framework.Domain
             where TEntity : IDomainObject
         {
             if (entity == null)
-                throw new ArgumentNullException("'entity' parameter is null");
+                throw new ArgumentNullException("'entity' parameter is required");
 
             IDictionary<string, Tuple<PropertyInfo, object>> properties = GetPrimitiveProperties(entity);
             DomainObjectMemento memento = new DomainObjectMemento(properties);
@@ -41,9 +41,21 @@ namespace Framework.Domain
             return memento;
         }
 
-        public void SetMemento<TEntity>(TEntity entity, IDomainObjectMemento memento)
+        public void SetMemento<TEntity>(ref TEntity entity, IDomainObjectMemento memento)
             where TEntity : IDomainObject
         {
+            if (entity == null)
+                throw new ArgumentNullException("'entity' parameter is required");
+
+            if (memento == null)
+                throw new ArgumentNullException("'memento' parameter is required");
+
+            IList<string> propertyNames = memento.GetPropertyNames();
+
+            for (int index = 0; index < propertyNames.Count; index++)
+            {
+                memento.SetPropertyValue(propertyNames[index], ref entity);
+            }
         }
 
         IDictionary<string, Tuple<PropertyInfo, object>> GetPrimitiveProperties<TEntity>(TEntity entity)

@@ -8,7 +8,6 @@ namespace Framework
         IDomainObject EntityObject { get; }
         Guid SystemId { get; }
         InstantiationType Instantiation { get; }
-        bool SetForDataSourceDeletion { get; set; }
         string OriginalHashCode { get; }
         UnitOfWorkAction GetExpectedAction();
         long GetTicksUpdated();
@@ -32,6 +31,7 @@ namespace Framework
         private bool _setForDataSourceDeletion = false;
         private readonly TEntity _entity;
         private readonly string _originalHashCode;
+        private readonly UnitOfWorkAction _action;
 
         IDomainObjectMementoService _mementoService = DomainObjectMementoService.GetInstance();
 
@@ -50,18 +50,6 @@ namespace Framework
             get { return _entity.SystemId; }
         }
 
-        public bool SetForDataSourceDeletion
-        {
-            get { return _setForDataSourceDeletion; }
-            set
-            {
-                if (_entity.Instantiation != InstantiationType.Loaded)
-                    throw new InvalidOperationException("");
-
-                _setForDataSourceDeletion = value;
-            }
-        }
-
         public InstantiationType Instantiation
         {
             get { return _entity.Instantiation; }
@@ -72,13 +60,14 @@ namespace Framework
             get { return _originalHashCode; }
         }
 
-        public UnitOfWorkEntityWrapper(TEntity entity)
+        public UnitOfWorkEntityWrapper(TEntity entity, UnitOfWorkAction action)
         {
             IDomainObjectMemento memento = _mementoService.CreateMemento(entity);
 
             _entity = entity;
             _originalHashCode = memento.HashCode;
             _ticksUpdated = GetTick();
+            _action = action;
         }
 
         long GetTick()
@@ -112,10 +101,7 @@ namespace Framework
 
         public UnitOfWorkAction GetExpectedAction()
         {
-            if(_entity.Instantiation == InstantiationType.New )
-                return UnitOfWorkAction.Insert;
-
-            return UnitOfWorkAction.None;
+            return _action;
         }
 
         public bool HasChanges()

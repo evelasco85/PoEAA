@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Framework.Data_Manipulation;
-using Framework.Domain;
-using Framework.Tests.CustomerServices;
+﻿using Framework.Tests.CustomerServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Framework.Tests
@@ -17,7 +10,7 @@ namespace Framework.Tests
         public void TestHasChanges()
         {
             Customer customer = new Customer(null) {Name = "John Doe", Number = "123"};
-            IUnitOfWorkEntityWrapper wrapper = new UnitOfWorkEntityWrapper<Customer>(customer);
+            IUnitOfWorkEntityWrapper wrapper = new UnitOfWorkEntityWrapper<Customer>(customer, UnitOfWorkAction.Insert);
 
             Assert.IsTrue(!string.IsNullOrEmpty(wrapper.OriginalHashCode));
             Assert.IsFalse(wrapper.HasChanges());

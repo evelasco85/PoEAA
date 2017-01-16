@@ -50,9 +50,9 @@ namespace Framework.Tests
 
 
             //Sequence of observation affects commit order
-            uow.ObserveEntityForChanges(customer1);
-            uow.ObserveEntityForChanges(customer3);
-            uow.ObserveEntityForChanges(customer2);
+            uow.RegisterNew(customer1);
+            uow.RegisterNew(customer3);
+            uow.RegisterNew(customer2);
             
 
             IList<string> sequenceDescription = new List<string>();

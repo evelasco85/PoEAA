@@ -19,9 +19,11 @@ namespace Framework
 
     public interface IUnitOfWork
     {
-        IUnitOfWorkEntityWrapper<TEntity> ObserveEntityForChanges<TEntity>(TEntity entity)
+        IUnitOfWorkEntityWrapper<TEntity> RegisterNew<TEntity>(TEntity entity)
             where TEntity : IDomainObject;
-        void UnobserveEntity<TEntity>(IUnitOfWorkEntityWrapper<TEntity> entityWrapper)
+        IUnitOfWorkEntityWrapper<TEntity> RegisterDirty<TEntity>(TEntity entity)
+            where TEntity : IDomainObject;
+        IUnitOfWorkEntityWrapper<TEntity> RegisterRemoved<TEntity>(TEntity entity)
             where TEntity : IDomainObject;
         void Commit(SuccessfulUoWInvocationDelegate successfulInvocation, FailedUoWInvocationDelegate failedInvocation);
     }
@@ -32,37 +34,93 @@ namespace Framework
 
         IDictionary<Guid, IUnitOfWorkEntityWrapper> _wrappedEntities = new Dictionary<Guid, IUnitOfWorkEntityWrapper>();
 
-        public IUnitOfWorkEntityWrapper<TEntity> ObserveEntityForChanges<TEntity>(TEntity entity)
+        public IUnitOfWorkEntityWrapper<TEntity> RegisterNew<TEntity>(TEntity entity)
             where TEntity : IDomainObject
         {
-            if(entity == null)
-                throw  new ArgumentNullException("'entity' parameter is required");
-
-            if (entity.Mapper == null)
-                throw new NullReferenceException("A 'mapper' implementation is required for an entity to be observed");
+            ValidateEntityPrerequisites(entity);
 
             if (_wrappedEntities.ContainsKey(entity.SystemId))
             {
-                return ((IUnitOfWorkEntityWrapper<TEntity>) _wrappedEntities[entity.SystemId]);
+                IUnitOfWorkEntityWrapper<TEntity> wrapper = ((IUnitOfWorkEntityWrapper<TEntity>) _wrappedEntities[entity.SystemId]);
+                UnitOfWorkAction action = wrapper.GetExpectedAction();
+
+                if (action == UnitOfWorkAction.Update)
+                    throw new InvalidOperationException("'entity' already registered for update");
+
+                if (action == UnitOfWorkAction.Delete)
+                    throw new InvalidOperationException("'entity' already registered for deletion");
+
+                if (action == UnitOfWorkAction.Insert)
+                    return wrapper;
             }
 
-            IUnitOfWorkEntityWrapper<TEntity> wrapper = new UnitOfWorkEntityWrapper<TEntity>(entity);
+            return Register(UnitOfWorkAction.Insert, entity);
+        }
+
+        public IUnitOfWorkEntityWrapper<TEntity> RegisterDirty<TEntity>(TEntity entity)
+           where TEntity : IDomainObject
+        {
+            ValidateEntityPrerequisites(entity);
+
+            if (_wrappedEntities.ContainsKey(entity.SystemId))
+            {
+                IUnitOfWorkEntityWrapper<TEntity> wrapper = ((IUnitOfWorkEntityWrapper<TEntity>)_wrappedEntities[entity.SystemId]);
+                UnitOfWorkAction action = wrapper.GetExpectedAction();
+
+                if (action == UnitOfWorkAction.Delete)
+                    throw new InvalidOperationException("'entity' already registered for deletion");
+
+                if ((action == UnitOfWorkAction.Insert) || (action == UnitOfWorkAction.Update))
+                    return wrapper;
+            }
+
+            return Register(UnitOfWorkAction.Update, entity);
+        }
+
+        public IUnitOfWorkEntityWrapper<TEntity> RegisterRemoved<TEntity>(TEntity entity)
+           where TEntity : IDomainObject
+        {
+            ValidateEntityPrerequisites(entity);
+
+            if (_wrappedEntities.ContainsKey(entity.SystemId))
+            {
+                IUnitOfWorkEntityWrapper<TEntity> wrapper = ((IUnitOfWorkEntityWrapper<TEntity>)_wrappedEntities[entity.SystemId]);
+                UnitOfWorkAction action = wrapper.GetExpectedAction();
+
+                if ((action == UnitOfWorkAction.Insert) || (action == UnitOfWorkAction.Update))
+                {
+                    _wrappedEntities.Remove(entity.SystemId);
+
+                    return new UnitOfWorkEntityWrapper<TEntity>(entity, UnitOfWorkAction.None);
+                }
+
+                if (action == UnitOfWorkAction.Delete)
+                {
+                    return wrapper;
+                }
+            }
+
+            return Register(UnitOfWorkAction.Insert, entity);
+        }
+
+        void ValidateEntityPrerequisites<TEntity>(TEntity entity)
+            where TEntity : IDomainObject
+        {
+            if (entity == null)
+                throw new ArgumentNullException("'entity' parameter is required");
+
+            if (entity.Mapper == null)
+                throw new NullReferenceException("A 'mapper' implementation is required for an entity to be observed");
+        }
+
+        IUnitOfWorkEntityWrapper<TEntity> Register<TEntity>(UnitOfWorkAction action, TEntity entity)
+            where TEntity : IDomainObject
+        {
+            IUnitOfWorkEntityWrapper<TEntity> wrapper = new UnitOfWorkEntityWrapper<TEntity>(entity, action);
 
             _wrappedEntities.Add(wrapper.SystemId, wrapper);
 
             return wrapper;
-        }
-
-        public void UnobserveEntity<TEntity>(IUnitOfWorkEntityWrapper<TEntity> entityWrapper)
-           where TEntity : IDomainObject
-        {
-            if (entityWrapper == null)
-                throw new ArgumentNullException("'entityWrapper' parameter is required");
-
-            if (!_wrappedEntities.ContainsKey(entityWrapper.SystemId))
-                return;
-
-            _wrappedEntities.Remove(entityWrapper.SystemId);
         }
 
         public void Commit(SuccessfulUoWInvocationDelegate successfulInvocation, FailedUoWInvocationDelegate failedInvocation)
@@ -104,9 +162,6 @@ namespace Framework
                         if (failedInvocation != null)
                             failedInvocation(domainObject, action, exception, additionalInfo);
                     });
-
-                //if(success)
-                //    ((ISystemManipulation)entity).MarkAsClean();
             }
         }
 

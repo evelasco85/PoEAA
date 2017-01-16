@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -31,7 +32,11 @@ namespace Framework.Domain
         public IDomainObjectMemento CreateMemento<TEntity>(TEntity entity)
             where TEntity : IDomainObject
         {
-            DomainObjectMemento memento = new DomainObjectMemento();
+            if (entity == null)
+                throw new ArgumentNullException("'entity' parameter is null");
+
+            IDictionary<string, Tuple<PropertyInfo, object>> properties = GetPrimitiveProperties(entity);
+            DomainObjectMemento memento = new DomainObjectMemento(properties);
 
             return memento;
         }
@@ -39,6 +44,29 @@ namespace Framework.Domain
         public void SetMemento<TEntity>(TEntity entity, IDomainObjectMemento memento)
             where TEntity : IDomainObject
         {
+        }
+
+        IDictionary<string, Tuple<PropertyInfo, object>> GetPrimitiveProperties<TEntity>(TEntity entity)
+        {
+            BindingFlags flags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+            Type entityType = typeof(TEntity);
+            IList<PropertyInfo> properties = entityType.GetProperties(flags);
+            IDictionary<string, Tuple<PropertyInfo, object>> propertyValues =
+                new Dictionary<string, Tuple<PropertyInfo, object>>();
+
+            for (int index = 0; index < properties.Count; index++)
+            {
+                PropertyInfo property = properties[index];
+                object value = property.GetValue(entity);
+                bool isPrimitive = (!property.PropertyType.IsClass) || (property.PropertyType == typeof(string));
+
+                if (!isPrimitive)
+                    continue;
+
+                propertyValues.Add(property.Name, new Tuple<PropertyInfo, object>(property, value));
+            }
+
+            return propertyValues;
         }
     }
 }

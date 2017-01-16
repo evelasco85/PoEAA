@@ -10,6 +10,7 @@ namespace Framework.Domain
 {
     public interface IDomainObjectMemento
     {
+        string HashCode { get; }
         IList<string> GetPropertyNames();
         object GetPropertyValue(string propertyName);
         void SetPropertyValue<TEntity>(string propertyName, ref TEntity entity);
@@ -18,7 +19,7 @@ namespace Framework.Domain
     public class DomainObjectMemento : IDomainObjectMemento
     {
         private readonly IDictionary<string, Tuple<PropertyInfo, object>> _properties;
-        private readonly string _hash;
+        private readonly string _hashCode;
 
         public DomainObjectMemento(IDictionary<string, Tuple<PropertyInfo, object>> properties)
         {
@@ -26,7 +27,12 @@ namespace Framework.Domain
                 throw new ArgumentNullException("'properties' parameter is required");
 
             _properties = properties;
-            _hash = ComputeHash(properties);
+            _hashCode = ComputeHash(properties);
+        }
+
+        public string HashCode
+        {
+            get { return _hashCode; }
         }
 
         public IList<string> GetPropertyNames()

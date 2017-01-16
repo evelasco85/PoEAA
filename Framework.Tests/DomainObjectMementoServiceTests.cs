@@ -44,8 +44,10 @@ namespace Framework.Tests
             service.SetMemento(ref domainObject, snapshotMemento);
 
             //Test original
+            IDomainObjectMemento latestSnapshotMemento = service.CreateMemento(customer);
             Assert.AreEqual("John Doe", customer.Name);
             Assert.AreEqual("123", customer.Number);
+            Assert.AreEqual(snapshotMemento.HashCode, latestSnapshotMemento.HashCode);
         }
     }
 }

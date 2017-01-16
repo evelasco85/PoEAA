@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Framework.Security;
 
 namespace Framework.Domain
 {
@@ -16,7 +17,8 @@ namespace Framework.Domain
 
     public class DomainObjectMemento : IDomainObjectMemento
     {
-        private IDictionary<string, Tuple<PropertyInfo, object>> _properties;
+        private readonly IDictionary<string, Tuple<PropertyInfo, object>> _properties;
+        private readonly string _hash;
 
         public DomainObjectMemento(IDictionary<string, Tuple<PropertyInfo, object>> properties)
         {
@@ -24,6 +26,7 @@ namespace Framework.Domain
                 throw new ArgumentNullException("'properties' parameter is required");
 
             _properties = properties;
+            _hash = ComputeHash(properties);
         }
 
         public IList<string> GetPropertyNames()
@@ -42,6 +45,29 @@ namespace Framework.Domain
             object propertyValue = _properties[propertyName].Item2;
 
             property.SetValue(entity, propertyValue);
+        }
+
+        string ComputeHash(IDictionary<string, Tuple<PropertyInfo, object>> properties)
+        {
+            StringBuilder hashSet = new StringBuilder();
+            IHashService service = HashService.GetInstance();
+
+            foreach (KeyValuePair<string, Tuple<PropertyInfo, object>> kvp in properties)
+            {
+                object value = kvp.Value.Item2;
+
+                if(value == null)
+                    continue;
+
+                string hashValue = Convert.ToString(value);
+
+                hashSet.AppendLine(service.ComputeHashValue(hashValue));
+            }
+
+            //Merkel tree???
+            string accumulatedHash = service.ComputeHashValue(hashSet.ToString());
+
+            return accumulatedHash;
         }
     }
 }

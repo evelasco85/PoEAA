@@ -31,37 +31,6 @@ namespace Framework.Tests
         }
 
         [TestMethod]
-        public void TestGetUncommitedCount()
-        {
-            IRepository<Customer> repository = _manager.GetRepository<Customer>();
-            GetCustomerByCivilStatusQuery.Criteria criteriaByStatus = GetCustomerByCivilStatusQuery.Criteria.SearchById(GetCustomerByCivilStatusQuery.CivilStatus.Married);
-            GetCustomerByIdQuery.Criteria criteriaById = GetCustomerByIdQuery.Criteria.SearchById(2);
-            List<Customer> results = new List<Customer>();
-            IUnitOfWork uow = new UnitOfWork();
-            
-            results.AddRange(repository.Matching(criteriaByStatus));
-            results.AddRange(repository.Matching(criteriaById));
-
-            /*Entities loaded from repository will be marked as 'Clean'*/
-            results.ForEach(customer =>
-            {
-                uow.ObserveEntityForChanges(customer);
-                Assert.AreEqual(DomainObjectState.Clean, customer.GetCurrentState(), "Entities loaded from data source or repository should be marked as 'Clean'");
-            });
-
-            IBaseMapper mapper = DataSynchronizationManager.GetInstance().GetMapper<Customer>();
-            Customer customer1 = new Customer(mapper);
-            Customer customer2 = new Customer(mapper);
-            Customer customer3 = new Customer(mapper);
-
-            uow.ObserveEntityForChanges(customer1);
-            uow.ObserveEntityForChanges(customer2);
-            uow.ObserveEntityForChanges(customer3);
-
-            Assert.AreEqual(3, uow.GetUncommitedCount());
-        }
-
-        [TestMethod]
         public void TestCommit_SimpleInsertion()
         {
             IRepository<Customer> repository = _manager.GetRepository<Customer>();
@@ -73,24 +42,18 @@ namespace Framework.Tests
             results.AddRange(repository.Matching(criteriaByStatus));
             results.AddRange(repository.Matching(criteriaById));
 
-            /*Entities loaded from repository will be marked as 'Clean'*/
-            results.ForEach(customer =>
-            {
-                uow.ObserveEntityForChanges(customer);
-                Assert.AreEqual(DomainObjectState.Clean, customer.GetCurrentState(), "Entities loaded from data source or repository should be marked as 'Clean'");
-            });
-
-            //Observe sequence of instantiation
+            
             IBaseMapper mapper = DataSynchronizationManager.GetInstance().GetMapper<Customer>();
             Customer customer1 = new Customer(mapper) { Number = "1" };
-            Customer customer3 = new Customer(mapper) { Number = "3" };
             Customer customer2 = new Customer(mapper) { Number = "2" };
+            Customer customer3 = new Customer(mapper) { Number = "3" };
 
+
+            //Sequence of observation affects commit order
             uow.ObserveEntityForChanges(customer1);
-            uow.ObserveEntityForChanges(customer2);
             uow.ObserveEntityForChanges(customer3);
-
-            Assert.AreEqual(3, uow.GetUncommitedCount());
+            uow.ObserveEntityForChanges(customer2);
+            
 
             IList<string> sequenceDescription = new List<string>();
 

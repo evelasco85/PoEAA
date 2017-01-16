@@ -19,19 +19,20 @@ namespace Framework
 
     public interface IUnitOfWork
     {
-        void ObserveEntityForChanges<TEntity>(TEntity entity)
+        IUnitOfWorkEntityWrapper<TEntity> ObserveEntityForChanges<TEntity>(TEntity entity)
+            where TEntity : IDomainObject;
+        void UnobserveEntity<TEntity>(IUnitOfWorkEntityWrapper<TEntity> entityWrapper)
             where TEntity : IDomainObject;
         void Commit(SuccessfulUoWInvocationDelegate successfulInvocation, FailedUoWInvocationDelegate failedInvocation);
-        int GetUncommitedCount();
     }
 
     public class UnitOfWork : IUnitOfWork
     {
         delegate bool OperationDelegate(ref IDomainObject entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
 
-        IDictionary<Guid, IDomainObject> _observedDomainObjects = new Dictionary<Guid, IDomainObject>();
+        IDictionary<Guid, IUnitOfWorkEntityWrapper> _wrappedEntities = new Dictionary<Guid, IUnitOfWorkEntityWrapper>();
 
-        public void ObserveEntityForChanges<TEntity>(TEntity entity)
+        public IUnitOfWorkEntityWrapper<TEntity> ObserveEntityForChanges<TEntity>(TEntity entity)
             where TEntity : IDomainObject
         {
             if(entity == null)
@@ -40,89 +41,93 @@ namespace Framework
             if (entity.Mapper == null)
                 throw new NullReferenceException("A 'mapper' implementation is required for an entity to be observed");
 
-            if(_observedDomainObjects.ContainsKey(entity.SystemId))
+            if (_wrappedEntities.ContainsKey(entity.SystemId))
+            {
+                return ((IUnitOfWorkEntityWrapper<TEntity>) _wrappedEntities[entity.SystemId]);
+            }
+
+            IUnitOfWorkEntityWrapper<TEntity> wrapper = new UnitOfWorkEntityWrapper<TEntity>(entity);
+
+            _wrappedEntities.Add(wrapper.SystemId, wrapper);
+
+            return wrapper;
+        }
+
+        public void UnobserveEntity<TEntity>(IUnitOfWorkEntityWrapper<TEntity> entityWrapper)
+           where TEntity : IDomainObject
+        {
+            if (entityWrapper == null)
+                throw new ArgumentNullException("'entityWrapper' parameter is required");
+
+            if (!_wrappedEntities.ContainsKey(entityWrapper.SystemId))
                 return;
 
-            
-
-            _observedDomainObjects.Add(entity.SystemId, entity);
+            _wrappedEntities.Remove(entityWrapper.SystemId);
         }
 
         public void Commit(SuccessfulUoWInvocationDelegate successfulInvocation, FailedUoWInvocationDelegate failedInvocation)
         {
-            ApplyOperation(DomainObjectState.Manually_Created, _observedDomainObjects, successfulInvocation, failedInvocation);
-            ApplyOperation(DomainObjectState.Dirty, _observedDomainObjects, successfulInvocation, failedInvocation);
-            ApplyOperation(DomainObjectState.For_DataSource_Deletion, _observedDomainObjects, successfulInvocation, failedInvocation);
-        }
-
-        public int GetUncommitedCount()
-        {
-            return _observedDomainObjects
-                .Values
-                .Where(objects => objects.GetCurrentState() != DomainObjectState.Clean)
-                .Count();
+            ApplyOperation(UnitOfWorkAction.Insert, _wrappedEntities, successfulInvocation, failedInvocation);
+            ApplyOperation(UnitOfWorkAction.Update, _wrappedEntities, successfulInvocation, failedInvocation);
+            ApplyOperation(UnitOfWorkAction.Delete, _wrappedEntities, successfulInvocation, failedInvocation);
         }
 
         void ApplyOperation(
-            DomainObjectState affectedState, IDictionary<Guid, IDomainObject> domainObjects,
+            UnitOfWorkAction action, IDictionary<Guid, IUnitOfWorkEntityWrapper> wrappedEntities,
             SuccessfulUoWInvocationDelegate successfulInvocation, FailedUoWInvocationDelegate failedInvocation
             )
         {
-            List<IDomainObject> affectedEntities = domainObjects
+            List<IUnitOfWorkEntityWrapper> affectedEntities = wrappedEntities
                 .Values
-                .Where(objects => objects.GetCurrentState() == affectedState)
-                .OrderBy(objects => ((ISystemManipulation)objects).GetTicksUpdated())
+                .Where(objects => objects.GetExpectedAction() == action)
+                .OrderBy(entity => entity.GetTicksUpdated())
                 .ToList();
 
             for (int index = 0; index < affectedEntities.Count; index++)
             {
-                IDomainObject entity = affectedEntities[index];
+                IDomainObject entity = affectedEntities[index].EntityObject;
 
                 if(entity == null)
                     continue;
 
                 IBaseMapper mapper = entity.Mapper;
-                Tuple<UnitOfWorkAction, OperationDelegate> operation = GetOperation(affectedState, mapper);
+                OperationDelegate operation = GetOperation(action, mapper);
 
-                bool success = operation.Item2(ref entity,
+                bool success = operation(ref entity,
                     (domainObject, additionalInfo) =>
                     {
                         if (successfulInvocation != null)
-                            successfulInvocation(domainObject, operation.Item1, additionalInfo);
+                            successfulInvocation(domainObject, action, additionalInfo);
                     },
                     (domainObject, exception, additionalInfo) =>
                     {
                         if (failedInvocation != null)
-                            failedInvocation(domainObject, operation.Item1, exception, additionalInfo);
+                            failedInvocation(domainObject, action, exception, additionalInfo);
                     });
 
-                if(success)
-                    ((ISystemManipulation)entity).MarkAsClean();
+                //if(success)
+                //    ((ISystemManipulation)entity).MarkAsClean();
             }
         }
 
-        Tuple<UnitOfWorkAction, OperationDelegate> GetOperation(DomainObjectState state, IBaseMapper mapper)
+        OperationDelegate GetOperation(UnitOfWorkAction action, IBaseMapper mapper)
         {
             OperationDelegate operation = null;
-            UnitOfWorkAction action = UnitOfWorkAction.None;
 
-            switch (state)
+            switch (action)
             {
-                case DomainObjectState.Manually_Created:
-                    action = UnitOfWorkAction.Insert;
+                case UnitOfWorkAction.Insert:
                     operation = new OperationDelegate(mapper.Insert);
                     break;
-                case DomainObjectState.Dirty:
-                    action = UnitOfWorkAction.Update;
+                case UnitOfWorkAction.Update:
                     operation = new OperationDelegate(mapper.Update);
                     break;
-                case DomainObjectState.For_DataSource_Deletion:
-                    action = UnitOfWorkAction.Delete;
+                case UnitOfWorkAction.Delete:
                     operation = new OperationDelegate(mapper.Delete);
                     break;
             }
 
-            return new Tuple<UnitOfWorkAction, OperationDelegate>(action, operation);
+            return operation;
         }
     }
 }

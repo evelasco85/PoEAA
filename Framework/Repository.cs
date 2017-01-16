@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Framework.Data_Manipulation;
 using Framework.Domain;
@@ -27,12 +26,12 @@ namespace Framework
             if ((newResult == null) || (!newResult.Any()))
                 return;
 
-            IBaseMapper<TEntity> mapper = _manager.GetMapper<TEntity>();
+            IBaseMapper<TEntity> mapper = DataSynchronizationManager.GetInstance().GetMapper<TEntity>();
 
             ((List<TEntity>)newResult).ForEach(entity =>
             {
                 ((ISystemManipulation)entity).SetQueryObject(query);
-                ((ISystemManipulation)entity).MarkAsClean();
+                ((ISystemManipulation)entity).SetMapper(mapper);
             });
         }
 

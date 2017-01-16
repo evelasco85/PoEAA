@@ -1,32 +1,25 @@
 ﻿using System;
-using System.Diagnostics;
 using Framework.Data_Manipulation;
 
 namespace Framework.Domain
 {
     public interface ISystemManipulation
     {
-        long GetTicksUpdated();
-        void MarkAsClean();
         void SetQueryObject(IBaseQueryObject queryObject);
+        void SetMapper(IBaseMapper mapper);
     }
 
     public interface IDomainObject
     {
-        IBaseQueryObject QueryObject { get; }
         Guid SystemId { get; }
         IBaseMapper Mapper { get; }
-        DomainObjectState GetCurrentState();
-        void MarkAsDirty();
-        void MarkForDeletion();
+        InstantiationType Instantiation { get; }
     }
 
-    public enum DomainObjectState
+    public enum InstantiationType
     {
-        Manually_Created = 0,
-        Clean = 1,
-        Dirty = 2,
-        For_DataSource_Deletion = 3
+        New,
+        Loaded
     }
 
     public class DomainObject : IDomainObject, ISystemManipulation
@@ -34,11 +27,6 @@ namespace Framework.Domain
         IBaseMapper _mapper;
         Guid _systemId;
         IBaseQueryObject _queryObject;
-
-        public IBaseQueryObject QueryObject
-        {
-            get { return _queryObject; }
-        }
 
         public Guid SystemId
         {
@@ -50,23 +38,23 @@ namespace Framework.Domain
             get { return _mapper; }
         }
 
-        private DomainObjectState _state;
-        private long _ticksUpdated;
-
-        static object s_lock = new object();
-        static long s_lastTickReceived;
-        static int s_tickOffset;
+        public InstantiationType Instantiation
+        {
+            get
+            {
+                if (_queryObject == null)
+                    return InstantiationType.New;
+                else
+                    return InstantiationType.Loaded;
+            }
+        }
         
-
-        //IMemento fields;
         //Identity fields;
 
         public DomainObject(IBaseMapper mapper)
         {
             _mapper = mapper;
             _systemId = Guid.NewGuid();
-            
-            SetState(DomainObjectState.Manually_Created);
         }
 
         public void SetQueryObject(IBaseQueryObject queryObject)
@@ -74,54 +62,9 @@ namespace Framework.Domain
             _queryObject = queryObject;
         }
 
-        public DomainObjectState GetCurrentState()
+        public void SetMapper(IBaseMapper mapper)
         {
-            return _state;
-        }
-
-        void SetState(DomainObjectState state)
-        {
-            long currentTick = DateTime.Now.Ticks;
-
-            lock(s_lock)
-            {
-                if(s_lastTickReceived == currentTick)
-                {
-                    s_tickOffset += 1;
-                    _ticksUpdated = currentTick + s_tickOffset;
-                }
-                else
-                {
-                    s_tickOffset = 0;
-                    s_lastTickReceived = currentTick;
-                    _ticksUpdated = currentTick;
-                }
-            }
-
-            _state = state;
-        }
-
-        //If invoked, 'Update' operation will be applied from the associated mapper
-        public void MarkAsDirty()
-        {
-            SetState(DomainObjectState.Dirty);
-        }
-
-        //Exclude from data source updates
-        public void MarkAsClean()
-        {
-            SetState(DomainObjectState.Clean);
-        }
-
-        //Deletion takes precedence over all modifiers
-        public void MarkForDeletion()
-        {
-            SetState(DomainObjectState.For_DataSource_Deletion);
-        }
-
-        public long GetTicksUpdated()
-        {
-            return _ticksUpdated;
+            _mapper = mapper;
         }
 
         /*
@@ -130,7 +73,5 @@ namespace Framework.Domain
          * fields.add(field.name, ref field);
          * }
          */
-
-       
     }
 }

@@ -43,12 +43,18 @@ namespace Framework.Data_Manipulation
         {
             TEntity instance = (TEntity) entity;
 
+            SetSafeSuccessfulInvocator(ref successfulInvocation);
+            SetSafeFailureInvocator(ref failedInvocation);
+
             return Update(ref instance, successfulInvocation, failedInvocation);
         }
 
         public bool Insert(ref IDomainObject entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation)
         {
             TEntity instance = (TEntity)entity;
+
+            SetSafeSuccessfulInvocator(ref successfulInvocation);
+            SetSafeFailureInvocator(ref failedInvocation);
 
             return Insert(ref instance, successfulInvocation, failedInvocation);
         }
@@ -57,7 +63,22 @@ namespace Framework.Data_Manipulation
         {
             TEntity instance = (TEntity)entity;
 
+            SetSafeSuccessfulInvocator(ref successfulInvocation);
+            SetSafeFailureInvocator(ref failedInvocation);
+
             return Delete(ref instance, successfulInvocation, failedInvocation);
+        }
+
+        void SetSafeSuccessfulInvocator(ref SuccessfulInvocationDelegate successfulInvocation)
+        {
+            if (successfulInvocation == null)
+                successfulInvocation = (domainObject, info) => { };
+        }
+
+        void SetSafeFailureInvocator(ref FailedInvocationDelegate failedInvocation)
+        {
+            if (failedInvocation == null)
+                failedInvocation = (domainObject, exception, info) => { };
         }
     }
 }

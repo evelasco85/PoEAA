@@ -87,11 +87,13 @@ namespace Framework
                 bool success = operation.Item2(ref entity,
                     (domainObject, additionalInfo) =>
                     {
-                        successfulInvocation(domainObject, operation.Item1, additionalInfo);
+                        if (successfulInvocation != null)
+                            successfulInvocation(domainObject, operation.Item1, additionalInfo);
                     },
                     (domainObject, exception, additionalInfo) =>
                     {
-                        failedInvocation(domainObject, operation.Item1, exception, additionalInfo);
+                        if (failedInvocation != null)
+                            failedInvocation(domainObject, operation.Item1, exception, additionalInfo);
                     });
 
                 if(success)

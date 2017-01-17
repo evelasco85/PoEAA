@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Framework.Tests
 {
     [TestClass]
-    public class RetrieveMarriedCustomersTSTest
+    public class TransactionScriptTest
     {
         private IDataSynchronizationManager _manager;
 
@@ -28,17 +28,17 @@ namespace Framework.Tests
         [TestMethod]
         public void TestRunScript()
         {
-            RetrieveMarriedCustomersTS transactionScript = new RetrieveMarriedCustomersTS();
+            AlterMarriedStatusIntoSingleTS transactionScript = new AlterMarriedStatusIntoSingleTS();
 
             transactionScript.Input = GetCustomerByCivilStatusQuery.Criteria.SearchByStatus(GetCustomerByCivilStatusQuery.CivilStatus.Married);
 
             transactionScript.RunScript();
 
-            IList<Customer> resultsByStatus = transactionScript.Output;
+            IList<Customer> resultsByStatus = transactionScript.Output.SuccessfullyAlteredCustomers;
 
             Assert.AreEqual(1, resultsByStatus.Count);
             Assert.AreEqual("5", resultsByStatus[0].Number);
-            Assert.AreEqual("Test Married", resultsByStatus[0].Name);
+            Assert.AreEqual("Test is now single", resultsByStatus[0].Name);
         }
     }
 }

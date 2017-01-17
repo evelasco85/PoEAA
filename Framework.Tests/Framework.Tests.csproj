@@ -54,8 +54,8 @@
     <Compile Include="CustomerServices\GetCustomerByIdQuery.cs" />
     <Compile Include="CustomerServices\Customer.cs" />
     <Compile Include="CustomerServices\CustomerMapper.cs" />
-    <Compile Include="TransactionScripts\RetrieveMarriedCustomersTS.cs" />
-    <Compile Include="RetrieveMarriedCustomersTSTest.cs" />
+    <Compile Include="TransactionScripts\AlterMarriedStatusIntoSingleTS.cs" />
+    <Compile Include="TransactionScriptTest.cs" />
     <Compile Include="UnitOfWorkEntityWrapperTests.cs" />
     <Compile Include="QueryObjectTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

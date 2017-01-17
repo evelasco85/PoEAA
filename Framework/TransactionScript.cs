@@ -1,11 +1,16 @@
 ﻿namespace Framework
 {
-    public interface ITransactionScript
+    public interface ITransactionScriptExecution
+    {
+        void RunScript();
+    }
+
+    public interface ITransactionScript : ITransactionScriptExecution
     {
         IUnitOfWork CreateUnitOfWork();
-        void PreExecute();
-        void Execute();
-        void PostExecute();
+        void PreExecuteBody();
+        void ExecutionBody();
+        void PostExecuteBody();
     }
 
     public interface ITransactionScript<TInput, TOutput> : ITransactionScript
@@ -22,20 +27,27 @@
         protected IRepositoryRegistry RepositoryRegistry { get; private set; }
         protected IMapperRegistry MapperRegistry { get; private set; }
 
-        public TransactionScript(IRepositoryRegistry repositoryRegistry, IMapperRegistry mapperRegistry)
+        protected TransactionScript(IRepositoryRegistry repositoryRegistry, IMapperRegistry mapperRegistry)
         {
             RepositoryRegistry = repositoryRegistry;
             MapperRegistry = mapperRegistry;
         }
 
-        public virtual void PreExecute()
+        public virtual void PreExecuteBody()
         {
         }
 
-        public abstract void Execute();
+        public abstract void ExecutionBody();
 
-        public virtual void PostExecute()
+        public virtual void PostExecuteBody()
         {
+        }
+
+        public void RunScript()
+        {
+            PreExecuteBody();
+            ExecutionBody();
+            PostExecuteBody();
         }
 
         public IUnitOfWork CreateUnitOfWork()

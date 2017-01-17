@@ -26,6 +26,7 @@ namespace Framework
         IUnitOfWorkEntityWrapper<TEntity> RegisterRemoved<TEntity>(TEntity entity)
             where TEntity : IDomainObject;
         void Commit(SuccessfulUoWInvocationDelegate successfulInvocation, FailedUoWInvocationDelegate failedInvocation);
+        void ClearUnitOfWork();
     }
 
     public class UnitOfWork : IUnitOfWork
@@ -128,6 +129,12 @@ namespace Framework
             ApplyOperation(UnitOfWorkAction.Insert, _wrappedEntities, successfulInvocation, failedInvocation);
             ApplyOperation(UnitOfWorkAction.Update, _wrappedEntities, successfulInvocation, failedInvocation);
             ApplyOperation(UnitOfWorkAction.Delete, _wrappedEntities, successfulInvocation, failedInvocation);
+            ClearUnitOfWork();
+        }
+
+        public void ClearUnitOfWork()
+        {
+            _wrappedEntities.Clear();
         }
 
         void ApplyOperation(

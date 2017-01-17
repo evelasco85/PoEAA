@@ -6,15 +6,27 @@ using Framework.Domain;
 
 namespace Framework
 {
-    public interface IDataSynchronizationManager
+    public interface IMapperRegistry
     {
-        void RegisterEntity<TEntity>(IBaseMapper<TEntity> mapper, IList<IBaseQueryObject<TEntity>> queryList)
-            where TEntity : IDomainObject;
-        IRepository<TEntity> GetRepository<TEntity>()
-            where TEntity : IDomainObject;
         IBaseMapper<TEntity> GetMapper<TEntity>()
             where TEntity : IDomainObject;
+    }
+
+    public interface IRepositoryRegistry
+    {
+        IRepository<TEntity> GetRepository<TEntity>()
+            where TEntity : IDomainObject;
+    }
+
+    public interface IQueryObjectRegistry
+    {
         IBaseQueryObject<TEntity> GetQueryBySearchCriteria<TEntity, TSearchInput>()
+            where TEntity : IDomainObject;
+    }
+
+    public interface IDataSynchronizationManager : IMapperRegistry, IRepositoryRegistry, IQueryObjectRegistry
+    {
+        void RegisterEntity<TEntity>(IBaseMapper<TEntity> mapper, IList<IBaseQueryObject<TEntity>> queryList)
             where TEntity : IDomainObject;
     }
 

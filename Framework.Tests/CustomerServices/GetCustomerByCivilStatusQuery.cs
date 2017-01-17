@@ -4,7 +4,7 @@ using Framework.Data_Manipulation;
 
 namespace Framework.Tests.CustomerServices
 {
-    class GetCustomerByCivilStatusQuery : BaseQueryObject<Customer, GetCustomerByCivilStatusQuery.Criteria, Tuple<string, string>>
+    public class GetCustomerByCivilStatusQuery : BaseQueryObject<Customer, GetCustomerByCivilStatusQuery.Criteria, Tuple<string, string>>
     {
         public enum CivilStatus
         {
@@ -21,7 +21,7 @@ namespace Framework.Tests.CustomerServices
             {
             }
 
-            public static Criteria SearchById(CivilStatus status)
+            public static Criteria SearchByStatus(CivilStatus status)
             {
                 return new Criteria { CurrentCivilStatus = status };
             }

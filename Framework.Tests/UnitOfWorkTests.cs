@@ -34,7 +34,7 @@ namespace Framework.Tests
         public void TestCommit_SimpleInsertion()
         {
             IRepository<Customer> repository = _manager.GetRepository<Customer>();
-            GetCustomerByCivilStatusQuery.Criteria criteriaByStatus = GetCustomerByCivilStatusQuery.Criteria.SearchById(GetCustomerByCivilStatusQuery.CivilStatus.Married);
+            GetCustomerByCivilStatusQuery.Criteria criteriaByStatus = GetCustomerByCivilStatusQuery.Criteria.SearchByStatus(GetCustomerByCivilStatusQuery.CivilStatus.Married);
             GetCustomerByIdQuery.Criteria criteriaById = GetCustomerByIdQuery.Criteria.SearchById(2);
             List<Customer> results = new List<Customer>();
             IUnitOfWork uow = new UnitOfWork();

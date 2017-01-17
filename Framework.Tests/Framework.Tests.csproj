@@ -54,6 +54,8 @@
     <Compile Include="CustomerServices\GetCustomerByIdQuery.cs" />
     <Compile Include="CustomerServices\Customer.cs" />
     <Compile Include="CustomerServices\CustomerMapper.cs" />
+    <Compile Include="TransactionScripts\RetrieveMarriedCustomersTS.cs" />
+    <Compile Include="RetrieveMarriedCustomersTSTest.cs" />
     <Compile Include="UnitOfWorkEntityWrapperTests.cs" />
     <Compile Include="QueryObjectTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -67,9 +69,7 @@
       <Name>Framework</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="TransactionScripts\" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

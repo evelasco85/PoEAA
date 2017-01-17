@@ -35,7 +35,7 @@ namespace Framework.Tests
             IRepository<Customer> repository = _manager.GetRepository<Customer>();
 
             /*Match by civil status*/
-            GetCustomerByCivilStatusQuery.Criteria criteriaByStatus = GetCustomerByCivilStatusQuery.Criteria.SearchById(GetCustomerByCivilStatusQuery.CivilStatus.Married);
+            GetCustomerByCivilStatusQuery.Criteria criteriaByStatus = GetCustomerByCivilStatusQuery.Criteria.SearchByStatus(GetCustomerByCivilStatusQuery.CivilStatus.Married);
             IList<Customer> resultsByStatus = repository.Matching(criteriaByStatus);
             Customer matchByStatus = resultsByStatus.First();
 

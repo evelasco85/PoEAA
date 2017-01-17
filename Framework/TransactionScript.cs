@@ -9,7 +9,7 @@
     {
         IUnitOfWork CreateUnitOfWork();
         void PreExecuteBody();
-        void ExecutionBody();
+        
         void PostExecuteBody();
     }
 
@@ -17,6 +17,7 @@
     {
         TInput Input { get; set; }
         TOutput Output { get; set; }
+        TOutput ExecutionBody();
     }
 
     public abstract class TransactionScript<TInput, TOutput> : ITransactionScript<TInput, TOutput>
@@ -37,7 +38,7 @@
         {
         }
 
-        public abstract void ExecutionBody();
+        public abstract TOutput ExecutionBody();
 
         public virtual void PostExecuteBody()
         {
@@ -46,7 +47,9 @@
         public void RunScript()
         {
             PreExecuteBody();
-            ExecutionBody();
+
+            Output = ExecutionBody();
+
             PostExecuteBody();
         }
 

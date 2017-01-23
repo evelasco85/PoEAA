@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -10,6 +9,13 @@ using Framework.Security;
 
 namespace Framework
 {
+    public interface IIdentityMapQuery<TEntity>
+        where TEntity : IDomainObject
+    {
+        IIdentityMapQuery<TEntity> SetFilter<TEntityPropertyType>(Expression<Func<TEntity, TEntityPropertyType>> keyValue, object keyToSearch);
+        TEntity GetEntity();
+    }
+
     public interface IIdentityMap
     {
         IList<PropertyInfo> GetIdentityFields();
@@ -21,14 +27,18 @@ namespace Framework
         where TEntity : IDomainObject
     {
         void AddEntity(TEntity entity);
+        IIdentityMapQuery<TEntity> SearchBy();
     }
 
-    public class IdentityMap<TEntity> : IIdentityMap<TEntity>
+    public class IdentityMap<TEntity> : 
+        IIdentityMap<TEntity>,
+        IIdentityMapQuery<TEntity>
         where TEntity : IDomainObject
     {
         IList<PropertyInfo> _identityFields = new List<PropertyInfo>();
         IDictionary<Guid, IDomainObject> _guidToDomainObjectDictionary = new Dictionary<Guid, IDomainObject>();
         IDictionary<string, Guid> _hashToGuidDictionary = new Dictionary<string, Guid>();
+        IDictionary<string, string> _currentSearchDictionary = new Dictionary<string, string>();
 
         public int Count { get { return _guidToDomainObjectDictionary.Count; } }
 
@@ -46,6 +56,28 @@ namespace Framework
                             attribute => attribute.AttributeType == typeof(IdentityFieldAttribute))))
                 .Where(property => (!property.PropertyType.IsClass) || (property.PropertyType == typeof(string)))
                 .ToList();
+        }
+
+        public IIdentityMapQuery<TEntity> SearchBy()
+        {
+            //Start new seach
+            _currentSearchDictionary.Clear();
+
+            return this;
+        }
+
+        public IIdentityMapQuery<TEntity> SetFilter<TEntityPropertyType>(Expression<Func<TEntity, TEntityPropertyType>> keyValue, object keyToSearch)
+        {
+            string entityFieldName = ((MemberExpression)keyValue.Body).Member.Name;
+            string searchValue = Convert.ToString(keyValue);
+
+            _currentSearchDictionary.Add(entityFieldName, searchValue);
+            return this;
+        }
+
+        public TEntity GetEntity()
+        {
+            return default(TEntity);
         }
 
         public IList<PropertyInfo> GetIdentityFields()
@@ -77,20 +109,6 @@ namespace Framework
                 _guidToDomainObjectDictionary.Add(systemId, entity);
                 _hashToGuidDictionary.Add(hash, systemId);
             }
-        }
-
-
-        public void GetEntity<TEntityPropertyType>(params Expression<Func<TEntityPropertyType>>[] keyValue)
-        {
-            if(keyValue == null)
-                return;
-
-            for (int index = 0; index < keyValue.Length; index++)
-            {
-                string entityFieldName = ((MemberExpression)keyValue[index].Body).Member.Name;
-            }
-
-            //TEntity
         }
 
         string CreateHash(TEntity entity)

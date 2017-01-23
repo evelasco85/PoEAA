@@ -9,7 +9,9 @@ namespace Framework.Tests.CustomerServices
         {
         }
 
+        [IdentityField]
         public string Number { get; set; }
+
         public string Name { get; set; }
     }
 }

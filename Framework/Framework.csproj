@@ -43,6 +43,8 @@
     <Compile Include="Data Manipulation\BaseMapper.cs" />
     <Compile Include="Domain\DomainObjectMemento.cs" />
     <Compile Include="Domain\DomainObjectMementoService.cs" />
+    <Compile Include="IdentityFieldAttribute.cs" />
+    <Compile Include="IdentityMap.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="DataSynchronizationManager.cs" />
     <Compile Include="Domain\DomainObject.cs" />

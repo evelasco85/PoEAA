@@ -24,6 +24,12 @@ namespace Framework
             where TEntity : IDomainObject;
     }
 
+    public interface IIdentityMapRegistry
+    {
+        IIdentityMap<TEntity> GetIdentityMap<TEntity>()
+            where TEntity : IDomainObject;
+    }
+
     public interface IDataSynchronizationManager : IMapperRegistry, IRepositoryRegistry, IQueryObjectRegistry
     {
         void RegisterEntity<TEntity>(IBaseMapper<TEntity> mapper, IList<IBaseQueryObject<TEntity>> queryList)
@@ -57,6 +63,7 @@ namespace Framework
             IEntityServiceContainer<TEntity> serviceContainer = new EntityServiceContainer<TEntity>
             {
                 Mapper = mapper,
+                IdentityMap = new IdentityMap<TEntity>(),
                 Repository = new Repository<TEntity>(this),
                 QueryDictionary = ConvertQueryListToDictionary(queryList)
             };
@@ -132,6 +139,14 @@ namespace Framework
             IEntityServiceContainer<TEntity> serviceContainer = GetServiceContainer<TEntity>();
 
             return serviceContainer.QueryDictionary[typeof(TSearchInput).FullName];
+        }
+
+        public IIdentityMap<TEntity> GetIdentityMap<TEntity>()
+            where TEntity : IDomainObject
+        {
+            IEntityServiceContainer<TEntity> serviceContainer = GetServiceContainer<TEntity>();
+
+            return serviceContainer.IdentityMap;
         }
     }
 }

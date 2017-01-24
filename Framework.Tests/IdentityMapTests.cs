@@ -27,16 +27,23 @@ namespace Framework.Tests
         [TestMethod]
         public void Test_Identity_Updates()
         {
-            Customer customer1 = new Customer(null) { Number = "001" };
+            Customer customer1 = new Customer(null) { Number = "001" , Name = "John Doe"};
             IIdentityMap<Customer> map = new IdentityMap<Customer>();
 
             map.AddEntity(customer1);
 
             customer1.Number = "002";
 
-            map.AddEntity(customer1);
+            map.AddEntity(customer1);       //Updating primary key values
+
+            Customer matchedCustomer = map.SearchBy().SetFilter(customer => customer.Number, "002").GetEntity();
+            Customer notFoundCustomer = map.SearchBy().SetFilter(customer => customer.Number, "001").GetEntity();
 
             Assert.AreEqual(1, map.Count);
+            Assert.IsTrue(notFoundCustomer == null);
+            Assert.IsNotNull(matchedCustomer);
+            Assert.AreEqual(customer1.Number, matchedCustomer.Number);
+            Assert.AreEqual(customer1.Name, matchedCustomer.Name);
         }
 
         [TestMethod]

@@ -45,7 +45,7 @@ namespace Framework.Tests
             Customer customer1 = new Customer(null) { Number = "001" };
             Customer customer2 = new Customer(null) { Number = "002" };
             Customer customer3 = new Customer(null) { Number = "003" };
-            Customer customer4 = new Customer(null) { Number = "004" };
+            Customer customer4 = new Customer(null) {Number = "004", Name = "John Doe"};
             Customer customer5 = new Customer(null) { Number = "005" };
             IIdentityMap<Customer> map = new IdentityMap<Customer>();
 
@@ -57,9 +57,60 @@ namespace Framework.Tests
 
             Assert.AreEqual(5, map.Count);
 
-            map.SearchBy()
-                .SetFilter(customer => customer.Number, "001")
+            Customer matchedCustomer =  map.SearchBy()
+                .SetFilter(customer => customer.Number, "004")
                 .GetEntity();
+
+            Assert.AreEqual(customer4.Number, matchedCustomer.Number);
+            Assert.AreEqual(customer4.Name, matchedCustomer.Name);
+        }
+
+        [TestMethod]
+        public void Test_SearchResult_NotFound()
+        {
+            Customer customer1 = new Customer(null) {Number = "001"};
+            Customer customer2 = new Customer(null) {Number = "002"};
+            Customer customer3 = new Customer(null) {Number = "003"};
+            Customer customer4 = new Customer(null) {Number = "004", Name = "John Doe"};
+            Customer customer5 = new Customer(null) {Number = "005"};
+            IIdentityMap<Customer> map = new IdentityMap<Customer>();
+
+            map.AddEntity(customer1);
+            map.AddEntity(customer2);
+            map.AddEntity(customer3);
+            map.AddEntity(customer4);
+            map.AddEntity(customer5);
+
+            Assert.AreEqual(5, map.Count);
+
+            Customer matchedCustomer = map.SearchBy()
+                .SetFilter(customer => customer.Number, "007")
+                .GetEntity();
+
+            Assert.IsNull(matchedCustomer);
+        }
+
+        [TestMethod]
+        public void Test_Clear_Identities()
+        {
+            Customer customer1 = new Customer(null) { Number = "001" };
+            Customer customer2 = new Customer(null) { Number = "002" };
+            Customer customer3 = new Customer(null) { Number = "003" };
+            Customer customer4 = new Customer(null) { Number = "004", Name = "John Doe" };
+            Customer customer5 = new Customer(null) { Number = "005" };
+            IIdentityMap<Customer> map = new IdentityMap<Customer>();
+
+            map.AddEntity(customer1);
+            map.AddEntity(customer2);
+            map.AddEntity(customer3);
+            map.AddEntity(customer4);
+            map.AddEntity(customer5);
+
+            Assert.AreEqual(5, map.Count);
+
+            map.ClearEntities();
+
+            Assert.AreEqual(0, map.Count);
         }
     }
 }

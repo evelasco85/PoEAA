@@ -12,7 +12,7 @@ namespace Framework
     public interface IIdentityMapQuery<TEntity>
         where TEntity : IDomainObject
     {
-        IIdentityMapQuery<TEntity> SetFilter<TEntityPropertyType>(Expression<Func<TEntity, TEntityPropertyType>> keyValue, object keyToSearch);
+        IIdentityMapQuery<TEntity> SetFilter<TEntityPropertyType>(Expression<Func<TEntity, TEntityPropertyType>> keyToSearch, object keyValue);
         TEntity GetEntity();
     }
 
@@ -20,6 +20,7 @@ namespace Framework
     {
         IList<PropertyInfo> GetIdentityFields();
         bool EntityHasValidIdentityFields();
+        void ClearEntities();
         int Count { get; }
     }
 
@@ -38,7 +39,7 @@ namespace Framework
         IList<PropertyInfo> _identityFields = new List<PropertyInfo>();
         IDictionary<Guid, IDomainObject> _guidToDomainObjectDictionary = new Dictionary<Guid, IDomainObject>();
         IDictionary<string, Guid> _hashToGuidDictionary = new Dictionary<string, Guid>();
-        IDictionary<string, string> _currentSearchDictionary = new Dictionary<string, string>();
+        IDictionary<string, object> _currentSearchDictionary = new Dictionary<string, object>();
 
         public int Count { get { return _guidToDomainObjectDictionary.Count; } }
 
@@ -66,17 +67,47 @@ namespace Framework
             return this;
         }
 
-        public IIdentityMapQuery<TEntity> SetFilter<TEntityPropertyType>(Expression<Func<TEntity, TEntityPropertyType>> keyValue, object keyToSearch)
+        public IIdentityMapQuery<TEntity> SetFilter<TEntityPropertyType>(Expression<Func<TEntity, TEntityPropertyType>> keyToSearch, object keyValue)
         {
-            string entityFieldName = ((MemberExpression)keyValue.Body).Member.Name;
+            string entityFieldName = ((MemberExpression)keyToSearch.Body).Member.Name;
             string searchValue = Convert.ToString(keyValue);
 
+            if(!_identityFields.Any(field => field.Name == entityFieldName))
+                throw new ArgumentException(string.Format("Field '{0}' is not marked with 'IdentityFieldAttribute'", entityFieldName));
+
             _currentSearchDictionary.Add(entityFieldName, searchValue);
+
             return this;
         }
 
         public TEntity GetEntity()
         {
+            var parameters = typeof(TEntity)
+                .GetConstructors()
+                .Single()
+                .GetParameters()
+                .Select(p => (object) null)     //Set parameter values to null
+                .ToArray();
+            TEntity searchEntity = (TEntity) Activator.CreateInstance(typeof(TEntity), parameters);
+
+            IList<PropertyInfo> matchedProperties = _identityFields
+                .Where(field => _currentSearchDictionary.Any(search => field.Name == search.Key))
+                .ToList();
+
+            for (int index = 0; index < matchedProperties.Count; index++)
+            {
+                PropertyInfo property = matchedProperties[index];
+                object searchValue = _currentSearchDictionary[property.Name];
+
+                property.SetValue(searchEntity, searchValue);
+            }
+
+            string searchHash = CreateHash(searchEntity);
+            Guid foundGuid = (_hashToGuidDictionary.ContainsKey(searchHash)) ? _hashToGuidDictionary[searchHash] : Guid.Empty;
+
+            if (foundGuid != Guid.Empty)
+                return (TEntity)_guidToDomainObjectDictionary[foundGuid];
+
             return default(TEntity);
         }
 
@@ -113,12 +144,26 @@ namespace Framework
 
         string CreateHash(TEntity entity)
         {
-            StringBuilder hashSet = new StringBuilder();
-            IHashService service = HashService.GetInstance();
-
+            IList<object> values = new List<object>();
+            
             for (int index = 0; index < _identityFields.Count; index++)
             {
                 object valueObj = _identityFields[index].GetValue(entity);
+
+                values.Add(valueObj);
+            }
+
+            return CreateHash(values);
+        }
+
+        string CreateHash(IList<object> values)
+        {
+            StringBuilder hashSet = new StringBuilder();
+            IHashService service = HashService.GetInstance();
+
+            for (int index = 0; index < values.Count; index++)
+            {
+                object valueObj = values[index];
 
                 hashSet.AppendLine(service.ComputeHashValue(Convert.ToString(valueObj)));
             }

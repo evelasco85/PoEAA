@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Framework.Domain
 {
@@ -59,10 +57,13 @@ namespace Framework.Domain
         }
 
         IDictionary<string, Tuple<PropertyInfo, object>> GetPrimitiveProperties<TEntity>(TEntity entity)
+            where TEntity : IDomainObject
         {
-            BindingFlags flags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly;
-            Type entityType = typeof(TEntity);
-            IList<PropertyInfo> properties = entityType.GetProperties(flags);
+            IList<PropertyInfo> properties = DataSynchronizationManager
+                .GetInstance()
+                .GetProperties<TEntity>()
+                .Values
+                .ToList();
             IDictionary<string, Tuple<PropertyInfo, object>> propertyValues =
                 new Dictionary<string, Tuple<PropertyInfo, object>>();
 
@@ -70,10 +71,6 @@ namespace Framework.Domain
             {
                 PropertyInfo property = properties[index];
                 object value = property.GetValue(entity);
-                bool isPrimitive = (!property.PropertyType.IsClass) || (property.PropertyType == typeof(string));
-
-                if (!isPrimitive)
-                    continue;
 
                 propertyValues.Add(property.Name, new Tuple<PropertyInfo, object>(property, value));
             }

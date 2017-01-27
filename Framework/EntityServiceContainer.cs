@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using Framework.Data_Manipulation;
 using Framework.Domain;
 
@@ -11,6 +12,7 @@ namespace Framework
         IRepository<TEntity> Repository { get; set; }
         IDictionary<string, IBaseQueryObject<TEntity>> QueryDictionary { get; set; }
         IIdentityMap<TEntity> IdentityMap { get; set; }
+        IDictionary<string, PropertyInfo> PrimitiveProperties { get; set; }
     }
 
     public class EntityServiceContainer<TEntity> : IEntityServiceContainer<TEntity>
@@ -20,5 +22,6 @@ namespace Framework
         public IRepository<TEntity> Repository { get; set; }
         public IDictionary<string, IBaseQueryObject<TEntity>> QueryDictionary { get; set; }
         public IIdentityMap<TEntity> IdentityMap { get; set; }
+        public IDictionary<string, PropertyInfo> PrimitiveProperties {get; set;}
     }
 }

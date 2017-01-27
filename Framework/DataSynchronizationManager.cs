@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Instrumentation;
+using System.Reflection;
 using Framework.Data_Manipulation;
 using Framework.Domain;
 
@@ -35,6 +36,9 @@ namespace Framework
     {
         void RegisterEntity<TEntity>(IBaseMapper<TEntity> mapper, IList<IBaseQueryObject<TEntity>> queryList)
             where TEntity : IDomainObject;
+
+        IDictionary<string, PropertyInfo> GetProperties<TEntity>()
+            where TEntity : IDomainObject;
     }
 
     public class DataSynchronizationManager : IDataSynchronizationManager
@@ -66,7 +70,8 @@ namespace Framework
                 Mapper = mapper,
                 IdentityMap = new IdentityMap<TEntity>(),
                 Repository = new Repository<TEntity>(this),
-                QueryDictionary = ConvertQueryListToDictionary(queryList)
+                QueryDictionary = ConvertQueryListToDictionary(queryList),
+                PrimitiveProperties = GetPrimitiveProperties<TEntity>()
             };
 
             string key = GetServiceContainerKey<TEntity>();
@@ -148,6 +153,25 @@ namespace Framework
             IEntityServiceContainer<TEntity> serviceContainer = GetServiceContainer<TEntity>();
 
             return serviceContainer.IdentityMap;
+        }
+
+        public IDictionary<string, PropertyInfo> GetProperties<TEntity>()
+           where TEntity : IDomainObject
+        {
+            IEntityServiceContainer<TEntity> serviceContainer = GetServiceContainer<TEntity>();
+
+            return serviceContainer.PrimitiveProperties;
+        }
+
+        IDictionary<string, PropertyInfo> GetPrimitiveProperties<TEntity>()
+        {
+            BindingFlags flags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+            Type entityType = typeof(TEntity);
+
+            return entityType
+                .GetProperties(flags)
+                .Where(property => (!property.PropertyType.IsClass) || (property.PropertyType == typeof(string)))
+                .ToDictionary(property => property.Name, property => property);
         }
     }
 }

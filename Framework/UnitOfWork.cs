@@ -19,11 +19,11 @@ namespace Framework
 
     public interface IUnitOfWork
     {
-        IUnitOfWorkEntityWrapper<TEntity> RegisterNew<TEntity>(TEntity entity)
+        TEntity RegisterNew<TEntity>(TEntity entity)
             where TEntity : IDomainObject;
-        IUnitOfWorkEntityWrapper<TEntity> RegisterDirty<TEntity>(TEntity entity)
+        TEntity RegisterDirty<TEntity>(TEntity entity)
             where TEntity : IDomainObject;
-        IUnitOfWorkEntityWrapper<TEntity> RegisterRemoved<TEntity>(TEntity entity)
+        TEntity RegisterRemoved<TEntity>(TEntity entity)
             where TEntity : IDomainObject;
         void Commit(SuccessfulUoWInvocationDelegate successfulInvocation, FailedUoWInvocationDelegate failedInvocation);
         void ClearUnitOfWork();
@@ -33,75 +33,82 @@ namespace Framework
     {
         delegate bool OperationDelegate(ref IDomainObject entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
 
-        IDictionary<Guid, IUnitOfWorkEntityWrapper> _wrappedEntities = new Dictionary<Guid, IUnitOfWorkEntityWrapper>();
+        IDictionary<Guid, IDomainObject> _insertionObjects = new Dictionary<Guid, IDomainObject>();
+        IDictionary<Guid, IDomainObject> _updatingObjects = new Dictionary<Guid, IDomainObject>();
+        IDictionary<Guid, IDomainObject> _deletionObjects = new Dictionary<Guid, IDomainObject>();
 
-        public IUnitOfWorkEntityWrapper<TEntity> RegisterNew<TEntity>(TEntity entity)
+        bool ContainsKey(IDictionary<Guid, IDomainObject> domainDictionary, IDomainObject domainObject)
+        {
+            return domainDictionary.ContainsKey(domainObject.SystemId);
+        }
+
+        void AddEntity(IDictionary<Guid, IDomainObject> domainDictionary, IDomainObject domainObject)
+        {
+            domainDictionary.Add(domainObject.SystemId, domainObject);
+        }
+
+        void RemoveEntity(IDictionary<Guid, IDomainObject> domainDictionary, IDomainObject domainObject)
+        {
+            if (ContainsKey(domainDictionary, domainObject))
+                domainDictionary.Remove(domainObject.SystemId);
+        }
+
+        public TEntity RegisterNew<TEntity>(TEntity entity)
             where TEntity : IDomainObject
         {
             ValidateEntityPrerequisites(entity);
 
-            if (_wrappedEntities.ContainsKey(entity.SystemId))
-            {
-                IUnitOfWorkEntityWrapper<TEntity> wrapper = ((IUnitOfWorkEntityWrapper<TEntity>) _wrappedEntities[entity.SystemId]);
-                UnitOfWorkAction action = wrapper.GetExpectedAction();
+            if (ContainsKey(_updatingObjects, entity))
+                throw new InvalidOperationException("'entity' already registered for update | [Operation Register: New]");
 
-                if (action == UnitOfWorkAction.Update)
-                    throw new InvalidOperationException("'entity' already registered for update | [Operation Register: New]");
+            if (ContainsKey(_deletionObjects, entity))
+                throw new InvalidOperationException("'entity' already registered for deletion | [Operation Register: New]");
 
-                if (action == UnitOfWorkAction.Delete)
-                    throw new InvalidOperationException("'entity' already registered for deletion | [Operation Register: New]");
+            if (ContainsKey(_insertionObjects, entity))
+                return entity;
 
-                if (action == UnitOfWorkAction.Insert)
-                    return wrapper;
-            }
+            AddEntity(_insertionObjects, entity);
 
-            return Register(UnitOfWorkAction.Insert, entity);
+            return entity;
         }
 
-        public IUnitOfWorkEntityWrapper<TEntity> RegisterDirty<TEntity>(TEntity entity)
-           where TEntity : IDomainObject
+        public TEntity RegisterDirty<TEntity>(TEntity entity)
+            where TEntity : IDomainObject
         {
             ValidateEntityPrerequisites(entity);
 
-            if (_wrappedEntities.ContainsKey(entity.SystemId))
-            {
-                IUnitOfWorkEntityWrapper<TEntity> wrapper = ((IUnitOfWorkEntityWrapper<TEntity>)_wrappedEntities[entity.SystemId]);
-                UnitOfWorkAction action = wrapper.GetExpectedAction();
+            if (ContainsKey(_deletionObjects, entity))
+                throw new InvalidOperationException(
+                    "'entity' already registered for deletion | [Operation Register: Dirty]");
 
-                if (action == UnitOfWorkAction.Delete)
-                    throw new InvalidOperationException("'entity' already registered for deletion | [Operation Register: Dirty]");
+            if (ContainsKey(_insertionObjects, entity) || ContainsKey(_updatingObjects, entity))
+                return entity;
 
-                if ((action == UnitOfWorkAction.Insert) || (action == UnitOfWorkAction.Update))
-                    return wrapper;
-            }
+            AddEntity(_updatingObjects, entity);
 
-            return Register(UnitOfWorkAction.Update, entity);
+            return entity;
         }
 
-        public IUnitOfWorkEntityWrapper<TEntity> RegisterRemoved<TEntity>(TEntity entity)
-           where TEntity : IDomainObject
+        public TEntity RegisterRemoved<TEntity>(TEntity entity)
+            where TEntity : IDomainObject
         {
             ValidateEntityPrerequisites(entity);
 
-            if (_wrappedEntities.ContainsKey(entity.SystemId))
+            if (ContainsKey(_insertionObjects, entity) || ContainsKey(_updatingObjects, entity))
             {
-                IUnitOfWorkEntityWrapper<TEntity> wrapper = ((IUnitOfWorkEntityWrapper<TEntity>)_wrappedEntities[entity.SystemId]);
-                UnitOfWorkAction action = wrapper.GetExpectedAction();
+                RemoveEntity(_insertionObjects, entity);
+                RemoveEntity(_updatingObjects, entity);
 
-                if ((action == UnitOfWorkAction.Insert) || (action == UnitOfWorkAction.Update))
-                {
-                    _wrappedEntities.Remove(entity.SystemId);
-
-                    return new UnitOfWorkEntityWrapper<TEntity>(entity, UnitOfWorkAction.None);
-                }
-
-                if (action == UnitOfWorkAction.Delete)
-                {
-                    return wrapper;
-                }
+                return entity;
             }
 
-            return Register(UnitOfWorkAction.Insert, entity);
+            if (ContainsKey(_deletionObjects, entity))
+                return entity;
+
+            AddEntity(_deletionObjects, entity);
+
+            return entity;
+
         }
 
         void ValidateEntityPrerequisites<TEntity>(TEntity entity)
@@ -114,43 +121,29 @@ namespace Framework
                 throw new NullReferenceException("A 'mapper' implementation is required for an entity to be observed");
         }
 
-        IUnitOfWorkEntityWrapper<TEntity> Register<TEntity>(UnitOfWorkAction action, TEntity entity)
-            where TEntity : IDomainObject
-        {
-            IUnitOfWorkEntityWrapper<TEntity> wrapper = new UnitOfWorkEntityWrapper<TEntity>(entity, action);
-
-            _wrappedEntities.Add(wrapper.SystemId, wrapper);
-
-            return wrapper;
-        }
-
         public void Commit(SuccessfulUoWInvocationDelegate successfulInvocation, FailedUoWInvocationDelegate failedInvocation)
         {
-            ApplyOperation(UnitOfWorkAction.Insert, _wrappedEntities, successfulInvocation, failedInvocation);
-            ApplyOperation(UnitOfWorkAction.Update, _wrappedEntities, successfulInvocation, failedInvocation);
-            ApplyOperation(UnitOfWorkAction.Delete, _wrappedEntities, successfulInvocation, failedInvocation);
+            ApplyOperation(UnitOfWorkAction.Insert, _insertionObjects.Values.ToList(), successfulInvocation, failedInvocation);
+            ApplyOperation(UnitOfWorkAction.Update, _updatingObjects.Values.ToList(), successfulInvocation, failedInvocation);
+            ApplyOperation(UnitOfWorkAction.Delete, _deletionObjects.Values.ToList(), successfulInvocation, failedInvocation);
             ClearUnitOfWork();
         }
 
         public void ClearUnitOfWork()
         {
-            _wrappedEntities.Clear();
+            _insertionObjects.Clear();
+            _updatingObjects.Clear();
+            _deletionObjects.Clear();
         }
 
         void ApplyOperation(
-            UnitOfWorkAction action, IDictionary<Guid, IUnitOfWorkEntityWrapper> wrappedEntities,
+            UnitOfWorkAction action, IList<IDomainObject> affectedEntities,
             SuccessfulUoWInvocationDelegate successfulInvocation, FailedUoWInvocationDelegate failedInvocation
             )
         {
-            List<IUnitOfWorkEntityWrapper> affectedEntities = wrappedEntities
-                .Values
-                .Where(objects => objects.GetExpectedAction() == action)
-                .OrderBy(entity => entity.GetTicksUpdated())
-                .ToList();
-
             for (int index = 0; index < affectedEntities.Count; index++)
             {
-                IDomainObject entity = affectedEntities[index].EntityObject;
+                IDomainObject entity = affectedEntities[index];
 
                 if(entity == null)
                     continue;

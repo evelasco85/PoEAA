@@ -54,7 +54,6 @@ namespace Framework.Tests
             uow.RegisterNew(customer3);
             uow.RegisterNew(customer2);
             
-
             IList<string> sequenceDescription = new List<string>();
 
             uow.Commit(

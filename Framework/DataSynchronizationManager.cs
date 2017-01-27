@@ -82,12 +82,6 @@ namespace Framework
             _serviceContainerDictionary.Add(key, serviceContainer);
         }
 
-        bool ServiceContainerExists<TEntity>()
-            where TEntity : IDomainObject
-        {
-            return _serviceContainerDictionary.ContainsKey(GetServiceContainerKey<TEntity>());
-        }
-
         IDictionary<string, IBaseQueryObject<TEntity>> ConvertQueryListToDictionary<TEntity>(IList<IBaseQueryObject<TEntity>> queryList)
             where TEntity : IDomainObject
         {

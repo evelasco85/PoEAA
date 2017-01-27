@@ -8,10 +8,8 @@ namespace Framework
         IDomainObject EntityObject { get; }
         Guid SystemId { get; }
         InstantiationType Instantiation { get; }
-        string OriginalHashCode { get; }
         UnitOfWorkAction GetExpectedAction();
         long GetTicksUpdated();
-        bool HasChanges();
     }
 
     public interface IUnitOfWorkEntityWrapper<TEntity> : IUnitOfWorkEntityWrapper
@@ -28,12 +26,8 @@ namespace Framework
         static long s_lastTickReceived;
         static int s_tickOffset;
 
-        private bool _setForDataSourceDeletion = false;
         private readonly TEntity _entity;
-        private readonly string _originalHashCode;
         private readonly UnitOfWorkAction _action;
-
-        IDomainObjectMementoService _mementoService = DomainObjectMementoService.GetInstance();
 
         public TEntity Entity
         {
@@ -55,17 +49,9 @@ namespace Framework
             get { return _entity.Instantiation; }
         }
 
-        public string OriginalHashCode
-        {
-            get { return _originalHashCode; }
-        }
-
         public UnitOfWorkEntityWrapper(TEntity entity, UnitOfWorkAction action)
         {
-            IDomainObjectMemento memento = _mementoService.CreateMemento(entity);
-
             _entity = entity;
-            _originalHashCode = memento.HashCode;
             _ticksUpdated = GetTick();
             _action = action;
         }
@@ -102,13 +88,6 @@ namespace Framework
         public UnitOfWorkAction GetExpectedAction()
         {
             return _action;
-        }
-
-        public bool HasChanges()
-        {
-            IDomainObjectMemento memento = _mementoService.CreateMemento(_entity);
-
-            return (_originalHashCode != memento.HashCode);
         }
     }
 }

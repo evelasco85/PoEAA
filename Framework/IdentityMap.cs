@@ -45,11 +45,16 @@ namespace Framework
 
         public IdentityMap()
         {
+            _identityFields = GetIdentities();
+        }
+
+        IList<PropertyInfo> GetIdentities()
+        {
             BindingFlags flags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly;
             Type entityType = typeof(TEntity);
-            IList<PropertyInfo> properties = entityType.GetProperties(flags);
-
-            _identityFields = properties
+            
+            return entityType
+                .GetProperties(flags)
                 .Where(
                     property =>
                         (property.CustomAttributes != null) && (property.CustomAttributes.Any()) &&
@@ -80,27 +85,38 @@ namespace Framework
             return this;
         }
 
-        public TEntity GetEntity()
+        TEntity CreateDefaultInstance()
         {
             var parameters = typeof(TEntity)
-                .GetConstructors()
-                .Single()
-                .GetParameters()
-                .Select(p => (object) null)     //Set parameter values to null
-                .ToArray();
-            TEntity searchEntity = (TEntity) Activator.CreateInstance(typeof(TEntity), parameters);
+               .GetConstructors()
+               .Single()
+               .GetParameters()
+               .Select(p => (object)null)     //Set parameter values to null
+               .ToArray();
+            
+            return (TEntity)Activator.CreateInstance(typeof(TEntity), parameters);
+        }
 
-            IList<PropertyInfo> matchedProperties = _identityFields
-                .Where(field => _currentSearchDictionary.Any(search => field.Name == search.Key))
+        void SetSearchPropertyValues(ref TEntity entity, IList<PropertyInfo> properties, IDictionary<string, object> searchDictionary)
+        {
+            IList<PropertyInfo> matchedProperties = properties
+                .Where(field => searchDictionary.Any(search => field.Name == search.Key))
                 .ToList();
 
             for (int index = 0; index < matchedProperties.Count; index++)
             {
                 PropertyInfo property = matchedProperties[index];
-                object searchValue = _currentSearchDictionary[property.Name];
+                object searchValue = searchDictionary[property.Name];
 
-                property.SetValue(searchEntity, searchValue);
+                property.SetValue(entity, searchValue);
             }
+        }
+
+        public TEntity GetEntity()
+        {
+            TEntity searchEntity = CreateDefaultInstance();
+
+            SetSearchPropertyValues(ref searchEntity, _identityFields, _currentSearchDictionary);
 
             string searchHash = CreateHash(searchEntity);
             Guid foundGuid = (_hashToGuidDictionary.ContainsKey(searchHash)) ? _hashToGuidDictionary[searchHash] : Guid.Empty;

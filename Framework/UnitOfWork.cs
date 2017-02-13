@@ -27,6 +27,7 @@ namespace Framework
             where TEntity : IDomainObject;
         void Commit(SuccessfulUoWInvocationDelegate successfulInvocation, FailedUoWInvocationDelegate failedInvocation);
         void ClearUnitOfWork();
+        bool PendingCommits();
     }
 
     public class UnitOfWork : IUnitOfWork
@@ -134,6 +135,11 @@ namespace Framework
             _insertionObjects.Clear();
             _updatingObjects.Clear();
             _deletionObjects.Clear();
+        }
+
+        public bool PendingCommits()
+        {
+            return (_insertionObjects.Any()) || (_updatingObjects.Any()) || (_deletionObjects.Any());
         }
 
         void ApplyOperation(

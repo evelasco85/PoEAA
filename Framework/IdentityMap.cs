@@ -85,40 +85,17 @@ namespace Framework
             return this;
         }
 
-        TEntity CreateDefaultInstance()
-        {
-            var parameters = typeof(TEntity)
-               .GetConstructors()
-               .Single()
-               .GetParameters()
-               .Select(p => (object)null)     //Set parameter values to null
-               .ToArray();
-            
-            return (TEntity)Activator.CreateInstance(typeof(TEntity), parameters);
-        }
-
-        void SetSearchPropertyValues(ref TEntity entity, IList<PropertyInfo> properties, IDictionary<string, object> searchDictionary)
-        {
-            IList<PropertyInfo> matchedProperties = properties
-                .Where(field => searchDictionary.Any(search => field.Name == search.Key))
-                .ToList();
-
-            for (int index = 0; index < matchedProperties.Count; index++)
-            {
-                PropertyInfo property = matchedProperties[index];
-                object searchValue = searchDictionary[property.Name];
-
-                property.SetValue(entity, searchValue);
-            }
-        }
-
         public TEntity GetEntity()
         {
-            TEntity searchEntity = CreateDefaultInstance();
+            IList<object> values = GetValuesByFieldOrdinals(propertyInfo =>
+            {
+                if (!_currentSearchDictionary.ContainsKey(propertyInfo.Name))
+                    return null;
 
-            SetSearchPropertyValues(ref searchEntity, _identityFields, _currentSearchDictionary);
+                return _currentSearchDictionary[propertyInfo.Name];
+            });
 
-            string searchHash = CreateHash(searchEntity);
+            string searchHash = CreateHash(values);
             Guid foundGuid = (_hashToGuidDictionary.ContainsKey(searchHash)) ? _hashToGuidDictionary[searchHash] : Guid.Empty;
 
             if (foundGuid != Guid.Empty)
@@ -160,16 +137,32 @@ namespace Framework
 
         string CreateHash(TEntity entity)
         {
+            IList<object> values = GetValuesByFieldOrdinals(propertyInfo =>
+            {
+                return propertyInfo.GetValue(entity);
+            });
+
+            return CreateHash(values);
+        }
+
+        IList<object> GetValuesByFieldOrdinals(Func<PropertyInfo, object> getValueFunc)
+        {
             IList<object> values = new List<object>();
-            
+
+            if (getValueFunc == null)
+                return values;
+
             for (int index = 0; index < _identityFields.Count; index++)
             {
-                object valueObj = _identityFields[index].GetValue(entity);
+                object valueObj = getValueFunc(_identityFields[index]);
+
+                if(valueObj == null)
+                    continue;
 
                 values.Add(valueObj);
             }
 
-            return CreateHash(values);
+            return values;
         }
 
         string CreateHash(IList<object> values)

@@ -28,9 +28,9 @@ namespace Framework.Tests
         [TestMethod]
         public void TestLazyLoadCustomer()
         {
-            LazyLoadManager.GetInstance().RegisterLazyLoadType<Customer, GetCustomerByIdQuery.Criteria>();
-            GetCustomerByIdQuery.Criteria criteria = GetCustomerByIdQuery.Criteria.SearchById(23);
-            Customer lazyLoadCustomer = LazyLoadManager.GetInstance().CreateLazyLoadEntity<Customer, GetCustomerByIdQuery.Criteria>(criteria);
+            //LazyLoadManager.GetInstance().RegisterLazyLoadType<Customer, GetCustomerByIdQuery.Criteria>();
+            //GetCustomerByIdQuery.Criteria criteria = GetCustomerByIdQuery.Criteria.SearchById(23);
+            //Customer lazyLoadCustomer = LazyLoadManager.GetInstance().CreateLazyLoadEntity<Customer, GetCustomerByIdQuery.Criteria>(criteria);
         }
     }
 }

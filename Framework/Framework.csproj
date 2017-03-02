@@ -47,6 +47,8 @@
     <Compile Include="ForeignKeyMappingManager.cs" />
     <Compile Include="IdentityFieldAttribute.cs" />
     <Compile Include="IdentityMap.cs" />
+    <Compile Include="LazyLoad\LazyLoadManager.cs" />
+    <Compile Include="LazyLoad\DynamicLazyLoadTypeBuilder.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="DataSynchronizationManager.cs" />
     <Compile Include="Domain\DomainObject.cs" />
@@ -56,6 +58,7 @@
     <Compile Include="TransactionScript.cs" />
     <Compile Include="UnitOfWork.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

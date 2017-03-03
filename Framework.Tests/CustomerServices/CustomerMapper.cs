@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Framework.Data_Manipulation;
+using System.Collections;
 
 namespace Framework.Tests.CustomerServices
 {
     class CustomerMapper : BaseMapper<Customer>
     {
+        public const string SUCCESS_DESCRIPTION = "description";
+
         IDictionary<string, Customer> _internalData = new Dictionary<string, Customer>();
 
         public IDictionary<string, Customer> InternalData
@@ -17,7 +20,13 @@ namespace Framework.Tests.CustomerServices
             FailedInvocationDelegate failedInvocation)
         {
             _internalData[entity.Number] = entity;
-            successfulInvocation(entity, string.Format("{0}", entity.Number));
+
+            Hashtable results = new Hashtable
+            {
+                {SUCCESS_DESCRIPTION, string.Format("{0}", entity.Number) }
+            };
+
+            successfulInvocation(entity, results);
 
             return true;
         }
@@ -26,7 +35,13 @@ namespace Framework.Tests.CustomerServices
             FailedInvocationDelegate failedInvocation)
         {
             _internalData.Remove(entity.Number);
-            successfulInvocation(entity, string.Format("{0}", entity.Number));
+
+            Hashtable results = new Hashtable
+            {
+                {SUCCESS_DESCRIPTION, string.Format("{0}", entity.Number) }
+            };
+
+            successfulInvocation(entity, results);
 
             return true;
         }
@@ -35,7 +50,13 @@ namespace Framework.Tests.CustomerServices
             FailedInvocationDelegate failedInvocation)
         {
             _internalData.Add(entity.Number, entity);
-            successfulInvocation(entity, string.Format("{0}", entity.Number));
+
+            Hashtable results = new Hashtable
+            {
+                {SUCCESS_DESCRIPTION, string.Format("{0}", entity.Number) }
+            };
+
+            successfulInvocation(entity, results);
 
             return true;
         }

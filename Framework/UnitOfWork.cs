@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Framework.Data_Manipulation;
 using Framework.Domain;
+using System.Collections;
 
 namespace Framework
 {
@@ -14,8 +15,8 @@ namespace Framework
         Delete = 3
     }
 
-    public delegate void SuccessfulUoWInvocationDelegate(IDomainObject domainObject, UnitOfWorkAction action, object additionalInfo);
-    public delegate void FailedUoWInvocationDelegate(IDomainObject domainObject, UnitOfWorkAction action, Exception exception, object additionalInfo);
+    public delegate void SuccessfulUoWInvocationDelegate(IDomainObject domainObject, UnitOfWorkAction action, Hashtable results);
+    public delegate void FailedUoWInvocationDelegate(IDomainObject domainObject, UnitOfWorkAction action, Hashtable results);
 
     public interface IUnitOfWork
     {
@@ -158,15 +159,15 @@ namespace Framework
                 OperationDelegate operation = GetOperation(action, mapper);
 
                 bool success = operation(ref entity,
-                    (domainObject, additionalInfo) =>
+                    (domainObject, results) =>
                     {
                         if (successfulInvocation != null)
-                            successfulInvocation(domainObject, action, additionalInfo);
+                            successfulInvocation(domainObject, action, results);
                     },
-                    (domainObject, exception, additionalInfo) =>
+                    (domainObject, results) =>
                     {
                         if (failedInvocation != null)
-                            failedInvocation(domainObject, action, exception, additionalInfo);
+                            failedInvocation(domainObject, action, results);
                     });
             }
         }

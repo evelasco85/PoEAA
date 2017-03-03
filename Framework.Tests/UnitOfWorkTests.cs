@@ -36,11 +36,11 @@ namespace Framework.Tests
             IRepository<Customer> repository = _manager.GetRepository<Customer>();
             GetCustomerByCivilStatusQuery.Criteria criteriaByStatus = GetCustomerByCivilStatusQuery.Criteria.SearchByStatus(GetCustomerByCivilStatusQuery.CivilStatus.Married);
             GetCustomerByIdQuery.Criteria criteriaById = GetCustomerByIdQuery.Criteria.SearchById(2);
-            List<Customer> results = new List<Customer>();
+            List<Customer> customerResults = new List<Customer>();
             IUnitOfWork uow = new UnitOfWork();
 
-            results.AddRange(repository.Matching(criteriaByStatus));
-            results.AddRange(repository.Matching(criteriaById));
+            customerResults.AddRange(repository.Matching(criteriaByStatus));
+            customerResults.AddRange(repository.Matching(criteriaById));
 
             
             IBaseMapper mapper = DataSynchronizationManager.GetInstance().GetMapper<Customer>();
@@ -57,11 +57,15 @@ namespace Framework.Tests
             IList<string> sequenceDescription = new List<string>();
 
             uow.Commit(
-                (domainObject, action, additionalInfo) =>
+                (domainObject, action, results) =>
                 {
-                    sequenceDescription.Add(string.Format("{0}={1}={2}", (string)additionalInfo, action.ToString(), domainObject.Mapper.GetEntityTypeName()));
+                    string description = ((results != null) && (results[CustomerMapper.SUCCESS_DESCRIPTION] != null)) ?
+                        (string)results[CustomerMapper.SUCCESS_DESCRIPTION] : string.Empty;
+
+
+                    sequenceDescription.Add(string.Format("{0}={1}={2}", description, action.ToString(), domainObject.Mapper.GetEntityTypeName()));
                 },
-                (domainObject, action, exception, additionalInfo) => { }
+                (domainObject, action, results) => { }
                 );
 
             Assert.AreEqual("1=Insert=Customer", sequenceDescription[0]);

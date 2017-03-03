@@ -1,10 +1,11 @@
 ﻿using System;
 using Framework.Domain;
+using System.Collections;
 
 namespace Framework.Data_Manipulation
 {
-    public delegate void SuccessfulInvocationDelegate(IDomainObject domainObject, object additionalInfo);
-    public delegate void FailedInvocationDelegate(IDomainObject domainObject, Exception exception, object additionalInfo);
+    public delegate void SuccessfulInvocationDelegate(IDomainObject domainObject, Hashtable results);
+    public delegate void FailedInvocationDelegate(IDomainObject domainObject, Hashtable results);
 
     public interface IBaseMapper_Instantiator<TEntity>
      where TEntity : IDomainObject
@@ -72,13 +73,13 @@ namespace Framework.Data_Manipulation
         void SetSafeSuccessfulInvocator(ref SuccessfulInvocationDelegate successfulInvocation)
         {
             if (successfulInvocation == null)
-                successfulInvocation = (domainObject, info) => { };
+                successfulInvocation = (domainObject, results) => { };
         }
 
         void SetSafeFailureInvocator(ref FailedInvocationDelegate failedInvocation)
         {
             if (failedInvocation == null)
-                failedInvocation = (domainObject, exception, info) => { };
+                failedInvocation = (domainObject, results) => { };
         }
     }
 }

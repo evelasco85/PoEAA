@@ -4,7 +4,7 @@ using Framework.Data_Manipulation;
 
 namespace Framework.Tests.CustomerServices
 {
-    class GetCustomerByIdQuery : BaseQueryObject<Customer, GetCustomerByIdQuery.Criteria, Tuple<string, string>>
+    class GetCustomerByIdQuery : BaseQueryObject<Customer, GetCustomerByIdQuery.Criteria>
     {
         public class Criteria
         {
@@ -20,7 +20,7 @@ namespace Framework.Tests.CustomerServices
             }
         }
 
-        public override Tuple<string, string> PerformSearchOperation(Criteria searchInput)
+        public override IList<Customer> PerformSearchOperation(Criteria searchInput)
         {
             Dictionary<int, string> customerList = new Dictionary<int, string>();
 
@@ -28,12 +28,9 @@ namespace Framework.Tests.CustomerServices
             customerList.Add(2, "Jane Doe");
             customerList.Add(3, "John Doe");
 
-            return new Tuple<string, string>(searchInput.CustomerId.ToString(), customerList[searchInput.CustomerId]);
-        }
-
-        public override IList<Customer> ConstructOutput(Tuple<string, string> searchResult)
-        {
-            Customer customer = new Customer(null);
+            Tuple<string, string> searchResult = new Tuple<string, string>(searchInput.CustomerId.ToString(), customerList[searchInput.CustomerId]);
+            IBaseMapper mapper = DataSynchronizationManager.GetInstance().GetMapper<Customer>();
+            Customer customer = new Customer(mapper);
 
             customer.Number = searchResult.Item1;
             customer.Name = searchResult.Item2;

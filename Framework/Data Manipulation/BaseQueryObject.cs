@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Framework.Domain;
 
 namespace Framework.Data_Manipulation
 {
@@ -15,15 +14,14 @@ namespace Framework.Data_Manipulation
         IList<TEntity> Execute();
     }
 
-    public interface IBaseQueryObject<TEntity, TSearchInput, TSearchResult> : IBaseQueryObject<TEntity>
+    public interface IBaseQueryObject<TEntity, TSearchInput> : IBaseQueryObject<TEntity>
     {
         TSearchInput SearchInput { get; set; }
-        TSearchResult PerformSearchOperation(TSearchInput searchInput);
-        IList<TEntity> ConstructOutput(TSearchResult searchResult);
+        IList<TEntity> PerformSearchOperation(TSearchInput searchInput);
     }
 
-    public abstract class BaseQueryObject<TEntity, TSearchInput, TSearchResult> :
-        IBaseQueryObject<TEntity, TSearchInput, TSearchResult>
+    public abstract class BaseQueryObject<TEntity, TSearchInput> :
+        IBaseQueryObject<TEntity, TSearchInput>
     {
         public TSearchInput SearchInput { get; set; }
 
@@ -37,14 +35,11 @@ namespace Framework.Data_Manipulation
             get { return typeof(TSearchInput); }
         }
 
-        public abstract TSearchResult PerformSearchOperation(TSearchInput searchInput);
-
-        public abstract IList<TEntity> ConstructOutput(TSearchResult searchResult);
+        public abstract IList<TEntity> PerformSearchOperation(TSearchInput searchInput);
 
         public IList<TEntity> Execute()
         {
-            TSearchResult searchResult = PerformSearchOperation(SearchInput);
-            IList<TEntity> ultimateResult = ConstructOutput(searchResult);
+            IList<TEntity> ultimateResult = PerformSearchOperation(SearchInput);
 
             return ultimateResult;
         }

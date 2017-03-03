@@ -7,7 +7,7 @@ using Framework.Data_Manipulation;
 
 namespace Framework.Tests.ReceivableServices
 {
-    public class GetAccountReceivablesByCustomerId : BaseQueryObject<AccountReceivable, GetAccountReceivablesByCustomerId.Criteria, IList<AccountReceivable>>
+    public class GetAccountReceivablesByCustomerId : BaseQueryObject<AccountReceivable, GetAccountReceivablesByCustomerId.Criteria>
     {
         public class Criteria
         {
@@ -37,11 +37,6 @@ namespace Framework.Tests.ReceivableServices
             };
 
             return accountReceivables.Where(receivable => receivable.CustomerNumber == searchInput.CustomerId).ToList();
-        }
-
-        public override IList<AccountReceivable> ConstructOutput(IList<AccountReceivable> searchResult)
-        {
-            return searchResult;
         }
     }
 }

@@ -46,16 +46,11 @@ namespace Framework
 
         public IList<TEntity> Matching<TSearchInput>(TSearchInput criteria)
         {
-            IBaseQueryObject<TEntity> query = GetQueryBySearchCriteria<TSearchInput>();
+            IBaseQueryObject<TEntity> query = _manager.GetQueryBySearchCriteria<TEntity, TSearchInput>();
 
             query.SearchInputObject = criteria;
 
             return Matching(query);
-        }
-
-        IBaseQueryObject<TEntity> GetQueryBySearchCriteria<TSearchInput>()
-        {
-            return _manager.GetQueryBySearchCriteria<TEntity, TSearchInput>();
         }
     }
 }

@@ -59,9 +59,7 @@ namespace Framework.Tests
             uow.Commit(
                 (domainObject, action, results) =>
                 {
-                    string description = ((results != null) && (results[CustomerMapper.SUCCESS_DESCRIPTION] != null)) ?
-                        (string)results[CustomerMapper.SUCCESS_DESCRIPTION] : string.Empty;
-
+                    string description = BaseMapper.GetHashValue<string>(results, CustomerMapper.SUCCESS_DESCRIPTION);
 
                     sequenceDescription.Add(string.Format("{0}={1}={2}", description, action.ToString(), domainObject.Mapper.GetEntityTypeName()));
                 },

@@ -1,5 +1,4 @@
-﻿using System;
-using Framework.Domain;
+﻿using Framework.Domain;
 using System.Collections;
 
 namespace Framework.Data_Manipulation
@@ -15,23 +14,43 @@ namespace Framework.Data_Manipulation
     public interface IBaseMapper
     {
         string GetEntityTypeName();
+        TOut GetResultValue<TOut>(Hashtable resultsTable, string key);
         bool Update(ref IDomainObject entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
         bool Insert(ref IDomainObject entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
         bool Delete(ref IDomainObject entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
     }
 
+    public abstract class BaseMapper : IBaseMapper
+    {
+        public abstract string GetEntityTypeName();
+
+        public static TOut GetHashValue<TOut>(Hashtable resultsTable, string key)
+        {
+            return ((resultsTable != null) && (resultsTable[key] != null)) ? (TOut)resultsTable[key] : default(TOut);
+        }
+
+        public TOut GetResultValue<TOut>(Hashtable resultsTable, string key)
+        {
+            return GetHashValue<TOut>(resultsTable, key);
+        }
+
+        public abstract bool Update(ref IDomainObject entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
+        public abstract bool Insert(ref IDomainObject entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
+        public abstract bool Delete(ref IDomainObject entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
+    }
+
     public interface IBaseMapper<TEntity> : IBaseMapper, IBaseMapper_Instantiator<TEntity>
-        where TEntity: IDomainObject
+        where TEntity : IDomainObject
     {
         bool Update(ref TEntity entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
         bool Insert(ref TEntity entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
         bool Delete(ref TEntity entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
     }
 
-    public abstract class BaseMapper<TEntity> : IBaseMapper<TEntity>
+    public abstract class BaseMapper<TEntity> : BaseMapper, IBaseMapper<TEntity>
         where TEntity : IDomainObject
     {
-        public string GetEntityTypeName()
+        public override string GetEntityTypeName()
         {
             return typeof(TEntity).Name;
         }
@@ -40,9 +59,9 @@ namespace Framework.Data_Manipulation
         public abstract bool Insert(ref TEntity entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
         public abstract bool Delete(ref TEntity entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
 
-        public bool Update(ref IDomainObject entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation)
+        public override bool Update(ref IDomainObject entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation)
         {
-            TEntity instance = (TEntity) entity;
+            TEntity instance = (TEntity)entity;
 
             SetSafeSuccessfulInvocator(ref successfulInvocation);
             SetSafeFailureInvocator(ref failedInvocation);
@@ -50,7 +69,7 @@ namespace Framework.Data_Manipulation
             return Update(ref instance, successfulInvocation, failedInvocation);
         }
 
-        public bool Insert(ref IDomainObject entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation)
+        public override bool Insert(ref IDomainObject entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation)
         {
             TEntity instance = (TEntity)entity;
 
@@ -60,7 +79,7 @@ namespace Framework.Data_Manipulation
             return Insert(ref instance, successfulInvocation, failedInvocation);
         }
 
-        public bool Delete(ref IDomainObject entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation)
+        public override bool Delete(ref IDomainObject entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation)
         {
             TEntity instance = (TEntity)entity;
 

@@ -94,6 +94,14 @@ public class IdentityMap<TEntity extends IDomainObject> implements
 
     @Override
     public TEntity GetEntity() {
+        List<Object> values = GetValuesByFieldOrdinals_Search(_currentSearchDictionary);
+
+        String searchHash = CreateHash(values);
+        UUID foundGuid = (_hashToGuidDictionary.containsKey(searchHash)) ? _hashToGuidDictionary.get(searchHash) : null;
+
+        if (foundGuid != null)
+            return (TEntity)_guidToDomainObjectDictionary.get(foundGuid);
+
         return null;
     }
 
@@ -133,30 +141,58 @@ public class IdentityMap<TEntity extends IDomainObject> implements
 
     String CreateHash(TEntity entity)
     {
-        List<Object> values = GetValuesByFieldOrdinals(entity);
+        List<Object> values = GetValuesByFieldOrdinals_CreateHash(entity);
 
         return CreateHash(values);
     }
 
-    List<Object> GetValuesByFieldOrdinals(Object entity)
+    List<Object> GetValuesByFieldOrdinals_CreateHash(Object entity)
     {
         List<Object> values = new ArrayList<>();
 
         if (entity == null)
             return values;
 
-        for (int index = 0; index < _identityFields.size(); index++)
-        {
+        for (int index = 0; index < _identityFields.size(); index++) {
             Object valueObj = null;
 
-            try {
-                valueObj = _identityFields.get(index).get(entity);
-            }
-            catch (IllegalAccessException ex)
+            Field field = _identityFields.get(index);
+
+            try
             {
+                valueObj = field.get(entity);
+            }
+            catch (IllegalAccessException ex) {
+
             }
 
-            if(valueObj == null)
+            if (valueObj == null)
+                continue;
+
+            values.add(valueObj);
+        }
+
+        return values;
+    }
+
+    List<Object> GetValuesByFieldOrdinals_Search(HashMap<String, Object> seachMap)
+    {
+        List<Object> values = new ArrayList<>();
+
+        if (seachMap == null)
+            return values;
+
+        for (int index = 0; index < _identityFields.size(); index++) {
+            Object valueObj = null;
+
+            Field field = _identityFields.get(index);
+
+            if (!seachMap.containsKey(field.getName()))
+                valueObj = null;
+            else
+                valueObj = seachMap.get(field.getName());
+
+            if (valueObj == null)
                 continue;
 
             values.add(valueObj);

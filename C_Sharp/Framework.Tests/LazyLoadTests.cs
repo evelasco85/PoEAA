@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Framework.Data_Manipulation;
 using Framework.LazyLoad;
 using Framework.Tests.LazyLoad;
@@ -20,9 +21,13 @@ namespace Framework.Tests
             list.Add(new ProductDomain(mapper, ProductDomain.Criteria.SearchById(4)));
             list.Add(new ProductDomain(mapper, ProductDomain.Criteria.SearchById(5)));
 
+            ProductDomain product = list.FirstOrDefault(x => x.Id == 2);
+
+            Assert.IsTrue(string.IsNullOrEmpty(product.Description));       //Description is not loaded
             Assert.AreEqual("Product two", list[0].Description);
             Assert.AreEqual("Product four", list[1].Description);
             Assert.AreEqual("Product five", list[2].Description);
+            Assert.IsFalse(string.IsNullOrEmpty(product.Description));      //Description is now loaded
         }
     }
 }

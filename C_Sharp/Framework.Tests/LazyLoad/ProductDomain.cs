@@ -21,6 +21,8 @@ namespace Framework.Tests.LazyLoad
         public ProductDomain(IBaseMapper mapper, Criteria criteria)
             : base(criteria, mapper)
         {
+            if (criteria != null)
+                Id = criteria.Id;
         }
     }
 }

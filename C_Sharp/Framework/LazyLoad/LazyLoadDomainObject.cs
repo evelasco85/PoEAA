@@ -31,12 +31,8 @@ namespace Framework.LazyLoad
                 return;
 
             TEntity currentEntity = (TEntity) this;
-            RetrieveMatchingEntityDelegate<TEntity> retrieveMatchingEntity = () =>
-            {
-                return loader.GetEntity(criteria);
-            };
 
-            loader.LoadAllFields(ref currentEntity, retrieveMatchingEntity);
+            loader.LoadAllFields(ref currentEntity, criteria);
 
             _criteria = default(TSearchInput);      //Clear criteria
         }

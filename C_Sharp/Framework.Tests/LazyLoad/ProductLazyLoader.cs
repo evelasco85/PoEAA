@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Framework.Data_Manipulation;
 using Framework.LazyLoad;
 
 namespace Framework.Tests.LazyLoad
@@ -9,13 +8,13 @@ namespace Framework.Tests.LazyLoad
     {
         IList<ProductDomain> _products = new List<ProductDomain>();
 
-        public ProductLazyLoader(IBaseMapper mapper) : base(mapper)
+        public ProductLazyLoader() 
         {
-            ProductDomain prod1 = new ProductDomain(Mapper, null);
-            ProductDomain prod2 = new ProductDomain(Mapper, null);
-            ProductDomain prod3 = new ProductDomain(Mapper, null);
-            ProductDomain prod4 = new ProductDomain(Mapper, null);
-            ProductDomain prod5 = new ProductDomain(Mapper, null);
+            ProductDomain prod1 = new ProductDomain(null, null);
+            ProductDomain prod2 = new ProductDomain(null, null);
+            ProductDomain prod3 = new ProductDomain(null, null);
+            ProductDomain prod4 = new ProductDomain(null, null);
+            ProductDomain prod5 = new ProductDomain(null, null);
 
 
             prod1.Id = 1;
@@ -41,15 +40,10 @@ namespace Framework.Tests.LazyLoad
             _products.Add(prod5);
         }
 
-        public override ProductDomain GetEntity(ProductDomain.Criteria criteria)
+        public override void LoadAllFields(ref ProductDomain entity, ProductDomain.Criteria criteria)
         {
-            return _products
+            ProductDomain matchedEntity =  _products
                 .FirstOrDefault(x => x.Id == criteria.Id);
-        }
-
-        public override void LoadAllFields(ref ProductDomain entity, RetrieveMatchingEntityDelegate<ProductDomain> retrieveMatchingEntity)
-        {
-            ProductDomain matchedEntity = retrieveMatchingEntity();
 
             if (matchedEntity == null)
                 return;

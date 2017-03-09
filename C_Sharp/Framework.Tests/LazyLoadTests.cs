@@ -1,4 +1,5 @@
-﻿using Framework.Data_Manipulation;
+﻿using System.Collections.Generic;
+using Framework.Data_Manipulation;
 using Framework.LazyLoad;
 using Framework.Tests.LazyLoad;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -12,7 +13,7 @@ namespace Framework.Tests
         public void TestLazyLoadProducts()
         {
             LazyLoader<ProductDomain, ProductDomain.Criteria> loader = new ProductLazyLoader();
-            LazyLoadList<ProductDomain, ProductDomain.Criteria> list = new LazyLoadList<ProductDomain, ProductDomain.Criteria>(loader);
+            IList<ProductDomain> list = new LazyLoadList<ProductDomain, ProductDomain.Criteria>(loader);
             IBaseMapper mapper = null;
 
             list.Add(new ProductDomain(mapper, ProductDomain.Criteria.SearchById(2)));

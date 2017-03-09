@@ -3,7 +3,7 @@ using Framework.Domain;
 
 namespace Framework.LazyLoad
 {
-    public class LazyLoadList<TEntity, TSearchInput> : List<TEntity>
+    public class LazyLoadList<TEntity, TSearchInput> : List<TEntity>, IList<TEntity>
         where TEntity : LazyLoadDomainObject<TSearchInput>, IDomainObject
     {
         private ILazyLoader<TEntity, TSearchInput> _loader;
@@ -13,7 +13,8 @@ namespace Framework.LazyLoad
             _loader = loader;
         }
 
-        public TEntity this[int index]
+        
+        public new TEntity this[int index]
         {
             get
             {
@@ -27,6 +28,7 @@ namespace Framework.LazyLoad
 
                 return entity;
             }
+            set { base[index] = value; }
         }
     }
 }

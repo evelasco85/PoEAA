@@ -55,6 +55,8 @@
     <Compile Include="CustomerServices\Customer.cs" />
     <Compile Include="CustomerServices\CustomerMapper.cs" />
     <Compile Include="IdentityMapTests.cs" />
+    <Compile Include="LazyLoad\ProductDomain.cs" />
+    <Compile Include="LazyLoad\ProductLazyLoader.cs" />
     <Compile Include="Mapping\FK_Customer_AccountReceivable.cs" />
     <Compile Include="ReceivableServices\AccountReceivable.cs" />
     <Compile Include="ReceivableServices\AccountReceivableMapper.cs" />

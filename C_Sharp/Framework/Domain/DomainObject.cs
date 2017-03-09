@@ -49,8 +49,6 @@ namespace Framework.Domain
             }
         }
         
-        //Identity fields;
-
         public DomainObject(IBaseMapper mapper)
         {
             _mapper = mapper;
@@ -66,12 +64,5 @@ namespace Framework.Domain
         {
             _mapper = mapper;
         }
-
-        /*
-         * void RegisterFields<TField>(Expression<Func<bool, TField>> field)
-         * {
-         * fields.add(field.name, ref field);
-         * }
-         */
     }
 }

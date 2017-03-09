@@ -47,8 +47,9 @@
     <Compile Include="ForeignKeyMappingManager.cs" />
     <Compile Include="IdentityFieldAttribute.cs" />
     <Compile Include="IdentityMap.cs" />
-    <Compile Include="LazyLoad\LazyLoadManager.cs" />
-    <Compile Include="LazyLoad\DynamicLazyLoadTypeBuilder.cs" />
+    <Compile Include="LazyLoad\LazyLoadDomainObject.cs" />
+    <Compile Include="LazyLoad\LazyLoader.cs" />
+    <Compile Include="LazyLoad\LazyLoadList.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="DataSynchronizationManager.cs" />
     <Compile Include="Domain\DomainObject.cs" />

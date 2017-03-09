@@ -6,7 +6,7 @@ namespace Framework.LazyLoad
     public interface ILazyLoadDomainObject<TSearchInput>
     {
         TSearchInput Criteria { get; }
-        void Load<TEntity>(ILazyLoader<TEntity, TSearchInput> loader, TSearchInput criteria)
+        void Load<TEntity>(ILazyLoader<TEntity, TSearchInput> loader)
            where TEntity : LazyLoadDomainObject<TSearchInput>;
     }
 
@@ -24,15 +24,15 @@ namespace Framework.LazyLoad
             _criteria = criteria;
         }
 
-        public void Load<TEntity>(ILazyLoader<TEntity, TSearchInput> loader, TSearchInput criteria)
+        public void Load<TEntity>(ILazyLoader<TEntity, TSearchInput> loader)
             where TEntity : LazyLoadDomainObject<TSearchInput>
         {
-            if ((criteria == null) || (loader == null))
+            if ((_criteria == null) || (loader == null))
                 return;
 
             TEntity currentEntity = (TEntity) this;
 
-            loader.LoadAllFields(ref currentEntity, criteria);
+            loader.LoadAllFields(ref currentEntity, _criteria);
 
             _criteria = default(TSearchInput);      //Clear criteria
         }

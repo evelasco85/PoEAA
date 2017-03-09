@@ -20,11 +20,11 @@ namespace Framework.LazyLoad
             {
                 TEntity entity = base[index];
 
-                if ((entity == null) || (entity.Criteria == null) || (_loader == null))
+                if ((entity == null) || (_loader == null))
                     return entity;
 
                 //Perform complete load
-                entity.Load(_loader, entity.Criteria);
+                entity.Load(_loader);
 
                 return entity;
             }

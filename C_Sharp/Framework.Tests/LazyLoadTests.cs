@@ -10,6 +10,12 @@ namespace Framework.Tests
     [TestClass]
     public class LazyLoadTests
     {
+
+        /****************************/
+        //
+        //      PLEASE READ 'LazyLoad_README.txt'
+        //
+        /****************************/
         [TestMethod]
         public void TestLazyLoadProducts()
         {

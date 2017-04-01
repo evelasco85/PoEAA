@@ -95,6 +95,19 @@ public class DataSynchronizationManager implements IDataSynchronizationManager{
         return _serviceContainerDictionary.containsKey(key);
     }
 
+    <TEntity extends IDomainObject> EntityServiceContainer<TEntity> GetServiceContainer(Class<TEntity> thisClass)
+            throws NoSuchObjectException
+    {
+        String key = GetServiceContainerKey(thisClass);
+
+        if (!ServiceContainerExists(key))
+            throw new NoSuchObjectException(String.format("Service container with key '%s' not found.", key));
+
+        EntityServiceContainer<TEntity> serviceContainer = (EntityServiceContainer<TEntity>)_serviceContainerDictionary.get(key);
+
+        return serviceContainer;
+    }
+
     public <TEntity extends IDomainObject> IRepository<TEntity> GetRepository(Class<TEntity> thisClass)
     {
         EntityServiceContainer<TEntity> container = null;
@@ -120,16 +133,17 @@ public class DataSynchronizationManager implements IDataSynchronizationManager{
         return container.Mapper;
     }
 
-    <TEntity extends IDomainObject> EntityServiceContainer<TEntity> GetServiceContainer(Class<TEntity> thisClass)
-            throws NoSuchObjectException
+
+
+    public <TEntity extends IDomainObject, TSearchInput> IBaseQueryObjectConcrete<TEntity> GetQueryBySearchCriteria(Class<TEntity> thisClass, Class<TSearchInput> thisSearch)
     {
-        String key = GetServiceContainerKey(thisClass);
+        EntityServiceContainer<TEntity> container = null;
 
-        if (!ServiceContainerExists(key))
-            throw new NoSuchObjectException(String.format("Service container with key '%s' not found.", key));
+        try {
+            container = GetServiceContainer(thisClass);
+        } catch (NoSuchObjectException ex) {
+        }
 
-        EntityServiceContainer<TEntity> serviceContainer = (EntityServiceContainer<TEntity>)_serviceContainerDictionary.get(key);
-
-        return serviceContainer;
+        return container.QueryDictionary.get(thisSearch.getName());
     }
 }

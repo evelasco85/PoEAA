@@ -109,6 +109,17 @@ public class DataSynchronizationManager implements IDataSynchronizationManager{
         return container.Repository;
     }
 
+    public <TEntity extends IDomainObject>  IBaseMapperConcrete<TEntity> GetMapper(Class<TEntity> thisClass) {
+        EntityServiceContainer<TEntity> container = null;
+
+        try {
+            container = GetServiceContainer(thisClass);
+        } catch (NoSuchObjectException ex) {
+        }
+
+        return container.Mapper;
+    }
+
     <TEntity extends IDomainObject> EntityServiceContainer<TEntity> GetServiceContainer(Class<TEntity> thisClass)
             throws NoSuchObjectException
     {

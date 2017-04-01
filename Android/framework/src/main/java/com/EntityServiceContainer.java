@@ -18,6 +18,6 @@ public class EntityServiceContainer<TEntity extends IDomainObject> {
     public IIdentityMapConcrete<TEntity> IdentityMap;
     public IRepository<TEntity> Repository;
     public HashMap<String, IBaseQueryObjectConcrete<TEntity>> QueryDictionary;
-    public HashMap<String, Field> PrimitiveProperties ;
+    public HashMap<String, Field> PrimitiveFields;
 }
 

@@ -8,5 +8,5 @@ import com.domain.DomainObjectInterfaces.IDomainObject;
  */
 
 public interface IQueryObjectRegistry {
-    <TEntity extends IDomainObject, TSearchInput> IBaseQueryObjectConcrete<TEntity> GetQueryBySearchCriteria();
+    <TEntity extends IDomainObject, TSearchInput> IBaseQueryObjectConcrete<TEntity> GetQueryBySearchCriteria(Class<TEntity> thisClass, Class<TSearchInput> thisSearch);
 }

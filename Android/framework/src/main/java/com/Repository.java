@@ -1,5 +1,6 @@
 package com;
 
+import com.Interfaces.IDataSynchronizationManager;
 import com.Interfaces.IRepository;
 import com.datamanipulation.BaseMapperInterfaces.IBaseMapperConcrete;
 import com.datamanipulation.BaseQueryObjectInterfaces.IBaseQueryObject;
@@ -7,7 +8,6 @@ import com.datamanipulation.BaseQueryObjectInterfaces.IBaseQueryObjectConcrete;
 import com.domain.DomainObjectInterfaces.IDomainObject;
 import com.domain.DomainObjectInterfaces.ISystemManipulation;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,10 +17,12 @@ import java.util.List;
 public class Repository <TEntity extends IDomainObject> implements IRepository<TEntity>
 {
     Class<TEntity> _class;
+    IDataSynchronizationManager _manager;
 
-    public Repository(Class<TEntity> thisClass)
+    public Repository(Class<TEntity> thisClass, IDataSynchronizationManager manager)
     {
         _class = thisClass;
+        _manager = manager;
     }
 
     void ApplyDomainObjectSettings(List<TEntity> newResult, IBaseQueryObject query)
@@ -50,8 +52,8 @@ public class Repository <TEntity extends IDomainObject> implements IRepository<T
 
     public <TSearchInput> List<TEntity> Matching(TSearchInput criteria)
     {
-        List<TEntity> result = new ArrayList<TEntity>();
+        IBaseQueryObjectConcrete<TEntity> query = _manager.GetQueryBySearchCriteria(_class, criteria.getClass());
 
-        return result;
+        return Matching(query);
     }
 }

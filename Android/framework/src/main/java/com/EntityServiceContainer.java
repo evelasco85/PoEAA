@@ -14,21 +14,10 @@ import java.util.HashMap;
  */
 
 public class EntityServiceContainer<TEntity extends IDomainObject> {
-    Class<TEntity> _class;
-
-    public EntityServiceContainer(Class<TEntity> thisClass)
-    {
-        _class = thisClass;
-    }
-
     public IBaseMapperConcrete<TEntity> Mapper;
-
+    public IIdentityMapConcrete<TEntity> IdentityMap;
     public IRepository<TEntity> Repository;
-
-    public HashMap<String, IBaseQueryObjectConcrete<TEntity>> QueryDictionary = new HashMap<String, IBaseQueryObjectConcrete<TEntity>>();
-
-    public IIdentityMapConcrete<TEntity> IdentityMap = new IdentityMap<TEntity>(_class);
-
+    public HashMap<String, IBaseQueryObjectConcrete<TEntity>> QueryDictionary;
     public HashMap<String, Field> PrimitiveProperties ;
 }
 

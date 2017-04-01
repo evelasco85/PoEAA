@@ -18,5 +18,5 @@ import java.util.List;
 public interface IDataSynchronizationManager extends IMapperRegistry, IRepositoryRegistry, IQueryObjectRegistry
 {
     <TEntity extends IDomainObject> void RegisterEntity(Class<TEntity> thisClass, IBaseMapperConcrete<TEntity> mapper, List<IBaseQueryObjectConcrete<TEntity>> queryList);
-    <TEntity  extends IDomainObject> HashMap<String, Field> GetProperties();
+    <TEntity  extends IDomainObject> HashMap<String, Field> GetFields(Class<TEntity> thisClass);
 }

@@ -133,8 +133,6 @@ public class DataSynchronizationManager implements IDataSynchronizationManager{
         return container.Mapper;
     }
 
-
-
     public <TEntity extends IDomainObject, TSearchInput> IBaseQueryObjectConcrete<TEntity> GetQueryBySearchCriteria(Class<TEntity> thisClass, Class<TSearchInput> thisSearch)
     {
         EntityServiceContainer<TEntity> container = null;
@@ -145,5 +143,17 @@ public class DataSynchronizationManager implements IDataSynchronizationManager{
         }
 
         return container.QueryDictionary.get(thisSearch.getName());
+    }
+
+    public <TEntity  extends IDomainObject> HashMap<String, Field> GetFields(Class<TEntity> thisClass)
+    {
+        EntityServiceContainer<TEntity> container = null;
+
+        try {
+            container = GetServiceContainer(thisClass);
+        } catch (NoSuchObjectException ex) {
+        }
+
+        return container.PrimitiveFields;
     }
 }

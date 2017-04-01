@@ -20,7 +20,6 @@ public abstract class BaseMapper<TEntity extends IDomainObject> implements IBase
     public String GetEntityTypeName()
     {
         return _entityClass.getName();
-
     }
 
     abstract public boolean ConcreteUpdate(TEntity entity, InvocationDelegates invocationDelegates);

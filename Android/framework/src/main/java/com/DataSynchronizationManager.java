@@ -1,11 +1,13 @@
 package com;
 
 import com.Interfaces.IDataSynchronizationManager;
+import com.Interfaces.IRepository;
 import com.datamanipulation.BaseMapperInterfaces.IBaseMapperConcrete;
 import com.datamanipulation.BaseQueryObjectInterfaces.IBaseQueryObjectConcrete;
 import com.domain.DomainObjectInterfaces.IDomainObject;
 
 import java.lang.reflect.Field;
+import java.rmi.NoSuchObjectException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -91,5 +93,32 @@ public class DataSynchronizationManager implements IDataSynchronizationManager{
     boolean ServiceContainerExists(String key)
     {
         return _serviceContainerDictionary.containsKey(key);
+    }
+
+    public <TEntity extends IDomainObject> IRepository<TEntity> GetRepository(Class<TEntity> thisClass)
+    {
+        EntityServiceContainer<TEntity> container = null;
+
+        try
+        {
+            container = GetServiceContainer(thisClass);
+        }
+        catch (NoSuchObjectException ex){
+        }
+
+        return container.Repository;
+    }
+
+    <TEntity extends IDomainObject> EntityServiceContainer<TEntity> GetServiceContainer(Class<TEntity> thisClass)
+            throws NoSuchObjectException
+    {
+        String key = GetServiceContainerKey(thisClass);
+
+        if (!ServiceContainerExists(key))
+            throw new NoSuchObjectException(String.format("Service container with key '%s' not found.", key));
+
+        EntityServiceContainer<TEntity> serviceContainer = (EntityServiceContainer<TEntity>)_serviceContainerDictionary.get(key);
+
+        return serviceContainer;
     }
 }

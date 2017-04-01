@@ -8,5 +8,5 @@ import com.domain.DomainObjectInterfaces.IDomainObject;
  */
 
 public interface IRepositoryRegistry {
-    <TEntity extends IDomainObject> IRepository<TEntity> GetRepository();
+    <TEntity extends IDomainObject> IRepository<TEntity> GetRepository(Class<TEntity> thisClass);
 }

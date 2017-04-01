@@ -8,5 +8,5 @@ import com.domain.DomainObjectInterfaces.IDomainObject;
  */
 
 public interface IMapperRegistry {
-    <TEntity extends IDomainObject> IBaseMapperConcrete<TEntity> GetMapper();
+    <TEntity extends IDomainObject> IBaseMapperConcrete<TEntity> GetMapper(Class<TEntity> thisClass);
 }

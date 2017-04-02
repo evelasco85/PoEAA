@@ -1,8 +1,8 @@
 package com;
 
 import com.Interfaces.IForeignKeyMappingManager;
-import com.domain.DomainObjectInterfaces.IDomainObject;
-import com.domain.ForeignKeyMappingInterfaces.IForeignKeyMapping;
+import com.Domain.DomainObjectInterfaces.IDomainObject;
+import com.Domain.ForeignKeyMappingInterfaces.IForeignKeyMapping;
 
 import java.rmi.NoSuchObjectException;
 import java.util.HashMap;

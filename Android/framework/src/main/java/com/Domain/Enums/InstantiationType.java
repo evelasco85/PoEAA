@@ -1,4 +1,4 @@
-package com.domain.Enums;
+package com.Domain.Enums;
 
 /**
  * Created by aiko on 3/4/17.

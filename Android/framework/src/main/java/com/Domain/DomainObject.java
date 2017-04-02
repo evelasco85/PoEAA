@@ -1,10 +1,10 @@
-package com.domain;
+package com.Domain;
 
-import com.datamanipulation.BaseMapperInterfaces.IBaseMapper;
-import com.datamanipulation.BaseQueryObjectInterfaces.IBaseQueryObject;
-import com.domain.DomainObjectInterfaces.IDomainObject;
-import com.domain.DomainObjectInterfaces.ISystemManipulation;
-import com.domain.Enums.InstantiationType;
+import com.DataManipulation.BaseMapperInterfaces.IBaseMapper;
+import com.DataManipulation.BaseQueryObjectInterfaces.IBaseQueryObject;
+import com.Domain.DomainObjectInterfaces.IDomainObject;
+import com.Domain.DomainObjectInterfaces.ISystemManipulation;
+import com.Domain.Enums.InstantiationType;
 
 import java.util.UUID;
 

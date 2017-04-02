@@ -1,6 +1,6 @@
-package com.datamanipulation;
+package com.DataManipulation;
 
-import com.datamanipulation.BaseQueryObjectInterfaces.IBaseQueryObjectSearchableConcrete;
+import com.DataManipulation.BaseQueryObjectInterfaces.IBaseQueryObjectSearchableConcrete;
 import java.util.List;
 
 /**

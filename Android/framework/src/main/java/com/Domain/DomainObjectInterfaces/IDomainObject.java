@@ -1,7 +1,7 @@
-package com.domain.DomainObjectInterfaces;
+package com.Domain.DomainObjectInterfaces;
 
-import com.datamanipulation.BaseMapperInterfaces.IBaseMapper;
-import com.domain.Enums.InstantiationType;
+import com.DataManipulation.BaseMapperInterfaces.IBaseMapper;
+import com.Domain.Enums.InstantiationType;
 
 import java.util.UUID;
 

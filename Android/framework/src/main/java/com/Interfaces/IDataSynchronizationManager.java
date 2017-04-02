@@ -3,9 +3,9 @@ package com.Interfaces;
 import com.Interfaces.Registries.IMapperRegistry;
 import com.Interfaces.Registries.IQueryObjectRegistry;
 import com.Interfaces.Registries.IRepositoryRegistry;
-import com.datamanipulation.BaseMapperInterfaces.IBaseMapperConcrete;
-import com.datamanipulation.BaseQueryObjectInterfaces.IBaseQueryObjectConcrete;
-import com.domain.DomainObjectInterfaces.IDomainObject;
+import com.DataManipulation.BaseMapperInterfaces.IBaseMapperConcrete;
+import com.DataManipulation.BaseQueryObjectInterfaces.IBaseQueryObjectConcrete;
+import com.Domain.DomainObjectInterfaces.IDomainObject;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;

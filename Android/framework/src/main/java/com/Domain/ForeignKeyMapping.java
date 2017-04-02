@@ -1,6 +1,6 @@
-package com.domain;
+package com.Domain;
 
-import com.domain.ForeignKeyMappingInterfaces.IForeignKeyMapping;
+import com.Domain.ForeignKeyMappingInterfaces.IForeignKeyMapping;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package com.Interfaces;
 
-import com.datamanipulation.BaseMapperInterfaces.InvocationDelegates;
-import com.domain.DomainObjectInterfaces.IDomainObject;
+import com.DataManipulation.BaseMapperInterfaces.InvocationDelegates;
+import com.Domain.DomainObjectInterfaces.IDomainObject;
 
 import java.rmi.NoSuchObjectException;
 

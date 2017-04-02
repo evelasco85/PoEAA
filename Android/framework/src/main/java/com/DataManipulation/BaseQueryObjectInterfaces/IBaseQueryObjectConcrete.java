@@ -1,4 +1,4 @@
-package com.datamanipulation.BaseQueryObjectInterfaces;
+package com.DataManipulation.BaseQueryObjectInterfaces;
 
 import java.util.List;
 

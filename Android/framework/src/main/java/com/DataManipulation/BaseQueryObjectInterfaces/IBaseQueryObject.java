@@ -1,4 +1,4 @@
-package com.datamanipulation.BaseQueryObjectInterfaces;
+package com.DataManipulation.BaseQueryObjectInterfaces;
 
 /**
  * Created by aiko on 3/4/17.

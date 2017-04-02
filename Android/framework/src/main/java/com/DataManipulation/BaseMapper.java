@@ -1,8 +1,8 @@
-package com.datamanipulation;
+package com.DataManipulation;
 
-import com.datamanipulation.BaseMapperInterfaces.IBaseMapperConcrete;
-import com.datamanipulation.BaseMapperInterfaces.InvocationDelegates;
-import com.domain.DomainObjectInterfaces.IDomainObject;
+import com.DataManipulation.BaseMapperInterfaces.IBaseMapperConcrete;
+import com.DataManipulation.BaseMapperInterfaces.InvocationDelegates;
+import com.Domain.DomainObjectInterfaces.IDomainObject;
 
 /**
  * Created by aiko on 2/11/17.

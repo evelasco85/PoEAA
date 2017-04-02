@@ -2,11 +2,11 @@ package com;
 
 import com.Interfaces.IDataSynchronizationManager;
 import com.Interfaces.IRepository;
-import com.datamanipulation.BaseMapperInterfaces.IBaseMapperConcrete;
-import com.datamanipulation.BaseQueryObjectInterfaces.IBaseQueryObject;
-import com.datamanipulation.BaseQueryObjectInterfaces.IBaseQueryObjectConcrete;
-import com.domain.DomainObjectInterfaces.IDomainObject;
-import com.domain.DomainObjectInterfaces.ISystemManipulation;
+import com.DataManipulation.BaseMapperInterfaces.IBaseMapperConcrete;
+import com.DataManipulation.BaseQueryObjectInterfaces.IBaseQueryObject;
+import com.DataManipulation.BaseQueryObjectInterfaces.IBaseQueryObjectConcrete;
+import com.Domain.DomainObjectInterfaces.IDomainObject;
+import com.Domain.DomainObjectInterfaces.ISystemManipulation;
 
 import java.util.List;
 

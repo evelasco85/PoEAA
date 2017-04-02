@@ -1,6 +1,6 @@
 package com.Interfaces;
 
-import com.domain.DomainObjectInterfaces.IDomainObject;
+import com.Domain.DomainObjectInterfaces.IDomainObject;
 
 import java.util.Hashtable;
 

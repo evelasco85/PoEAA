@@ -1,7 +1,7 @@
 package com.Interfaces.Registries;
 
 import com.Interfaces.IIdentityMapConcrete;
-import com.domain.DomainObjectInterfaces.IDomainObject;
+import com.Domain.DomainObjectInterfaces.IDomainObject;
 
 /**
  * Created by aiko on 3/11/17.

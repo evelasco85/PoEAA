@@ -1,7 +1,7 @@
-package com.domain.DomainObjectInterfaces;
+package com.Domain.DomainObjectInterfaces;
 
-import com.datamanipulation.BaseMapperInterfaces.IBaseMapper;
-import com.datamanipulation.BaseQueryObjectInterfaces.IBaseQueryObject;
+import com.DataManipulation.BaseMapperInterfaces.IBaseMapper;
+import com.DataManipulation.BaseQueryObjectInterfaces.IBaseQueryObject;
 
 /**
  * Created by aiko on 3/4/17.

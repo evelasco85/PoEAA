@@ -1,8 +1,8 @@
 package CustomerServices;
 
 import com.IdentityFieldAnnotation;
-import com.datamanipulation.BaseMapperInterfaces.IBaseMapper;
-import com.domain.DomainObject;
+import com.DataManipulation.BaseMapperInterfaces.IBaseMapper;
+import com.Domain.DomainObject;
 
 /**
  * Created by aiko on 3/5/17.

@@ -2,12 +2,11 @@ package com;
 
 import com.Interfaces.IIdentityMapConcrete;
 import com.Interfaces.IIdentityMapQuery;
-import com.domain.DomainObjectInterfaces.IDomainObject;
-import com.security.HashService;
-import com.security.IHashService;
+import com.Domain.DomainObjectInterfaces.IDomainObject;
+import com.Security.HashService;
+import com.Security.IHashService;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;

@@ -2,7 +2,7 @@ package com.DataManipulation;
 
 import com.DataManipulation.BaseMapperInterfaces.IBaseMapperConcrete;
 import com.DataManipulation.BaseMapperInterfaces.InvocationDelegates;
-import com.Domain.DomainObjectInterfaces.IDomainObject;
+import com.Domain.Interfaces.IDomainObject;
 
 /**
  * Created by aiko on 2/11/17.

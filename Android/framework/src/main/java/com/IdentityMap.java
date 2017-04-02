@@ -2,7 +2,7 @@ package com;
 
 import com.Interfaces.IIdentityMapConcrete;
 import com.Interfaces.IIdentityMapQuery;
-import com.Domain.DomainObjectInterfaces.IDomainObject;
+import com.Domain.Interfaces.IDomainObject;
 import com.Security.HashService;
 import com.Security.IHashService;
 

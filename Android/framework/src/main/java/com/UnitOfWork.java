@@ -5,7 +5,7 @@ import com.Interfaces.UnitOfWorkAction;
 import com.Interfaces.UoWInvocationDelegates;
 import com.DataManipulation.BaseMapperInterfaces.IBaseMapper;
 import com.DataManipulation.BaseMapperInterfaces.InvocationDelegates;
-import com.Domain.DomainObjectInterfaces.IDomainObject;
+import com.Domain.Interfaces.IDomainObject;
 
 import java.rmi.NoSuchObjectException;
 import java.util.Collection;

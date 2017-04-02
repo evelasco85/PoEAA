@@ -1,4 +1,4 @@
-package com.Domain.DomainObjectInterfaces;
+package com.Domain.Interfaces;
 
 import com.DataManipulation.BaseMapperInterfaces.IBaseMapper;
 import com.Domain.Enums.InstantiationType;

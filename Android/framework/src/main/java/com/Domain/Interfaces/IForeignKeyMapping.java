@@ -1,4 +1,4 @@
-package com.Domain.ForeignKeyMappingInterfaces;
+package com.Domain.Interfaces;
 
 import java.util.List;
 

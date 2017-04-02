@@ -2,8 +2,8 @@ package com.Domain;
 
 import com.DataManipulation.BaseMapperInterfaces.IBaseMapper;
 import com.DataManipulation.BaseQueryObjectInterfaces.IBaseQueryObject;
-import com.Domain.DomainObjectInterfaces.IDomainObject;
-import com.Domain.DomainObjectInterfaces.ISystemManipulation;
+import com.Domain.Interfaces.IDomainObject;
+import com.Domain.Interfaces.ISystemManipulation;
 import com.Domain.Enums.InstantiationType;
 
 import java.util.UUID;

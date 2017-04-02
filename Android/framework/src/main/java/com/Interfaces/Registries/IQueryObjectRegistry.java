@@ -1,7 +1,7 @@
 package com.Interfaces.Registries;
 
 import com.DataManipulation.BaseQueryObjectInterfaces.IBaseQueryObjectConcrete;
-import com.Domain.DomainObjectInterfaces.IDomainObject;
+import com.Domain.Interfaces.IDomainObject;
 
 /**
  * Created by aiko on 3/11/17.

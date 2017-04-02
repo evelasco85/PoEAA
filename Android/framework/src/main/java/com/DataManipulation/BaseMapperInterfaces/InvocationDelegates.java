@@ -1,6 +1,6 @@
 package com.DataManipulation.BaseMapperInterfaces;
 
-import com.Domain.DomainObjectInterfaces.IDomainObject;
+import com.Domain.Interfaces.IDomainObject;
 
 import java.util.Hashtable;
 

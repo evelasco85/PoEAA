@@ -5,7 +5,7 @@ import com.Interfaces.Registries.IQueryObjectRegistry;
 import com.Interfaces.Registries.IRepositoryRegistry;
 import com.DataManipulation.BaseMapperInterfaces.IBaseMapperConcrete;
 import com.DataManipulation.BaseQueryObjectInterfaces.IBaseQueryObjectConcrete;
-import com.Domain.DomainObjectInterfaces.IDomainObject;
+import com.Domain.Interfaces.IDomainObject;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;

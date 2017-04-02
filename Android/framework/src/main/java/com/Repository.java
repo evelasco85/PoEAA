@@ -5,8 +5,8 @@ import com.Interfaces.IRepository;
 import com.DataManipulation.BaseMapperInterfaces.IBaseMapperConcrete;
 import com.DataManipulation.BaseQueryObjectInterfaces.IBaseQueryObject;
 import com.DataManipulation.BaseQueryObjectInterfaces.IBaseQueryObjectConcrete;
-import com.Domain.DomainObjectInterfaces.IDomainObject;
-import com.Domain.DomainObjectInterfaces.ISystemManipulation;
+import com.Domain.Interfaces.IDomainObject;
+import com.Domain.Interfaces.ISystemManipulation;
 
 import java.util.List;
 

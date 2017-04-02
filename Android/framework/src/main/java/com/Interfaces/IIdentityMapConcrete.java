@@ -1,6 +1,6 @@
 package com.Interfaces;
 
-import com.Domain.DomainObjectInterfaces.IDomainObject;
+import com.Domain.Interfaces.IDomainObject;
 
 /**
  * Created by aiko on 3/4/17.

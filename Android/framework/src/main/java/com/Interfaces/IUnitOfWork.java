@@ -1,5 +1,6 @@
 package com.Interfaces;
 
+import com.datamanipulation.BaseMapperInterfaces.InvocationDelegates;
 import com.domain.DomainObjectInterfaces.IDomainObject;
 
 import java.rmi.NoSuchObjectException;
@@ -9,13 +10,13 @@ import java.rmi.NoSuchObjectException;
  */
 
 public interface IUnitOfWork {
-    <TEntity extends IDomainObject> TEntity RegisterNew(TEntity entity)
+    <TEntity extends IDomainObject> TEntity RegisterNew(TEntity entity, InvocationDelegates invocationDelegates)
             throws NoSuchObjectException;
 
-    <TEntity extends IDomainObject> TEntity RegisterDirty(TEntity entity)
+    <TEntity extends IDomainObject> TEntity RegisterDirty(TEntity entity, InvocationDelegates invocationDelegates)
             throws NoSuchObjectException;
 
-    <TEntity extends IDomainObject> TEntity RegisterRemoved(TEntity entity)
+    <TEntity extends IDomainObject> TEntity RegisterRemoved(TEntity entity, InvocationDelegates invocationDelegates)
             throws NoSuchObjectException;
 
     void Commit(UoWInvocationDelegates delegates);

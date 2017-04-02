@@ -9,6 +9,11 @@ import java.util.Hashtable;
  */
 
 public interface UoWInvocationDelegates {
-    void SuccessfulUoWInvocationDelegate(IDomainObject domainObject, UnitOfWorkAction action, Hashtable results);
-    void FailedUoWInvocationDelegate(IDomainObject domainObject, UnitOfWorkAction action, Hashtable results);
+    Hashtable GetResults();
+
+    void SetResults(Hashtable results);
+
+    void SuccessfulUoWInvocationDelegate(IDomainObject domainObject, UnitOfWorkAction action);
+
+    void FailedUoWInvocationDelegate(IDomainObject domainObject, UnitOfWorkAction action);
 }

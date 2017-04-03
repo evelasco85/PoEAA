@@ -54,6 +54,7 @@
     <Compile Include="CustomerServices\GetCustomerByIdQuery.cs" />
     <Compile Include="CustomerServices\Customer.cs" />
     <Compile Include="CustomerServices\CustomerMapper.cs" />
+    <Compile Include="General\Implicit_Explicit_ByRef_ByVal_Tests.cs" />
     <Compile Include="IdentityMapTests.cs" />
     <Compile Include="LazyLoad\ProductDomain.cs" />
     <Compile Include="LazyLoad\ProductLazyLoader.cs" />

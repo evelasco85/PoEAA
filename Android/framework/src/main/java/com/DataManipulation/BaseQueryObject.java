@@ -32,7 +32,7 @@ public abstract class BaseQueryObject<TEntity, TSearchInput>
         return _searchInputType;
     }
 
-    public BaseQueryObject(Class searchInputType) {
+    public BaseQueryObject(Class<TSearchInput> searchInputType) {
         _searchInputType = searchInputType;
     }
 

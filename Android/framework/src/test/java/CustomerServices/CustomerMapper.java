@@ -40,6 +40,8 @@ public class CustomerMapper extends BaseMapper<Customer> {
 
         invocationDelegates.SetResults(results);
         invocationDelegates.SuccessfulInvocation(customer);
+
+        return true;
     }
 
     @Override

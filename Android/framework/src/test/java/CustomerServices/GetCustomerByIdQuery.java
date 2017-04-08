@@ -14,7 +14,7 @@ import java.util.List;
 
 public class GetCustomerByIdQuery extends BaseQueryObject<Customer, GetCustomerByIdQuery.Criteria> {
 
-    public class Criteria {
+    public static class Criteria {
         public int CustomerId;
 
         public Criteria(int customerId) {
@@ -23,7 +23,7 @@ public class GetCustomerByIdQuery extends BaseQueryObject<Customer, GetCustomerB
     }
 
     public GetCustomerByIdQuery() {
-        super(Customer.class);
+        super( GetCustomerByIdQuery.Criteria.class);
     }
 
     @Override

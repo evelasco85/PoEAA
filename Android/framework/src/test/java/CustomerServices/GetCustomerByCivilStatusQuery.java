@@ -43,7 +43,7 @@ public class GetCustomerByCivilStatusQuery extends BaseQueryObject<Customer, Get
     }
 
     public GetCustomerByCivilStatusQuery(){
-        super(Customer.class);
+        super(GetCustomerByCivilStatusQuery.Criteria.class);
     }
 
     @Override

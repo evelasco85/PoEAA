@@ -8,6 +8,7 @@ import com.DataManipulation.BaseQueryObjectInterfaces.IBaseQueryObjectConcrete;
 import com.Domain.Interfaces.IDomainObject;
 import com.Domain.Interfaces.ISystemManipulation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,9 +42,11 @@ public class Repository <TEntity extends IDomainObject> implements IRepository<T
         }
     }
 
-    List<TEntity> Matching(IBaseQueryObjectConcrete<TEntity> query)
-    {
-        List<TEntity> results = query.Execute();
+    List<TEntity> Matching(IBaseQueryObjectConcrete<TEntity> query) {
+        List<TEntity> results = new ArrayList<TEntity>();
+
+        if (query != null)
+            results.addAll(query.Execute());
 
         ApplyDomainObjectSettings(results, query);
 
@@ -53,6 +56,8 @@ public class Repository <TEntity extends IDomainObject> implements IRepository<T
     public <TSearchInput> List<TEntity> Matching(TSearchInput criteria)
     {
         IBaseQueryObjectConcrete<TEntity> query = _manager.GetQueryBySearchCriteria(_class, criteria.getClass());
+
+        query.SetSearchInputObject(criteria);
 
         return Matching(query);
     }

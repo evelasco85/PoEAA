@@ -10,7 +10,7 @@ import java.util.List;
  */
 
 public class GetAccountReceivablesByCustomerId extends BaseQueryObject<AccountReceivable, GetAccountReceivablesByCustomerId.Criteria> {
-    public class Criteria {
+    public static class Criteria {
         public String CustomerId;
 
         public Criteria(String id) {
@@ -20,7 +20,7 @@ public class GetAccountReceivablesByCustomerId extends BaseQueryObject<AccountRe
 
     public GetAccountReceivablesByCustomerId()
     {
-        super(AccountReceivable.class);
+        super(GetAccountReceivablesByCustomerId.Criteria.class);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class GetAccountReceivablesByCustomerId extends BaseQueryObject<AccountRe
         for (int index = 0; index < accountReceivables.size(); ++index){
             AccountReceivable result =  accountReceivables.get(index);
 
-            if(result.CustomerNumber == criteria.CustomerId)
+            if((criteria != null) && (criteria.CustomerId != null) && (criteria.CustomerId.equals(result.CustomerNumber)))
                 results.add(result);
         }
 

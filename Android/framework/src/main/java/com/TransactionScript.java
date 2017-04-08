@@ -46,11 +46,11 @@ public abstract class TransactionScript<TInput, TOutput> implements ITransaction
         _mapperRegistry = mapperRegistry;
     }
 
-    public abstract void PreExecuteBody();
+    public void PreExecuteBody(){}
 
     public abstract TOutput ExecutionBody();
 
-    public abstract void PostExecuteBody();
+    public void PostExecuteBody(){}
 
     public void RunScript()
     {

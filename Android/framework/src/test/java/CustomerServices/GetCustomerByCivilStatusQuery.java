@@ -20,7 +20,7 @@ public class GetCustomerByCivilStatusQuery extends BaseQueryObject<Customer, Get
         Divorced
     }
 
-    public class Criteria
+    public static class Criteria
     {
         public CivilStatus CurrentCivilStatus;
 

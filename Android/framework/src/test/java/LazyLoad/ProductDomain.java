@@ -8,7 +8,7 @@ import com.LazyLoad.LazyLoadDomainObject;
  */
 
 public class ProductDomain extends LazyLoadDomainObject<ProductDomain.Criteria>{
-    public class Criteria
+    public static class Criteria
     {
         public int Id;
 

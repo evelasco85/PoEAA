@@ -1,7 +1,6 @@
 import com.DataManipulation.BaseQueryObjectInterfaces.IBaseQueryObjectConcrete;
 import com.DataSynchronizationManager;
 import com.Interfaces.IDataSynchronizationManager;
-import com.Interfaces.IRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +9,7 @@ import CustomerServices.Customer;
 import CustomerServices.CustomerMapper;
 import CustomerServices.GetCustomerByCivilStatusQuery;
 import CustomerServices.GetCustomerByIdQuery;
+import TransactionScripts.AlterMarriedStatusIntoSingleTS;
 
 import static org.junit.Assert.assertEquals;
 
@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
  * Created by aiko on 4/8/17.
  */
 
-public class RepositoryTests {
+public class TransactionScriptTest {
     private IDataSynchronizationManager _manager;
 
     @org.junit.Before
@@ -33,26 +33,18 @@ public class RepositoryTests {
     }
 
     @org.junit.Test
-    public void TestRepository()
+    public void TestRunScript()
     {
-        IRepository<Customer> repository = _manager.GetRepository(Customer.class);
+        AlterMarriedStatusIntoSingleTS transactionScript = new AlterMarriedStatusIntoSingleTS();
 
-            /*Match by civil status*/
-        GetCustomerByCivilStatusQuery.Criteria criteriaByStatus = new GetCustomerByCivilStatusQuery.Criteria(GetCustomerByCivilStatusQuery.CivilStatus.Married);
-        List<Customer> resultsByStatus = repository.Matching(criteriaByStatus);
-        Customer matchByStatus = resultsByStatus.get(0);
+        transactionScript.SetInput(new GetCustomerByCivilStatusQuery.Criteria(GetCustomerByCivilStatusQuery.CivilStatus.Married));
 
-        assertEquals("5", matchByStatus.Number);
-        assertEquals("Test Married", matchByStatus.Name);
-        /***********************/
+        transactionScript.RunScript();
 
-            /*Match by Id*/
-        GetCustomerByIdQuery.Criteria criteriaById = new GetCustomerByIdQuery.Criteria(2);
-        List<Customer> resultsById = repository.Matching(criteriaById);
-        Customer matchById = resultsById.get(0);
+        List<Customer> resultsByStatus = transactionScript.GetOutput().SuccessfullyAlteredCustomers;
 
-        assertEquals("2", matchById.Number);
-        assertEquals("Jane Doe", matchById.Name);
-        /************/
+        assertEquals(1, resultsByStatus.size());
+        assertEquals("5", resultsByStatus.get(0).Number);
+        assertEquals("Test is now single", resultsByStatus.get(0).Name);
     }
 }

@@ -63,6 +63,6 @@ public abstract class TransactionScript<TInput, TOutput> implements ITransaction
 
     public IUnitOfWork CreateUnitOfWork()
     {
-        return null;
+        return new UnitOfWork();
     }
 }

@@ -20,7 +20,7 @@ import CustomerServices.GetCustomerByCivilStatusQuery;
 public class AlterMarriedStatusIntoSingleTS  extends TransactionScript<GetCustomerByCivilStatusQuery.Criteria, AlterMarriedStatusIntoSingleTS.TransactionResult> {
     public class TransactionResult
     {
-        public List<Customer> SuccessfullyAlteredCustomers;
+        public List<Customer> SuccessfullyAlteredCustomers = new ArrayList<Customer>();
     }
 
     public AlterMarriedStatusIntoSingleTS()
@@ -51,9 +51,7 @@ public class AlterMarriedStatusIntoSingleTS  extends TransactionScript<GetCustom
 
         TransactionResult result = new TransactionResult();
 
-        result.SuccessfullyAlteredCustomers = new ArrayList<Customer>();
-
-        uow.Commit(new AlterMarriedInvocationDelegates(result.SuccessfullyAlteredCustomers));
+        uow.Commit(new AlterMarriedInvocationDelegates(result));
 
         return result;
     }

@@ -15,11 +15,10 @@ import CustomerServices.Customer;
 
 public class AlterMarriedInvocationDelegates implements UoWInvocationDelegates {
     Hashtable _results;
-    List<Customer> _successfullyAlteredCustomers;
+    AlterMarriedStatusIntoSingleTS.TransactionResult _transactionResult;
 
-    public AlterMarriedInvocationDelegates(List<Customer> successfullyAlteredCustomers)
-    {
-        _successfullyAlteredCustomers = successfullyAlteredCustomers;
+    public AlterMarriedInvocationDelegates(AlterMarriedStatusIntoSingleTS.TransactionResult transactionResult) {
+        _transactionResult = transactionResult;
     }
 
     public Hashtable GetResults() {
@@ -31,7 +30,7 @@ public class AlterMarriedInvocationDelegates implements UoWInvocationDelegates {
     }
 
     public void SuccessfulUoWInvocationDelegate(IDomainObject domainObject, UnitOfWorkAction action) {
-        _successfullyAlteredCustomers.add((Customer) domainObject);
+        _transactionResult.SuccessfullyAlteredCustomers.add((Customer) domainObject);
     }
 
     public void FailedUoWInvocationDelegate(IDomainObject domainObject, UnitOfWorkAction action) {

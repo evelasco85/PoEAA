@@ -74,8 +74,9 @@ public class UnitOfWorkTests {
 
         uow.Commit(new CustomerUoWDelegate(sequenceDescription));
 
-        assertEquals("1=Insert=CustomerServices.Customer", sequenceDescription.get(0));
-        assertEquals("3=Insert=CustomerServices.Customer", sequenceDescription.get(1));
-        assertEquals("2=Insert=CustomerServices.Customer", sequenceDescription.get(2));
+
+        assertEquals(true, sequenceDescription.contains("1=Insert=CustomerServices.Customer"));
+        assertEquals(true, sequenceDescription.contains("3=Insert=CustomerServices.Customer"));
+        assertEquals(true, sequenceDescription.contains("2=Insert=CustomerServices.Customer"));
     }
 }

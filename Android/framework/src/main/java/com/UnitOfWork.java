@@ -8,8 +8,9 @@ import com.DataManipulation.BaseMapperInterfaces.InvocationDelegates;
 import com.Domain.Interfaces.IDomainObject;
 
 import java.rmi.NoSuchObjectException;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -128,9 +129,10 @@ public class UnitOfWork implements IUnitOfWork {
 
     public void Commit(UoWInvocationDelegates delegates)
     {
-        ApplyOperation(UnitOfWorkAction.Insert, _insertionObjects.values(), delegates);
-        ApplyOperation(UnitOfWorkAction.Update, _updatingObjects.values(), delegates);
-        ApplyOperation(UnitOfWorkAction.Delete, _deletionObjects.values(), delegates);
+        ;
+        ApplyOperation(UnitOfWorkAction.Insert, new ArrayList<IDomainObject>(_insertionObjects.values()), delegates);
+        ApplyOperation(UnitOfWorkAction.Update, new ArrayList<IDomainObject>(_updatingObjects.values()), delegates);
+        ApplyOperation(UnitOfWorkAction.Delete, new ArrayList<IDomainObject>(_deletionObjects.values()), delegates);
         ClearUnitOfWork();
     }
 
@@ -147,11 +149,13 @@ public class UnitOfWork implements IUnitOfWork {
     }
 
     void ApplyOperation(
-            UnitOfWorkAction action, Collection<IDomainObject> affectedEntities,
+            UnitOfWorkAction action, List<IDomainObject> affectedEntities,
             UoWInvocationDelegates uoWInvocationDelegates
     )
     {
-        for (IDomainObject entity : affectedEntities) {
+        for(int index = 0; index < affectedEntities.size(); ++index)
+        {
+            IDomainObject entity = affectedEntities.get(index);
 
             if (entity == null)
                 continue;

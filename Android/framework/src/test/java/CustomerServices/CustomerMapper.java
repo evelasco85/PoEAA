@@ -36,7 +36,7 @@ public class CustomerMapper extends BaseMapper<Customer> {
 
         Hashtable results = new Hashtable();
 
-        results.put(SUCCESS_DESCRIPTION, String.format("Service container with key '%s' not found.", customer.Number));
+        results.put(SUCCESS_DESCRIPTION, String.format("%s", customer.Number));
 
         invocationDelegates.SetResults(results);
         invocationDelegates.SuccessfulInvocation(customer);
@@ -53,7 +53,7 @@ public class CustomerMapper extends BaseMapper<Customer> {
 
         Hashtable results = new Hashtable();
 
-        results.put(SUCCESS_DESCRIPTION, String.format("Service container with key '%s' not found.", customer.Number));
+        results.put(SUCCESS_DESCRIPTION, String.format("%s", customer.Number));
 
         invocationDelegates.SetResults(results);
         invocationDelegates.SuccessfulInvocation(customer);
@@ -68,7 +68,7 @@ public class CustomerMapper extends BaseMapper<Customer> {
 
         Hashtable results = new Hashtable();
 
-        results.put(SUCCESS_DESCRIPTION, String.format("Service container with key '%s' not found.", customer.Number));
+        results.put(SUCCESS_DESCRIPTION, String.format("%s", customer.Number));
 
         invocationDelegates.SetResults(results);
         invocationDelegates.SuccessfulInvocation(customer);

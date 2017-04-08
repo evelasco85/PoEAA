@@ -14,6 +14,13 @@ public class Customer extends DomainObject {
         super(mapper);
     }
 
+    public Customer(IBaseMapper mapper, String number)
+    {
+        this(mapper);
+
+        Number = number;
+    }
+
     @IdentityFieldAnnotation
     public String Number;
 

@@ -19,6 +19,7 @@ namespace Framework.Domain
         InstantiationType Instantiation { get; }
 
         IDictionary<string, PropertyInfo> GetMonitoredProperties();
+        IDictionary<string, object> GetCurrentMonitoredPropertyValues();
     }
 
     public enum InstantiationType
@@ -83,11 +84,32 @@ namespace Framework.Domain
                         (!property
                             .CustomAttributes
                             .Any(attribute => attribute.AttributeType == typeof(IgnorePropertyMonitoringAttribute))
-                        )) //||
+                        ))
                         
                         )
                 .Where(property => (!property.PropertyType.IsClass) || (property.PropertyType == typeof(string)))
                 .ToDictionary(property => property.Name, property => property);
+        }
+
+        public IDictionary<string, object> GetCurrentMonitoredPropertyValues()
+        {
+            IDictionary<string, PropertyInfo> properties = GetMonitoredProperties();
+            IDictionary<string, object> values = new Dictionary<string, object>();
+
+            foreach(KeyValuePair<string, PropertyInfo> property in properties)
+            {
+                values.Add(
+                    property.Key,
+                    property.Value.GetValue(this)
+                    );
+            }
+
+            return values;
+        }
+
+        void GetDiff(DomainObject otherDomainObject)
+        {
+
         }
     }
 }

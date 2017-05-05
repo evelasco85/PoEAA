@@ -45,7 +45,7 @@
     <Compile Include="Domain\DomainObjectMementoService.cs" />
     <Compile Include="Domain\ForeignKeyMapping.cs" />
     <Compile Include="Domain\IgnorePropertyMonitoringAttribute.cs" />
-    <Compile Include="Domain\ObjectStateContainer.cs" />
+    <Compile Include="Domain\ObjectStateMonitoringContainer.cs" />
     <Compile Include="ForeignKeyMappingManager.cs" />
     <Compile Include="IdentityFieldAttribute.cs" />
     <Compile Include="IdentityMap.cs" />

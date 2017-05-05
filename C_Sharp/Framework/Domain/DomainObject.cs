@@ -3,6 +3,8 @@ using Framework.Data_Manipulation;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Framework.Domain
 {
@@ -99,15 +101,29 @@ namespace Framework.Domain
 
             foreach(KeyValuePair<string, PropertyInfo> property in properties)
             {
-                values.Add(
-                    property.Key,
-                    property.Value.GetValue(this)
-                    );
+                string key = property.Key;
+                object value = property.Value.GetValue(this);
+
+                if (value == null)
+                    values.Add(key, value);
+                else        //Just making sure, in-case of non-primitive slipage
+                    values.Add(key, DeepClone(value));
             }
 
             return values;
         }
 
+        static T DeepClone<T>(T obj)
+        {
+            using (var ms = new MemoryStream())
+            {
+                var formatter = new BinaryFormatter();
+                formatter.Serialize(ms, obj);
+                ms.Position = 0;
+
+                return (T)formatter.Deserialize(ms);
+            }
+        }
         public IDictionary<string, PropertyInfo> GetDiffProperties(DomainObject otherDomainObject)
         {
             if (otherDomainObject == null) throw new ArgumentNullException("Cannot compare null value");

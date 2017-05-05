@@ -20,6 +20,7 @@ namespace Framework.Domain
 
         IDictionary<string, PropertyInfo> GetMonitoredProperties();
         IDictionary<string, object> GetCurrentMonitoredPropertyValues();
+        IDictionary<string, PropertyInfo> GetDiffProperties(DomainObject otherDomainObject);
     }
 
     public enum InstantiationType
@@ -107,9 +108,35 @@ namespace Framework.Domain
             return values;
         }
 
-        void GetDiff(DomainObject otherDomainObject)
+        public IDictionary<string, PropertyInfo> GetDiffProperties(DomainObject otherDomainObject)
         {
+            if (otherDomainObject == null) throw new ArgumentNullException("Cannot compare null value");
 
+            if (GetType().FullName != otherDomainObject.GetType().FullName)
+                throw new ArgumentException("Argument is not a comparable type");
+
+            IDictionary<string, PropertyInfo> properties = GetMonitoredProperties();
+            IDictionary<string, PropertyInfo> diffProperties = new Dictionary<string, PropertyInfo>();
+
+            foreach (KeyValuePair<string, PropertyInfo> property in properties)
+            {
+                object thisValue = property.Value.GetValue(this);
+                object thatValue = property.Value.GetValue(otherDomainObject);
+
+                if (thatValue == null)
+                {
+                    diffProperties.Add(property);
+                    continue;
+                }
+
+                if(!thisValue.Equals(thatValue))
+                {
+                    diffProperties.Add(property);
+                    continue;
+                }
+            }
+
+            return diffProperties;
         }
     }
 }

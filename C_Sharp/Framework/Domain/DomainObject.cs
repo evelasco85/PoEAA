@@ -148,11 +148,8 @@ namespace Framework.Domain
 
         public static bool NotEqualPropertyValues(object propVal1, object propVal2)
         {
-            if ((propVal1 == null) != (propVal2 == null)) return true;
-
-            if (!propVal1.Equals(propVal2)) return true;
-
-            return false;
+            //Can be further improved...
+            return !object.Equals(propVal1, propVal2);
         }
     }
 }

@@ -97,7 +97,7 @@ namespace Framework.Domain
                 IDictionary<string, PropertyInfo> observableProperties = _observableTypeProperties[domainObject.GetType().FullName];
                 ModifiedEntity modifiedItem = GetModifiedEntity(domainObject, observableProperties, originalValues, currentValues);
 
-                if (modifiedEntities == null) continue;
+                if (modifiedItem == null) continue;
 
                 modifiedEntities.Add(modifiedItem);
             }

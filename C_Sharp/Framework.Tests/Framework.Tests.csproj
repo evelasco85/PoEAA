@@ -74,6 +74,7 @@
     <Compile Include="DomainObjectMementoServiceTests.cs" />
     <Compile Include="LazyLoadTests.cs" />
     <Compile Include="DomainObjectTests.cs" />
+    <Compile Include="ObjectStateMonitoringContainerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Framework\Framework.csproj">

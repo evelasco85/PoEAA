@@ -139,20 +139,20 @@ namespace Framework.Domain
                 object thisValue = property.Value.GetValue(this);
                 object thatValue = property.Value.GetValue(otherDomainObject);
 
-                if (thatValue == null)
-                {
+                if(NotEqualPropertyValues(thisValue, thatValue))
                     diffProperties.Add(property);
-                    continue;
-                }
-
-                if(!thisValue.Equals(thatValue))
-                {
-                    diffProperties.Add(property);
-                    continue;
-                }
             }
 
             return diffProperties;
+        }
+
+        public static bool NotEqualPropertyValues(object propVal1, object propVal2)
+        {
+            if ((propVal1 == null) != (propVal2 == null)) return true;
+
+            if (!propVal1.Equals(propVal2)) return true;
+
+            return false;
         }
     }
 }

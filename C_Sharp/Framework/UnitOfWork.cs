@@ -26,6 +26,8 @@ namespace Framework
             where TEntity : IDomainObject;
         TEntity RegisterRemoved<TEntity>(TEntity entity)
             where TEntity : IDomainObject;
+        void RemoveExistingRegistration<TEntity>(TEntity entity)
+            where TEntity : IDomainObject;
         void Commit(SuccessfulUoWInvocationDelegate successfulInvocation, FailedUoWInvocationDelegate failedInvocation);
         void ClearUnitOfWork();
         bool PendingCommits();
@@ -53,6 +55,14 @@ namespace Framework
         {
             if (ContainsKey(domainDictionary, domainObject))
                 domainDictionary.Remove(domainObject.SystemId);
+        }
+
+        public void RemoveExistingRegistration<TEntity>(TEntity entity)
+            where TEntity : IDomainObject
+        {
+            RemoveEntity(_insertionObjects, entity);
+            RemoveEntity(_updatingObjects, entity);
+            RemoveEntity(_deletionObjects, entity);
         }
 
         public TEntity RegisterNew<TEntity>(TEntity entity)

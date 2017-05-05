@@ -45,7 +45,9 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
       </ItemGroup>
     </Otherwise>
   </Choose>
@@ -71,6 +73,7 @@
     <Compile Include="UnitOfWorkTests.cs" />
     <Compile Include="DomainObjectMementoServiceTests.cs" />
     <Compile Include="LazyLoadTests.cs" />
+    <Compile Include="DomainObjectTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Framework\Framework.csproj">

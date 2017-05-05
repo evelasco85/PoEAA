@@ -1,5 +1,8 @@
 ﻿using System;
 using Framework.Data_Manipulation;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Linq;
 
 namespace Framework.Domain
 {
@@ -14,6 +17,8 @@ namespace Framework.Domain
         Guid SystemId { get; }
         IBaseMapper Mapper { get; }
         InstantiationType Instantiation { get; }
+
+        IDictionary<string, PropertyInfo> GetMonitoredProperties();
     }
 
     public enum InstantiationType
@@ -48,7 +53,7 @@ namespace Framework.Domain
                     return InstantiationType.Loaded;
             }
         }
-        
+
         public DomainObject(IBaseMapper mapper)
         {
             _mapper = mapper;
@@ -63,6 +68,26 @@ namespace Framework.Domain
         public void SetMapper(IBaseMapper mapper)
         {
             _mapper = mapper;
+        }
+
+        public IDictionary<string, PropertyInfo> GetMonitoredProperties()
+        {
+            BindingFlags flags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+            Type entityType = GetType();
+
+            return entityType
+                .GetProperties(flags)
+                .Where(
+                    property =>
+                        ((property.CustomAttributes != null) &&
+                        (!property
+                            .CustomAttributes
+                            .Any(attribute => attribute.AttributeType == typeof(IgnorePropertyMonitoringAttribute))
+                        )) //||
+                        
+                        )
+                .Where(property => (!property.PropertyType.IsClass) || (property.PropertyType == typeof(string)))
+                .ToDictionary(property => property.Name, property => property);
         }
     }
 }

@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Data Manipulation">
+      <UniqueIdentifier>{0a0b9c00-4787-405a-80a3-706b255fc192}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Domain">
+      <UniqueIdentifier>{62f4d636-57b6-44b1-b666-8cfb8562611b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\LazyLoad">
+      <UniqueIdentifier>{f33fbbcf-9b33-4352-aed1-e035b9115642}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Security">
+      <UniqueIdentifier>{bbe826bd-2e2d-4491-a3b1-e129a4a767d8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

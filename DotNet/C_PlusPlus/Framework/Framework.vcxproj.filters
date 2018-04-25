@@ -25,6 +25,9 @@
     <Filter Include="Header Files\Security">
       <UniqueIdentifier>{bbe826bd-2e2d-4491-a3b1-e129a4a767d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\PlatformSpecific">
+      <UniqueIdentifier>{7a6f5271-65df-41d2-804f-bd3aea50345a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -32,6 +35,21 @@
     </ClInclude>
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IdentityMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseMapper.h">
+      <Filter>Header Files\Data Manipulation</Filter>
+    </ClInclude>
+    <ClInclude Include="DomainObject.h">
+      <Filter>Header Files\Domain</Filter>
+    </ClInclude>
+    <ClInclude Include="Types.h">
+      <Filter>Header Files\PlatformSpecific</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseQueryObject.h">
+      <Filter>Header Files\Data Manipulation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -42,6 +60,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="dllmain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DomainObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

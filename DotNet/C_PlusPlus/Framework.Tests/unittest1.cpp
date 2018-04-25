@@ -1,7 +1,12 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
+#include "Customer.h"
+#include "DomainObject.h"
 
+using namespace std;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+using namespace CustomerServices;
+using namespace Framework::Domain;
 
 namespace FrameworkTests
 {		
@@ -11,8 +16,10 @@ namespace FrameworkTests
 		
 		TEST_METHOD(TestMethod1)
 		{
-			Assert::AreEqual(1, 1);
-		}
+			Customer customer;
+			string expected("Hello World");
 
+			Assert::AreEqual(expected, customer.GetTestMessage(), L"", LINE_INFO());
+		}
 	};
 }

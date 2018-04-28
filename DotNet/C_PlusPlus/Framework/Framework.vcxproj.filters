@@ -51,6 +51,9 @@
     <ClInclude Include="BaseQueryObject.h">
       <Filter>Header Files\Data Manipulation</Filter>
     </ClInclude>
+    <ClInclude Include="DllMacros.h">
+      <Filter>Header Files\PlatformSpecific</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

@@ -2,17 +2,17 @@
 
 #include <string>
 #include <map>
-#include "Types.h"
 
 using namespace std;
-using namespace Framework;
+
+class Guid;
 
 namespace Framework
 {
 	template<typename TEntity>
 	class IdentityMap
 	{
-	public:
+	private:
 		typedef HashDictionary map<string, Guid>;
 		typedef SearchDictionary map<string, TEntity>;
 

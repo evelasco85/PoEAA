@@ -2,6 +2,7 @@
 
 #include <string>
 #include "DllMacros.h"
+#include <memory>
 
 using namespace std;
 
@@ -18,9 +19,9 @@ namespace Framework
 		public:
 			enum InstantiationType { New = 1, Loaded = 2 };
 		private:
-			BaseMapper *m_mapper;
-			Guid *m_systemId;
-			BaseQueryObject *m_queryObject;
+			unique_ptr<Guid> *m_systemId;
+			shared_ptr<BaseMapper> *m_mapper;
+			shared_ptr<BaseQueryObject> *m_queryObject;
 		public:
 			string GetTestMessage();
 		};

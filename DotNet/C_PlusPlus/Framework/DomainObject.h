@@ -18,11 +18,14 @@ namespace Framework
 		{
 		public:
 			enum InstantiationType { New = 1, Loaded = 2 };
+			typedef const unique_ptr<Guid> ConstGuidPtr;
+			typedef const BaseMapper ConstMapper;
+			typedef const BaseQueryObject ConstQuery;
 			
 		private:
-			const unique_ptr<Guid> m_systemId;		//Data non-modifiable
-			const BaseMapper * const m_mapper;				//Data non-modifiable, pointer non-repointable
-			const BaseQueryObject * const m_queryObject;	//Data non-modifiable, pointer non-repointable
+			ConstGuidPtr m_systemId;		//Data non-modifiable
+			ConstMapper *m_mapper;				//Data non-modifiable, pointer non-repointable
+			ConstQuery *m_queryObject;	//Data non-modifiable, pointer non-repointable
 
 		public:
 			DomainObject():

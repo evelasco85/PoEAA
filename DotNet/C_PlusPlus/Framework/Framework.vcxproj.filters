@@ -30,42 +30,42 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseMapper.h">
+      <Filter>Header Files\Data Manipulation</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseQueryObject.h">
+      <Filter>Header Files\Data Manipulation</Filter>
+    </ClInclude>
+    <ClInclude Include="DomainObject.h">
+      <Filter>Header Files\Domain</Filter>
+    </ClInclude>
+    <ClInclude Include="DllMacros.h">
+      <Filter>Header Files\PlatformSpecific</Filter>
+    </ClInclude>
+    <ClInclude Include="Types.h">
+      <Filter>Header Files\PlatformSpecific</Filter>
+    </ClInclude>
+    <ClInclude Include="IdentityMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IdentityMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseMapper.h">
-      <Filter>Header Files\Data Manipulation</Filter>
-    </ClInclude>
-    <ClInclude Include="DomainObject.h">
-      <Filter>Header Files\Domain</Filter>
-    </ClInclude>
-    <ClInclude Include="Types.h">
-      <Filter>Header Files\PlatformSpecific</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseQueryObject.h">
-      <Filter>Header Files\Data Manipulation</Filter>
-    </ClInclude>
-    <ClInclude Include="DllMacros.h">
-      <Filter>Header Files\PlatformSpecific</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
+    <ClCompile Include="dllmain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DomainObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Framework.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dllmain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DomainObject.cpp">
+    <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

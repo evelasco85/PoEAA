@@ -27,14 +27,15 @@ namespace Framework
 			ConstMapper *m_mapper;				//Data non-modifiable, pointer non-repointable
 			ConstQuery *m_queryObject;	//Data non-modifiable, pointer non-repointable
 
-		public:
-			DomainObject():
+		protected:
+			DomainObject() :
 				m_systemId(GenerateGuid()),
 				m_mapper(NULL),
 				m_queryObject(NULL)
 			{
 			}
 
+		public:
 			string GetTestMessage();
 		};
 	}

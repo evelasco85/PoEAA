@@ -10,3 +10,7 @@ string DomainObject::GetTestMessage()
 {
 	 return "Hello World"; 
 }
+
+DomainObject::~DomainObject()
+{
+}

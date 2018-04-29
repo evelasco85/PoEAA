@@ -14,10 +14,12 @@ namespace FrameworkTests
 		
 		TEST_METHOD(TestMethod1)
 		{
-			Customer customer;
+			DomainObject *customerDomainObject = new Customer;
 			string expected("Hello World");
 
-			Assert::AreEqual(expected, customer.GetTestMessage(), L"", LINE_INFO());
+			Assert::AreEqual(expected, customerDomainObject->GetTestMessage(), L"", LINE_INFO());
+
+			delete customerDomainObject;
 		}
 	};
 }

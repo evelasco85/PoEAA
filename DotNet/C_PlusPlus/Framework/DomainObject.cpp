@@ -37,7 +37,14 @@ public:
 DomainObject::DomainObject(ConstMapper *mapper) :
 	pImpl{ make_unique<Implementation>(mapper) } { }
 
-DomainObject::~DomainObject() { }
+//'default' explicityly informs compiler to generate body/func automatically
+DomainObject::DomainObject(DomainObject&&) = default;
+
+//'default' explicityly informs compiler to generate body/func automatically
+DomainObject& DomainObject::operator=(DomainObject&&) = default;
+
+//'default' explicityly informs compiler to generate body/func automatically
+DomainObject::~DomainObject() = default;
 
 string DomainObject::GetTestMessage() const
 {

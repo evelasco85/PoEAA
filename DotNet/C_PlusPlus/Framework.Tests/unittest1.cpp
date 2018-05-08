@@ -19,7 +19,12 @@ namespace FrameworkTests
 
 			Assert::AreEqual(expected, customerDomainObject->GetTestMessage(), L"", LINE_INFO());
 
-			delete customerDomainObject;
+			if (customerDomainObject != NULL)
+			{
+				delete customerDomainObject;
+
+				customerDomainObject = NULL;
+			}
 		}
 	};
 }

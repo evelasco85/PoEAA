@@ -28,12 +28,12 @@ namespace Framework
 			DomainObject& operator=(DomainObject&&);
 
 			//Copy constructor and assignment
-			DomainObject(const DomainObject&) = delete;						//'delete' informs compiler not to generate body/func automatically
-			DomainObject& operator=(const DomainObject&) = delete;			//'delete' informs compiler not to generate body/func automatically
+			DomainObject(const DomainObject&) = delete;						//'delete' informs compiler not to generate body/func automatically, thus prevents copying
+			DomainObject& operator=(const DomainObject&) = delete;			//'delete' informs compiler not to generate body/func automatically, thus prevents copying
 		public:
 			virtual ~DomainObject() = 0;									//Declaring DomainObject as abstract class
 
-			string GetTestMessage() const;
+			const string GetGuid();
 		};
 	}
 }

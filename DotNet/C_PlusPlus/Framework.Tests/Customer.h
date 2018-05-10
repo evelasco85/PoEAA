@@ -9,6 +9,7 @@ namespace CustomerServices
 {
 	class Customer : public DomainObject
 	{
+	private:
 	public:
 		Customer() : DomainObject(nullptr){}
 

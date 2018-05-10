@@ -8,16 +8,15 @@ using namespace Framework::Domain;
 
 class BaseQueryObject;
 
-class DomainObject::Implementation
+class FRAMEWORK_API DomainObject::Implementation
 {
 public:
 	enum InstantiationType { New = 1, Loaded = 2 };
-	typedef const unique_ptr<Guid> ConstGuidPtr;
 	typedef const BaseQueryObject ConstQueryObject;
 private:
-	ConstGuidPtr m_systemId;			//Data non-modifiable
-	ConstMapper *m_mapper;				//Data non-modifiable, pointer non-repointable
-	ConstQueryObject *m_queryObject;	//Data non-modifiable, pointer non-repointable
+	unique_ptr<Guid> m_systemId;			//Data non-modifiable
+	ConstMapper *m_mapper;					//Data non-modifiable, pointer non-repointable
+	ConstQueryObject *m_queryObject;		//Data non-modifiable, pointer non-repointable
 public:
 	Implementation(ConstMapper *mapper) :
 		m_systemId(GenerateGuid()),
@@ -27,26 +26,45 @@ public:
 	}
 	~Implementation() {}
 
-	//param type DomainObject is for back-reference
-	string GetTestMessage(const DomainObject& domainObject) const
+	const string GetGuid(const DomainObject&)
 	{
-		return "Hello World";
+		string guid;
+
+		if (!m_systemId) return guid;
+
+		RPC_CSTR szUuid = NULL;
+
+		if (::UuidToStringA(m_systemId.get(), &szUuid) == RPC_S_OK)
+		{
+			guid = (char*)szUuid;
+			::RpcStringFreeA(&szUuid);
+		}
+
+		return guid;
 	}
 };
 
 DomainObject::DomainObject(ConstMapper *mapper) :
 	pImpl{ make_unique<Implementation>(mapper) } { }
 
-//'default' explicityly informs compiler to generate body/func automatically
-DomainObject::DomainObject(DomainObject&&) = default;
+DomainObject::DomainObject(DomainObject&& rvalue) :
+	pImpl(move(rvalue.pImpl))
+{
+}
 
-//'default' explicityly informs compiler to generate body/func automatically
-DomainObject& DomainObject::operator=(DomainObject&&) = default;
+DomainObject& DomainObject::operator=(DomainObject&& rvalue)
+{
+	pImpl = move(rvalue.pImpl);
+
+	return *this;
+}
 
 //'default' explicityly informs compiler to generate body/func automatically
 DomainObject::~DomainObject() = default;
 
-string DomainObject::GetTestMessage() const
+const string DomainObject::GetGuid()
 {
-	return pImpl->GetTestMessage(*this);
+	if (!pImpl) return string("");
+
+	return pImpl->GetGuid(*this);
 }

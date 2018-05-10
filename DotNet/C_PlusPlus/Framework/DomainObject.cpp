@@ -30,7 +30,7 @@ public:
 	{
 		string guid;
 
-		if (!m_systemId) return guid;
+		if (!m_systemId) return string("");
 
 		RPC_CSTR szUuid = NULL;
 
@@ -40,7 +40,7 @@ public:
 			::RpcStringFreeA(&szUuid);
 		}
 
-		return guid;
+		return string(guid);
 	}
 };
 

@@ -26,8 +26,8 @@ Customer::Customer() :
 }
 
 Customer::Customer(Customer&& rvalue) :
-	DomainObject(move(rvalue))
-	,pImpl(move(rvalue.pImpl))
+	DomainObject(move(rvalue)),
+	pImpl(move(rvalue.pImpl))
 {
 }
 

@@ -29,11 +29,12 @@ namespace CustomerServices
 		{
 			using std::swap;
 
+			swap(lhs.pImpl, rhs.pImpl);
+
 			DomainObject *lhsDomainObject = &lhs;
 			DomainObject *rhsDomainObject = &rhs;
 
 			swap(*lhsDomainObject, *rhsDomainObject);
-			swap(lhs.pImpl, rhs.pImpl);
 		}
 	};
 }

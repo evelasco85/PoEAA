@@ -33,8 +33,8 @@ Customer::Customer(Customer&& rvalue) :
 
 Customer& Customer::operator=(Customer&& rvalue)
 {
-	pImpl = move(rvalue.pImpl);
 	DomainObject::operator=(move(rvalue));
+	pImpl = move(rvalue.pImpl);
 
 	return *this;
 }

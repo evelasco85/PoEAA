@@ -53,5 +53,23 @@ namespace FrameworkTests
 			Assert::AreEqual(sourceGuidBeforeMove, guid, L"Should be equal", LINE_INFO());
 			Assert::AreEqual(string(""), sourceGuidAfterMove, L"Should not contain guid", LINE_INFO());
 		}
+
+		TEST_METHOD(SwapTest)
+		{
+			Customer customer1;
+			Customer customer2;
+			string customer1Guid = customer1.GetGuid();
+			string customer2Guid = customer2.GetGuid();
+
+			Assert::AreNotEqual(customer1Guid, customer2Guid, L"Should not be equal", LINE_INFO());
+
+			swap(customer1, customer2);
+
+			string newCustomer1Guid = customer1.GetGuid();
+			string newCustomer2Guid = customer2.GetGuid();
+
+			Assert::AreEqual(customer1Guid, newCustomer2Guid, L"Should be equal", LINE_INFO());
+			Assert::AreEqual(customer2Guid, newCustomer1Guid, L"Should be equal", LINE_INFO());
+		}
 	};
 }

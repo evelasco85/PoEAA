@@ -22,5 +22,15 @@ namespace CustomerServices
 		Customer& operator=(const Customer&) = delete;
 
 		~Customer();
+
+		friend void swap(Customer& lhs, Customer& rhs)
+		{
+			using std::swap;
+
+			DomainObject *lhsDomainObject = &lhs;
+			DomainObject *rhsDomainObject = &rhs;
+
+			swap(*lhsDomainObject, *rhsDomainObject);
+		}
 	};
 }

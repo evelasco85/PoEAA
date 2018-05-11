@@ -21,6 +21,14 @@ public:
 		m_mapper(mapper),
 		m_queryObject(queryObject)	{ }
 
+	//Move constructor and assignment
+	Implementation(Implementation&&) = default;
+	Implementation& operator=(Implementation&&) = default;
+
+	//Copy constructor and assignment, for strong guarantee and swapping
+	Implementation(const Implementation&) = default;
+	Implementation& operator=(const Implementation&) = default;
+
 	~Implementation()
 	{
 		//Only objects instantiated within this class are to be destroyed

@@ -34,6 +34,13 @@ namespace Framework
 		public:
 			virtual ~DomainObject() = 0;									//Declaring DomainObject as abstract class
 
+			friend void swap(DomainObject& lhs, DomainObject& rhs)
+			{
+				using std::swap;
+
+				swap(lhs.pImpl, rhs.pImpl);
+			}
+
 			const string GetGuid();
 		};
 	}

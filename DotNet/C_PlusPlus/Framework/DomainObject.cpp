@@ -17,7 +17,7 @@ private:
 	ConstQueryObject *m_queryObject;		//Data non-modifiable
 public:
 	Implementation(ConstMapper* mapper, ConstQueryObject* queryObject) :
-		m_systemId(GenerateGuid()),
+		m_systemId(NewGuid()),
 		m_mapper(mapper),
 		m_queryObject(queryObject)	{ }
 

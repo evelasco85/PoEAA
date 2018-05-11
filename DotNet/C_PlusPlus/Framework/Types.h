@@ -20,7 +20,7 @@ namespace Framework
 #ifdef WIN32
 	typedef UUID Guid;
 	
-	static inline const Guid* GenerateGuid()
+	static inline const Guid* NewGuid()
 	{
 		Guid uuid;
 

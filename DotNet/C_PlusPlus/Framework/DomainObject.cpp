@@ -6,26 +6,24 @@
 using namespace std;
 using namespace Framework::Domain;
 
-class BaseQueryObject;
-
 class FRAMEWORK_API DomainObject::Implementation
 {
 public:
 	enum InstantiationType { New = 1, Loaded = 2 };
 	typedef const Guid ConstGuid;
-	typedef const BaseQueryObject ConstQueryObject;
 private:
-	ConstGuid *m_systemId;			//Data non-modifiable
-	ConstMapper *m_mapper;					//Data non-modifiable, pointer non-repointable
-	ConstQueryObject *m_queryObject;		//Data non-modifiable, pointer non-repointable
+	ConstGuid *m_systemId;					//Data non-modifiable
+	ConstMapper *m_mapper;					//Data non-modifiable
+	ConstQueryObject *m_queryObject;		//Data non-modifiable
 public:
-	Implementation(ConstMapper *mapper) :
+	Implementation(ConstMapper* mapper, ConstQueryObject* queryObject) :
 		m_systemId(GenerateGuid()),
 		m_mapper(mapper),
-		m_queryObject(NULL)	{ }
+		m_queryObject(queryObject)	{ }
 
 	~Implementation()
 	{
+		//Only objects instantiated within this class are to be destroyed
 		if (m_systemId != NULL)
 		{
 			delete m_systemId;
@@ -52,8 +50,8 @@ public:
 	}
 };
 
-DomainObject::DomainObject(ConstMapper *mapper) :
-	pImpl{ make_unique<Implementation>(mapper) } { }
+DomainObject::DomainObject(ConstMapper* mapper, ConstQueryObject* queryObject) :
+	pImpl{ make_unique<Implementation>(mapper, queryObject) } { }
 
 DomainObject::DomainObject(DomainObject&& rvalue) :
 	pImpl(move(rvalue.pImpl))

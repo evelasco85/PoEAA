@@ -7,6 +7,7 @@
 using namespace std;
 
 class BaseMapper;
+class BaseQueryObject;
 
 namespace Framework
 {
@@ -16,11 +17,12 @@ namespace Framework
 		{
 		public:
 			typedef const BaseMapper ConstMapper;
+			typedef const BaseQueryObject ConstQueryObject;
 		private:
 			class Implementation;											//State persistency
 			unique_ptr<Implementation> pImpl;								//pImpl is a complete type
 		protected:															//Declaring DomainObject uninstantiable
-			DomainObject(ConstMapper*);
+			DomainObject(ConstMapper*, ConstQueryObject*);
 
 			//Move constructor and assignment
 			DomainObject(DomainObject&&);

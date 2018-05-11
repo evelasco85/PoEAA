@@ -33,6 +33,7 @@ namespace CustomerServices
 			DomainObject *rhsDomainObject = &rhs;
 
 			swap(*lhsDomainObject, *rhsDomainObject);
+			swap(lhs.pImpl, rhs.pImpl);
 		}
 	};
 }

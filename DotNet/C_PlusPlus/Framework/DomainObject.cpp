@@ -12,29 +12,37 @@ class FRAMEWORK_API DomainObject::Implementation
 {
 public:
 	enum InstantiationType { New = 1, Loaded = 2 };
+	typedef const Guid ConstGuid;
 	typedef const BaseQueryObject ConstQueryObject;
 private:
-	unique_ptr<Guid> m_systemId;			//Data non-modifiable
+	ConstGuid *m_systemId;			//Data non-modifiable
 	ConstMapper *m_mapper;					//Data non-modifiable, pointer non-repointable
 	ConstQueryObject *m_queryObject;		//Data non-modifiable, pointer non-repointable
 public:
 	Implementation(ConstMapper *mapper) :
 		m_systemId(GenerateGuid()),
 		m_mapper(mapper),
-		m_queryObject(nullptr)
+		m_queryObject(NULL)	{ }
+
+	~Implementation()
 	{
+		if (m_systemId != NULL)
+		{
+			delete m_systemId;
+
+			m_systemId = NULL;
+		}
 	}
-	~Implementation() {}
 
 	const string GetGuid(const DomainObject&)
 	{
 		string guid;
 
-		if (!m_systemId) return string("");
+		if (m_systemId == NULL) return string("");
 
 		RPC_CSTR szUuid = NULL;
 
-		if (::UuidToStringA(m_systemId.get(), &szUuid) == RPC_S_OK)
+		if (::UuidToStringA(m_systemId, &szUuid) == RPC_S_OK)
 		{
 			guid = (char*)szUuid;
 			::RpcStringFreeA(&szUuid);

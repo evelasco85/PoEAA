@@ -20,19 +20,19 @@ namespace Framework
 #ifdef WIN32
 	typedef UUID Guid;
 	
-	static unique_ptr<Guid> GenerateGuid()
+	static inline const Guid* GenerateGuid()
 	{
-		Guid *uuid = new Guid;
+		Guid uuid;
 
-		ZeroMemory(uuid, sizeof(Guid));
+		ZeroMemory(&uuid, sizeof(Guid));
 
-		if (UuidCreate(uuid) != RPC_S_OK)
+		if (UuidCreate(&uuid) != RPC_S_OK)
 		{
 			fprintf(stderr, "Unable to create UUID!\n");
 			exit(1);
 		}
 
-		return unique_ptr<Guid>(uuid);
+		return new Guid(uuid);
 	}
 #else
 	typedef uuid_t Guid;

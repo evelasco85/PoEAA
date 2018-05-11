@@ -15,7 +15,6 @@ namespace Framework
 		class FRAMEWORK_API DomainObject									//Public facing operations
 		{
 		public:
-			static const DomainObject null;
 			typedef const BaseMapper ConstMapper;
 		private:
 			class Implementation;											//State persistency

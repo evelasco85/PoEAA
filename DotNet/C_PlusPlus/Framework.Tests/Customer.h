@@ -11,7 +11,7 @@ namespace CustomerServices
 	{
 	private:
 	public:
-		Customer() : DomainObject(nullptr){}
+		Customer() : DomainObject(NULL){}
 
 		//Move constructor and assignment
 		Customer(Customer&&);

@@ -62,9 +62,7 @@ DomainObject::DomainObject(ConstMapper* mapper, ConstQueryObject* queryObject) :
 	pImpl{ make_unique<Implementation>(mapper, queryObject) } { }
 
 DomainObject::DomainObject(DomainObject&& rvalue) :
-	pImpl(move(rvalue.pImpl))
-{
-}
+	pImpl(move(rvalue.pImpl)) { }
 
 DomainObject& DomainObject::operator=(DomainObject&& rvalue)
 {

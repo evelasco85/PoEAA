@@ -10,8 +10,10 @@ namespace CustomerServices
 	class Customer : public DomainObject
 	{
 	private:
+		class Implementation;
+		unique_ptr<Implementation> pImpl;
 	public:
-		Customer() : DomainObject(NULL, NULL){}
+		Customer();
 
 		//Move constructor and assignment
 		Customer(Customer&&);

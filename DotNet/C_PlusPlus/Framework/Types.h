@@ -37,6 +37,4 @@ namespace Framework
 #else
 	typedef uuid_t Guid;
 #endif
-
-	
 }

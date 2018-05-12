@@ -159,6 +159,8 @@
     <ClInclude Include="Types.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BaseMapper.cpp" />
+    <ClCompile Include="BaseMapperFunctions.h" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="DomainObject.cpp" />
     <ClCompile Include="Framework.cpp" />

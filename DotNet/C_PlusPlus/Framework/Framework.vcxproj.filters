@@ -68,5 +68,11 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BaseMapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseMapperFunctions.h">
+      <Filter>Header Files\Data Manipulation</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

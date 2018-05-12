@@ -1,5 +1,6 @@
-#include <string>
 #include "stdafx.h"
+
+#include <string>
 #include "Types.h"
 #include "DomainObject.h"
 

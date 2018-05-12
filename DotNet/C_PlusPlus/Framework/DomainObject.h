@@ -41,7 +41,7 @@ namespace Framework
 				swap(lhs.pImpl, rhs.pImpl);
 			}
 
-			const string GetGuid();
+			const string GetGuid() const;
 		};
 	}
 }

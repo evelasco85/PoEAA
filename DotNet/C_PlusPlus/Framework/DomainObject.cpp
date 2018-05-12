@@ -40,21 +40,22 @@ public:
 		}
 	}
 
-	const string GetGuid(const DomainObject&)
+	const string GetGuid() const
 	{
-		string guid;
-
 		if (m_systemId == NULL) return string("");
 
 		RPC_CSTR szUuid = NULL;
+		string guid;
 
 		if (::UuidToStringA(m_systemId, &szUuid) == RPC_S_OK)
 		{
 			guid = (char*)szUuid;
 			::RpcStringFreeA(&szUuid);
+
+			return string(guid);
 		}
 
-		return string(guid);
+		return string("");
 	}
 };
 
@@ -74,9 +75,10 @@ DomainObject& DomainObject::operator=(DomainObject&& rvalue)
 //'default' explicityly informs compiler to generate body/func automatically
 DomainObject::~DomainObject() = default;
 
-const string DomainObject::GetGuid()
+//Inside a const member function, all non-static data members of the class becomes const.
+const string DomainObject::GetGuid() const
 {
 	if (!pImpl) return string("");
 
-	return pImpl->GetGuid(*this);
+	return pImpl->GetGuid();
 }

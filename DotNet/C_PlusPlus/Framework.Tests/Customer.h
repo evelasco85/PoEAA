@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DomainObject.h"
+#include <memory> 
 
 using namespace std;
 using namespace Framework::Domain;
@@ -29,8 +30,8 @@ namespace CustomerServices
 		{
 			using std::swap;
 
-			DomainObject *lhsDomainObject = &lhs;
-			DomainObject *rhsDomainObject = &rhs;
+			DomainObject* lhsDomainObject = &lhs;
+			DomainObject* rhsDomainObject = &rhs;
 
 			swap(*lhsDomainObject, *rhsDomainObject);
 			swap(lhs.pImpl, rhs.pImpl);

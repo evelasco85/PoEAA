@@ -27,6 +27,9 @@
     <ClInclude Include="Customer.h">
       <Filter>Header Files\CustomerServices</Filter>
     </ClInclude>
+    <ClInclude Include="CustomerMapper.h">
+      <Filter>Header Files\CustomerServices</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -37,6 +40,9 @@
     </ClCompile>
     <ClCompile Include="BasicTests.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomerMapper.cpp">
+      <Filter>Header Files\CustomerServices</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

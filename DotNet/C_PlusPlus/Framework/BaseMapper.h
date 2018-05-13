@@ -12,30 +12,46 @@ namespace Framework
 {
 	namespace DataManipulation
 	{
-		template<typename TEntity>
 		class FRAMEWORK_API BaseMapper
 		{
+		protected:
+			BaseMapper();
+			BaseMapper(BaseMapper&&) = default;
+			BaseMapper& operator=(BaseMapper&&) = default;
+			BaseMapper(const BaseMapper&) = delete;
+			BaseMapper& operator=(const BaseMapper&) = delete;
 		public:
-			BaseMapper()
-			{
-				// Compile-time check
-				static_assert(is_base_of<DomainObject, TEntity>::value, "TEntity must derive from DomainObject");
-			}
-
 			virtual ~BaseMapper() = 0;
+
+			//Abstract functions
+			virtual bool Update(DomainObject* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation) = 0;
+			virtual bool Insert(DomainObject* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation) = 0;
+			virtual bool Delete(DomainObject* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation) = 0;
+		};
+
+		template<typename TEntity>
+		class FRAMEWORK_API BaseMapperSpecific : public BaseMapper
+		{
+		protected:
+			BaseMapperSpecific();
+			BaseMapperSpecific(BaseMapperSpecific&&) = default;
+			BaseMapperSpecific& operator=(BaseMapperSpecific&&) = default;
+			BaseMapperSpecific(const BaseMapperSpecific&) = delete;
+			BaseMapperSpecific& operator=(const BaseMapperSpecific&) = delete;
+		public:
+			virtual ~BaseMapperSpecific() = 0;
 
 			const string GetEntityTypeName();
 
-			template<typename TOut>
-			const TOut* GetResultValue(const BaseMapperHashtable& resultsTable, const string& key);
-
-			bool Update(TEntity* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation) = 0;
-			bool Insert(TEntity* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation) = 0;
-			bool Delete(TEntity* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation) = 0;
-
+			//Perform overriding of base class abstract functions
 			bool Update(DomainObject* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation);
 			bool Insert(DomainObject* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation);
 			bool Delete(DomainObject* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation);
+
+			//abstract functions
+			virtual bool Update(TEntity* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation) = 0;
+			virtual bool Insert(TEntity* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation) = 0;
+			virtual bool Delete(TEntity* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation) = 0;
 		};
 	}
 }

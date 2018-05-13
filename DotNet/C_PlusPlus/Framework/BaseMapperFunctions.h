@@ -20,10 +20,10 @@ namespace Framework
 		typedef InvocationDelegate FailedInvocationDelegate;
 
 		template<typename TOut>
-		static const TOut* GetResultValue(const BaseMapperHashtable& resultsTable, const string& key)
+		const TOut* GetResultValue(const BaseMapperHashtable& resultsTable, const string& key)
 		{
 			TOut* result = NULL;
-
+			////////////////////
 			return result;
 		}
 

@@ -30,31 +30,17 @@ namespace Framework
 			virtual bool Delete(DomainObject* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation) = 0;
 		};
 
-		//template<typename TEntity, typename = void>
-		//class FRAMEWORK_API BaseMapperSpecific;
-
-		//template<typename TEntity, typename enable_if<is_derived_from_DomainObject<TEntity>::value, void>::type>
 		template<typename TEntity>
-		class FRAMEWORK_API BaseMapperSpecific
-			/*<
-				TEntity,
-				typename enable_if<is_derived_from_DomainObject<TEntity>::value, void>::type
-			>*/
-			: public BaseMapper
+		class FRAMEWORK_API BaseMapperSpecific : public BaseMapper
 		{
 		protected:
-			BaseMapperSpecific()
-			{
-				// Compile-time check
-				//static_assert(is_base_of<DomainObject, TEntity>::value, "TEntity must derive from DomainObject");
-			}
-
+			BaseMapperSpecific();
 			BaseMapperSpecific(BaseMapperSpecific&&) = default;
 			BaseMapperSpecific& operator=(BaseMapperSpecific&&) = default;
 			BaseMapperSpecific(const BaseMapperSpecific&) = delete;
 			BaseMapperSpecific& operator=(const BaseMapperSpecific&) = delete;
 		public:
-			virtual ~BaseMapperSpecific() {}
+			virtual ~BaseMapperSpecific();
 
 			const string GetEntityTypeName();
 

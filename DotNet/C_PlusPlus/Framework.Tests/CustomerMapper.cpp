@@ -1,9 +1,6 @@
 #include "stdafx.h"
 #include "CustomerMapper.h"
 
-using namespace std;
-using namespace CustomerServices;
-
 class CustomerMapper::Implementation
 {
 public:
@@ -18,3 +15,20 @@ public:
 		//Only objects instantiated within this class are to be destroyed
 	}	
 };
+
+bool CustomerMapper::Update(Customer* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation)
+{
+	return false;
+}
+
+//
+bool CustomerMapper::Insert(Customer* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation)
+{
+	return false;
+}
+//
+
+bool CustomerMapper::Delete(Customer* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation)
+{
+	return false;
+}

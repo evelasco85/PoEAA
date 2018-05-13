@@ -5,10 +5,10 @@
 
 using namespace std;
 
-class Guid;
-
 namespace Framework
 {
+	class Guid;
+
 	template<typename TEntity>
 	class IdentityMap
 	{

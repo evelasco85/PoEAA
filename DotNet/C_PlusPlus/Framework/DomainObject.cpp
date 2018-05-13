@@ -1,10 +1,10 @@
 #include "stdafx.h"
 
-#include <string>
 #include "Types.h"
 #include "DomainObject.h"
 
 using namespace std;
+using namespace Framework;
 using namespace Framework::Domain;
 
 class FRAMEWORK_API DomainObject::Implementation

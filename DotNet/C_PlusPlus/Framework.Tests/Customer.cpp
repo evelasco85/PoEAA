@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "Customer.h"
-#include <memory>
 
-using namespace std;
 using namespace CustomerServices;
 
 class Customer::Implementation

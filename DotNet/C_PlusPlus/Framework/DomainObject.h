@@ -6,13 +6,13 @@
 
 using namespace std;
 
-class BaseMapper;
-class BaseQueryObject;
-
 namespace Framework
 {
 	namespace Domain
 	{
+		class BaseMapper;
+		class BaseQueryObject;
+
 		class FRAMEWORK_API DomainObject									//Public facing operations
 		{
 		public:

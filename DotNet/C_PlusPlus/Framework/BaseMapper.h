@@ -44,8 +44,8 @@ namespace Framework
 
 			const string GetEntityTypeName();
 
-			//Perform overriding of base class abstract functions
-			virtual bool Update(DomainObject* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation)
+			/*Perform overriding of base class abstract functions*/
+			bool Update(DomainObject* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation)
 			{
 				SetSafeSuccessfulInvocator(successfulInvocation);
 				SetSafeFailureInvocator(failedInvocation);
@@ -57,7 +57,7 @@ namespace Framework
 
 			}
 			
-			virtual bool Insert(DomainObject* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation)
+			bool Insert(DomainObject* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation)
 			{
 				SetSafeSuccessfulInvocator(successfulInvocation);
 				SetSafeFailureInvocator(failedInvocation);
@@ -68,7 +68,7 @@ namespace Framework
 				return Insert(instance, successfulInvocation, failedInvocation);
 			}
 
-			virtual bool Delete(DomainObject* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation)
+			bool Delete(DomainObject* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation)
 			{
 				SetSafeSuccessfulInvocator(successfulInvocation);
 				SetSafeFailureInvocator(failedInvocation);
@@ -78,6 +78,7 @@ namespace Framework
 				//Forward to concrete implementation
 				return Delete(instance, successfulInvocation, failedInvocation);
 			}
+			/*****************************************************/
 
 			//abstract functions
 			virtual bool Update(TEntity* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation) = 0;

@@ -2,17 +2,16 @@
 
 #include "stdafx.h"
 #include "BaseMapper.h"
-#include "BaseMapperFunctions.h"
-#include "Customer.h"
 #include <memory>
 #include <unordered_map>
 
 using namespace std;
-using namespace CustomerServices;
 using namespace Framework::DataManipulation;
 
 namespace CustomerServices
 {
+	class Customer;
+
 	class CustomerMapper : public BaseMapperSpecific<Customer>
 	{
 	private:
@@ -41,8 +40,8 @@ namespace CustomerServices
 			swap(lhs.pImpl, rhs.pImpl);
 		}
 
-		virtual bool Update(Customer* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation);
-		virtual bool Insert(Customer* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation);
-		virtual bool Delete(Customer* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation);
+		bool Update(Customer* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation);
+		bool Insert(Customer* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation);
+		bool Delete(Customer* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation);
 	};
 }

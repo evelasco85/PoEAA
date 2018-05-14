@@ -1,49 +1,46 @@
 #pragma once
 
 #include "stdafx.h"
-#include "DllMacros.h"
 #include <functional>
-#include <unordered_map>
+#include "BaseMapper.h"
 
 using namespace std;
 
 namespace Framework
 {
+	namespace Domain
+	{
+		//Forward declaration
+		class DomainObject;
+	}
+
 	namespace DataManipulation
 	{
-		class DomainObject;
-
-		typedef void* Object;
-		typedef unordered_map<string, Object> BaseMapperHashtable;
-		typedef function<void(DomainObject*, BaseMapperHashtable*)> InvocationDelegate;
-		typedef InvocationDelegate SuccessfulInvocationDelegate;
-		typedef InvocationDelegate FailedInvocationDelegate;
-
 		template < typename T >
-		struct is_derived_from_DomainObject : conditional< is_base_of<DomainObject, T>::value,
+		struct is_derived_from_DomainObject : conditional< is_base_of<Domain::DomainObject, T>::value,
 			true_type, false_type >::type {};
 
 		template<typename TOut>
-		const TOut* GetResultValue(const BaseMapperHashtable& resultsTable, const string& key)
+		const TOut* GetResultValue(const BaseMapper::BaseMapperHashtable& resultsTable, const string& key)
 		{
 			TOut* result = NULL;
 			////////////////////
 			return result;
 		}
 
-		static void SetSafeSuccessfulInvocator(SuccessfulInvocationDelegate* successfulInvocation)
+		static void SetSafeSuccessfulInvocator(BaseMapper::SuccessfulInvocationDelegate* successfulInvocation)
 		{
 			if (successfulInvocation == NULL)
 			{
-				*successfulInvocation = [](DomainObject*, BaseMapperHashtable*) {};
+				*successfulInvocation = [](Domain::DomainObject*, BaseMapper::BaseMapperHashtable*) {};
 			}
 		}
 
-		static void SetSafeFailureInvocator(FailedInvocationDelegate* failedInvocation)
+		static void SetSafeFailureInvocator(BaseMapper::FailedInvocationDelegate* failedInvocation)
 		{
 			if (failedInvocation == NULL)
 			{
-				*failedInvocation = [](DomainObject*, BaseMapperHashtable*) {};
+				*failedInvocation = [](Domain::DomainObject*, BaseMapper::BaseMapperHashtable*) {};
 			}
 		}
 	}

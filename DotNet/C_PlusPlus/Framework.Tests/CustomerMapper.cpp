@@ -1,5 +1,8 @@
 #include "stdafx.h"
+#include "Customer.h"
 #include "CustomerMapper.h"
+
+using namespace CustomerServices;
 
 class CustomerMapper::Implementation
 {

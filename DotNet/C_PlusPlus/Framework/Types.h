@@ -1,7 +1,6 @@
 #pragma once
 
 #include <memory>
-#include "DllMacros.h"
 
 using namespace std;
 

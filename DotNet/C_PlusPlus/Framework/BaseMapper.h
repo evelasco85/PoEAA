@@ -2,19 +2,29 @@
 
 #include <functional>
 #include <type_traits>
+#include <unordered_map>
 #include "DllMacros.h"
-#include "DomainObject.h"
-#include "BaseMapperFunctions.h"
 
 using namespace std;
-using namespace Framework::Domain;
 
 namespace Framework
 {
+	namespace Domain
+	{
+		//Forward declaration
+		class DomainObject;
+	}
+
 	namespace DataManipulation
 	{
 		class FRAMEWORK_API BaseMapper
 		{
+		public:
+			typedef void* Object;
+			typedef unordered_map<string, Object> BaseMapperHashtable;
+			typedef function<void(Domain::DomainObject*, BaseMapperHashtable*)> InvocationDelegate;
+			typedef InvocationDelegate SuccessfulInvocationDelegate;
+			typedef InvocationDelegate FailedInvocationDelegate;
 		protected:
 			BaseMapper() {}
 			BaseMapper(BaseMapper&&) = default;
@@ -25,9 +35,9 @@ namespace Framework
 			virtual ~BaseMapper() {}
 
 			//Abstract functions
-			virtual bool Update(DomainObject* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation) = 0;
-			virtual bool Insert(DomainObject* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation) = 0;
-			virtual bool Delete(DomainObject* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation) = 0;
+			virtual bool Update(Domain::DomainObject* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation) = 0;
+			virtual bool Insert(Domain::DomainObject* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation) = 0;
+			virtual bool Delete(Domain::DomainObject* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation) = 0;
 		};
 
 		template<typename TEntity>
@@ -45,39 +55,9 @@ namespace Framework
 			const string GetEntityTypeName();
 
 			/*Perform overriding of base class abstract functions*/
-			bool Update(DomainObject* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation)
-			{
-				SetSafeSuccessfulInvocator(successfulInvocation);
-				SetSafeFailureInvocator(failedInvocation);
-
-				TEntity* instance = (TEntity*)entity;
-
-				//Forward to concrete implementation
-				return Update(instance, successfulInvocation, failedInvocation);
-
-			}
-			
-			bool Insert(DomainObject* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation)
-			{
-				SetSafeSuccessfulInvocator(successfulInvocation);
-				SetSafeFailureInvocator(failedInvocation);
-
-				TEntity* instance = (TEntity*)entity;
-
-				//Forward to concrete implementation
-				return Insert(instance, successfulInvocation, failedInvocation);
-			}
-
-			bool Delete(DomainObject* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation)
-			{
-				SetSafeSuccessfulInvocator(successfulInvocation);
-				SetSafeFailureInvocator(failedInvocation);
-
-				TEntity* instance = (TEntity*)entity;
-
-				//Forward to concrete implementation
-				return Delete(instance, successfulInvocation, failedInvocation);
-			}
+			bool Update(Domain::DomainObject* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation);
+			bool Insert(Domain::DomainObject* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation);
+			bool Delete(Domain::DomainObject* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation);
 			/*****************************************************/
 
 			//abstract functions

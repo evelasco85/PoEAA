@@ -8,15 +8,20 @@ using namespace std;
 
 namespace Framework
 {
+	namespace DataManipulation
+	{
+		//Forward declaration
+		class BaseMapper;
+	}
+
 	namespace Domain
 	{
-		class BaseMapper;
 		class BaseQueryObject;
 
 		class FRAMEWORK_API DomainObject									//Public facing operations
 		{
 		public:
-			typedef const BaseMapper ConstMapper;
+			typedef const DataManipulation::BaseMapper ConstMapper;
 			typedef const BaseQueryObject ConstQueryObject;
 		private:
 			class Implementation;											//State persistency

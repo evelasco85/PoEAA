@@ -1,5 +1,6 @@
 #pragma once
 
+#include "BaseMapper.h"
 #include "BaseMapperFunctions.h"
 
 using namespace std;
@@ -14,7 +15,7 @@ namespace Framework
 	namespace DataManipulation
 	{
 		template<class TEntity>
-		class _declspec(dllexport) BaseMapperConcrete
+		class FORCE_API_EXPORT BaseMapperConcrete : public BaseMapper
 		{
 		public:
 			BaseMapperConcrete();
@@ -30,7 +31,8 @@ namespace Framework
 				return typeid(TEntity).name();
 			}
 
-			virtual bool ConcreteUpdate(TEntity* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation) = 0;
+			bool Update(Domain::DomainObject* entity, SuccessfulInvocationDelegate& successfulInvocation, FailedInvocationDelegate& failedInvocation);
+			virtual bool ConcreteUpdate(TEntity* entity, SuccessfulInvocationDelegate& successfulInvocation, FailedInvocationDelegate& failedInvocation) = 0;
 		};
 
 		template<class TEntity>
@@ -42,5 +44,14 @@ namespace Framework
 
 		template<class TEntity>
 		BaseMapperConcrete<TEntity>::~BaseMapperConcrete() {}
+
+		template<class TEntity>
+		bool BaseMapperConcrete<TEntity>::Update(Domain::DomainObject* entity, SuccessfulInvocationDelegate& successfulInvocation, FailedInvocationDelegate& failedInvocation)
+		{
+			TEntity* instance = (TEntity*)entity;
+
+			//Forward to concrete implementation
+			return ConcreteUpdate(instance, successfulInvocation, failedInvocation);
+		}
 	}
 }

@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
-//#include "CustomerMapper.h"
+#include "CustomerMapper.h"
 
 using namespace std;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
-//using namespace CustomerServices;
+using namespace CustomerServices;
 
 namespace FrameworkTests
 {
@@ -13,7 +13,7 @@ namespace FrameworkTests
 	public:
 		TEST_METHOD(Test)
 		{
-			//CustomerMapper* d = new CustomerMapper();
+			CustomerMapper* d = new CustomerMapper();
 		}
 	};
 }

@@ -2,7 +2,9 @@
 
 #include "stdafx.h"
 #include <functional>
-#include "BaseMapper.h"
+#include <unordered_map>
+
+#include "DllMacros.h"
 
 using namespace std;
 
@@ -10,12 +12,17 @@ namespace Framework
 {
 	namespace Domain
 	{
-		//Forward declaration
 		class DomainObject;
 	}
 
 	namespace DataManipulation
 	{
+		typedef void* Object;
+		typedef unordered_map<string, Object> BaseMapperHashtable;
+		typedef function<void(Domain::DomainObject*, BaseMapperHashtable*)> InvocationDelegate;
+		typedef InvocationDelegate SuccessfulInvocationDelegate;
+		typedef InvocationDelegate FailedInvocationDelegate;
+
 		template < typename T >
 		struct is_derived_from_DomainObject : conditional< is_base_of<Domain::DomainObject, T>::value,
 			true_type, false_type >::type {};

@@ -54,7 +54,7 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BaseMapperSpecific.h">
+    <ClInclude Include="BaseMapperConcrete.h">
       <Filter>Header Files\Data Manipulation</Filter>
     </ClInclude>
   </ItemGroup>
@@ -68,14 +68,8 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BaseMapper.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BaseMapperFunctions.h">
       <Filter>Header Files\Data Manipulation</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseMapperSpecific.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

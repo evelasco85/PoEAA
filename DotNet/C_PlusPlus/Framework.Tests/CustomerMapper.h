@@ -1,27 +1,21 @@
 #pragma once
 
 #include "stdafx.h"
-#include "BaseMapperSpecific.h"
 #include <memory>
-#include <unordered_map>
+
+#include "Customer.h"
+#include "BaseMapperConcrete.h"
+
 
 using namespace std;
 using namespace Framework::DataManipulation;
 
 namespace CustomerServices
 {
-	class Customer;
-
-	class CustomerMapper : public BaseMapperSpecific<Customer>
+	class CustomerMapper : public BaseMapperConcrete<Customer>
 	{
-	private:
-		class Implementation;
-		unique_ptr<Implementation> pImpl;
 	public:
-		CustomerMapper() :
-			BaseMapperSpecific<Customer>(),
-			pImpl{ make_unique<Implementation>() }
-		{}
+		CustomerMapper() : BaseMapperConcrete<Customer>(){}
 
 		//Move constructor and assignment
 		CustomerMapper(CustomerMapper&&) = default;
@@ -33,15 +27,9 @@ namespace CustomerServices
 
 		~CustomerMapper() {}
 
-		friend void swap(CustomerMapper& lhs, CustomerMapper& rhs)
+		bool ConcreteUpdate(Customer* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation)
 		{
-			using std::swap;
-
-			swap(lhs.pImpl, rhs.pImpl);
+			return false;
 		}
-
-		bool Update(Customer* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation);
-		bool Insert(Customer* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation);
-		bool Delete(Customer* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation);
 	};
 }

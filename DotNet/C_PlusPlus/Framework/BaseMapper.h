@@ -21,8 +21,9 @@ namespace Framework
 	{
 		class FORCE_API_EXPORT BaseMapper
 		{
-		public:
+		protected:
 			BaseMapper() {}
+		public:
 			BaseMapper(BaseMapper&&) = default;
 			BaseMapper& operator=(BaseMapper&&) = default;
 			BaseMapper(const BaseMapper&) = delete;

@@ -64,9 +64,8 @@ namespace CustomerServices
 	bool CustomerMapper::ConcreteUpdate(Customer* entity, SuccessfulInvocationDelegate& successfulInvocation, FailedInvocationDelegate& failedInvocation)
 	{
 		BaseMapperHashtable table;
-		DomainObject* domainObject = entity;
 
-		successfulInvocation(*domainObject, table);
+		successfulInvocation(*entity, table);
 
 		return false;
 	}

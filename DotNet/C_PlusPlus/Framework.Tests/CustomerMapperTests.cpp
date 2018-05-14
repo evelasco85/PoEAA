@@ -19,7 +19,7 @@ namespace FrameworkTests
 		TEST_METHOD(Test)
 		{
 			Customer* customer = new Customer();
-			CustomerMapper* customerMapper = new CustomerMapper();
+			BaseMapper* mapper = new CustomerMapper();
 			SuccessfulInvocationDelegate successfulDelegate = [](const DomainObject&, const BaseMapperHashtable&)
 			{
 				//
@@ -29,7 +29,7 @@ namespace FrameworkTests
 				//
 			};
 
-			customerMapper->Update(
+			mapper->Update(
 				customer,
 				successfulDelegate,
 				failedDelegate

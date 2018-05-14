@@ -162,6 +162,7 @@
   <ItemGroup>
     <ClCompile Include="Customer.cpp" />
     <ClCompile Include="CustomerMapper.cpp" />
+    <ClCompile Include="CustomerMapperTests.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

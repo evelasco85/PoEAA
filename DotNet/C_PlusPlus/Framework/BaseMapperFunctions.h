@@ -21,26 +21,26 @@ namespace Framework
 			true_type, false_type >::type {};
 
 		template<typename TOut>
-		const TOut* GetResultValue(const BaseMapper::BaseMapperHashtable& resultsTable, const string& key)
+		const TOut* GetResultValue(const BaseMapperHashtable& resultsTable, const string& key)
 		{
 			TOut* result = NULL;
 			////////////////////
 			return result;
 		}
 
-		static void SetSafeSuccessfulInvocator(BaseMapper::SuccessfulInvocationDelegate* successfulInvocation)
+		static void SetSafeSuccessfulInvocator(SuccessfulInvocationDelegate* successfulInvocation)
 		{
 			if (successfulInvocation == NULL)
 			{
-				*successfulInvocation = [](Domain::DomainObject*, BaseMapper::BaseMapperHashtable*) {};
+				*successfulInvocation = [](Domain::DomainObject*, BaseMapperHashtable*) {};
 			}
 		}
 
-		static void SetSafeFailureInvocator(BaseMapper::FailedInvocationDelegate* failedInvocation)
+		static void SetSafeFailureInvocator(FailedInvocationDelegate* failedInvocation)
 		{
 			if (failedInvocation == NULL)
 			{
-				*failedInvocation = [](Domain::DomainObject*, BaseMapper::BaseMapperHashtable*) {};
+				*failedInvocation = [](Domain::DomainObject*, BaseMapperHashtable*) {};
 			}
 		}
 	}

@@ -150,6 +150,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BaseMapper.h" />
+    <ClInclude Include="BaseMapperSpecific.h" />
     <ClInclude Include="BaseQueryObject.h" />
     <ClInclude Include="DomainObject.h" />
     <ClInclude Include="IdentityMap.h" />
@@ -161,6 +162,7 @@
   <ItemGroup>
     <ClCompile Include="BaseMapper.cpp" />
     <ClCompile Include="BaseMapperFunctions.h" />
+    <ClCompile Include="BaseMapperSpecific.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="DomainObject.cpp" />
     <ClCompile Include="stdafx.cpp">

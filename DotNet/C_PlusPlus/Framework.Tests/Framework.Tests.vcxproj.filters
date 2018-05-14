@@ -44,5 +44,8 @@
     <ClCompile Include="CustomerMapper.cpp">
       <Filter>Header Files\CustomerServices</Filter>
     </ClCompile>
+    <ClCompile Include="CustomerMapperTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

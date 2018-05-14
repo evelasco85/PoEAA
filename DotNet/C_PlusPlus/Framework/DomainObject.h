@@ -12,17 +12,16 @@ namespace Framework
 	{
 		//Forward declaration
 		class BaseMapper;
+		class BaseQueryObject;
 	}
 
 	namespace Domain
 	{
-		class BaseQueryObject;
-
 		class FRAMEWORK_API DomainObject									//Public facing operations
 		{
 		public:
 			typedef const DataManipulation::BaseMapper ConstMapper;
-			typedef const BaseQueryObject ConstQueryObject;
+			typedef const DataManipulation::BaseQueryObject ConstQueryObject;
 		private:
 			class Implementation;											//State persistency
 			unique_ptr<Implementation> pImpl;								//pImpl is a complete type

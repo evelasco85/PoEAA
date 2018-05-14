@@ -24,12 +24,10 @@ bool CustomerMapper::Update(Customer* entity, SuccessfulInvocationDelegate* succ
 	return false;
 }
 
-//
 bool CustomerMapper::Insert(Customer* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation)
 {
 	return false;
 }
-//
 
 bool CustomerMapper::Delete(Customer* entity, SuccessfulInvocationDelegate* successfulInvocation, FailedInvocationDelegate* failedInvocation)
 {

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "stdafx.h"
-#include "BaseMapper.h"
+#include "BaseMapperSpecific.h"
 #include <memory>
 #include <unordered_map>
 

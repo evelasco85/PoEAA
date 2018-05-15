@@ -31,8 +31,8 @@ namespace Framework
 			return result;
 		}
 
-		template<typename TMap>
-		typename TMap::iterator EfficientAddOrUpdate(TMap& map, const string& key, const Object& value)
+		template<typename TMap, typename TKeyArg, typename TValueArg>
+		typename TMap::iterator EfficientAddOrUpdate(TMap& map, const TKeyArg& key, const TValueArg& value)
 		{
 			typename TMap::iterator lowerBound = map.lower_bound(key);
 

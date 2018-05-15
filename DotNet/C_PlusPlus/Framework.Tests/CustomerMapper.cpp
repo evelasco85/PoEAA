@@ -7,8 +7,14 @@ using namespace CustomerServices;
 
 class CustomerMapper::Implementation
 {
+private:
+	typedef unordered_map<string, reference_wrapper<Customer>> Dictionary;
+private:
+	Dictionary m_InternalData;
 public:
-	Implementation() = default;
+	Implementation() :
+		m_InternalData()
+	{ }
 	Implementation(Implementation&&) = default;
 	Implementation& operator=(Implementation&&) = default;
 	Implementation(const Implementation&) = default;
@@ -17,6 +23,11 @@ public:
 	~Implementation()
 	{
 		//Only objects instantiated within this class are to be destroyed
+	}
+
+	void AddEditCustomer(const Customer& customer)
+	{
+		//EfficientAddOrUpdate(mInternalData, customer., data);
 	}
 };
 

@@ -48,5 +48,11 @@ namespace CustomerServices
 			swap(*lhsDomainObject, *rhsDomainObject);
 			swap(lhs.pImpl, rhs.pImpl);
 		}
+
+		const string GetNumber() const;
+		void SetNumber(const string& number);
+
+		const string GetName() const;
+		void SetName(const string& name);
 	};
 }

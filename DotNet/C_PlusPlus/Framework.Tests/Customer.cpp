@@ -9,8 +9,14 @@ using namespace Framework::DataManipulation;
 
 class Customer::Implementation
 {
+private:
+	string m_Number;
+	string m_Name;
 public:
-	Implementation() = default;
+	Implementation() :
+		m_Number(),
+		m_Name()
+	{}
 	Implementation(Implementation&&) = default;
 	Implementation& operator=(Implementation&&) = default;
 	Implementation(const Implementation&) = default;
@@ -20,6 +26,12 @@ public:
 	{
 		//Only objects instantiated within this class are to be destroyed
 	}
+
+	const string GetNumber() const { return m_Number; }
+	void SetNumber(const string& number) { m_Number = number; }
+
+	const string GetName() const { return m_Name; }
+	void SetName(const string& name) { m_Name = name; }
 };
 
 Customer::Customer(ConstMapper* mapper) :
@@ -43,3 +55,22 @@ Customer& Customer::operator=(Customer&& rvalue)
 }
 
 Customer::~Customer() = default;
+
+const string Customer::GetNumber() const {
+	if (!pImpl) return string("");
+
+	return pImpl->GetNumber(); 
+}
+
+void Customer::SetNumber(const string& number) {
+	if (pImpl) pImpl->SetNumber(number);
+}
+
+const string Customer::GetName() const {
+	if (!pImpl) return string("");
+
+	return pImpl->GetName(); 
+}
+void Customer::SetName(const string& name) {
+	if (pImpl) pImpl->SetName(name);
+}

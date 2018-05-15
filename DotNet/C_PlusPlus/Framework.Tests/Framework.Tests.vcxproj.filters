@@ -38,13 +38,13 @@
     <ClCompile Include="Customer.cpp">
       <Filter>Header Files\CustomerServices</Filter>
     </ClCompile>
-    <ClCompile Include="BasicTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CustomerMapperTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CustomerMapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomerTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

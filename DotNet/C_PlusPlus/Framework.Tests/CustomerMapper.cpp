@@ -26,11 +26,23 @@ CustomerMapper::CustomerMapper() :
 
 CustomerMapper::~CustomerMapper() {}
 
-bool CustomerMapper::ConcreteUpdate(Customer* entity, const SuccessfulInvocationDelegate& successfulInvocation, const FailedInvocationDelegate& failedInvocation)
+const string CustomerMapper::SUCCESS_DESCRIPTION("Description");
+
+bool CustomerMapper::ConcreteInsert(Customer* entity, const SuccessfulInvocationDelegate& successfulInvocation, const FailedInvocationDelegate& failedInvocation)
 {
 	BaseMapperHashtable table;
 
 	successfulInvocation(*entity, table);
 
+	return false;
+}
+
+bool CustomerMapper::ConcreteUpdate(Customer* entity, const SuccessfulInvocationDelegate& successfulInvocation, const FailedInvocationDelegate& failedInvocation)
+{
+	return false;
+}
+
+bool CustomerMapper::ConcreteDelete(Customer* entity, const SuccessfulInvocationDelegate& successfulInvocation, const FailedInvocationDelegate& failedInvocation)
+{
 	return false;
 }

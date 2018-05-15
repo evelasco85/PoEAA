@@ -39,11 +39,15 @@ namespace Framework
 			const string GetEntityTypeName() const;
 
 			/*Override BaseMapper abstract functions*/
+			bool Insert(Domain::DomainObject* entity, const SuccessfulInvocationDelegate& successfulInvocation, const FailedInvocationDelegate& failedInvocation);
 			bool Update(Domain::DomainObject* entity, const SuccessfulInvocationDelegate& successfulInvocation, const FailedInvocationDelegate& failedInvocation);
+			bool Delete(Domain::DomainObject* entity, const SuccessfulInvocationDelegate& successfulInvocation, const FailedInvocationDelegate& failedInvocation);
 			/*********************************/
 
 			/*Abstract function declarations*/
+			virtual bool ConcreteInsert(TEntity* entity, const SuccessfulInvocationDelegate& successfulInvocation, const FailedInvocationDelegate& failedInvocation) = 0;
 			virtual bool ConcreteUpdate(TEntity* entity, const SuccessfulInvocationDelegate& successfulInvocation, const FailedInvocationDelegate& failedInvocation) = 0;
+			virtual bool ConcreteDelete(TEntity* entity, const SuccessfulInvocationDelegate& successfulInvocation, const FailedInvocationDelegate& failedInvocation) = 0;
 			/*******************************/
 		};
 
@@ -64,10 +68,24 @@ namespace Framework
 		}
 
 		template<class TEntity>
+		bool BaseMapperConcrete<TEntity>::Insert(Domain::DomainObject* entity, const SuccessfulInvocationDelegate& successfulInvocation, const FailedInvocationDelegate& failedInvocation)
+		{
+			//Forward to concrete implementation
+			return ConcreteInsert((TEntity*)entity, successfulInvocation, failedInvocation);
+		}
+
+		template<class TEntity>
 		bool BaseMapperConcrete<TEntity>::Update(Domain::DomainObject* entity, const SuccessfulInvocationDelegate& successfulInvocation, const FailedInvocationDelegate& failedInvocation)
 		{
 			//Forward to concrete implementation
 			return ConcreteUpdate((TEntity*)entity, successfulInvocation, failedInvocation);
+		}
+
+		template<class TEntity>
+		bool BaseMapperConcrete<TEntity>::Delete(Domain::DomainObject* entity, const SuccessfulInvocationDelegate& successfulInvocation, const FailedInvocationDelegate& failedInvocation)
+		{
+			//Forward to concrete implementation
+			return ConcreteDelete((TEntity*)entity, successfulInvocation, failedInvocation);
 		}
 	}
 }

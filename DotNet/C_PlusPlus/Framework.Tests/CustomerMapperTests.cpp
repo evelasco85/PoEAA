@@ -38,7 +38,7 @@ namespace FrameworkTests
 			BaseMapper* genericMapper = customerMapper;
 			
 			Customer* customer = new Customer(NULL);
-			bool updated = genericMapper->Update(
+			bool updated = genericMapper->Insert(
 				customer,
 				[](const DomainObject&, const BaseMapperHashtable&)
 			{

@@ -16,7 +16,7 @@ namespace Framework
 	namespace DataManipulation
 	{
 		/*Type definifion visibility on Framework:DataManipulation namespace*/
-		typedef void* Object;
+		typedef string Object;
 		typedef unordered_map<string, Object> BaseMapperHashtable;
 		typedef function<void(const Domain::DomainObject&, const BaseMapperHashtable&)> InvocationDelegate;
 		typedef InvocationDelegate SuccessfulInvocationDelegate;
@@ -29,6 +29,25 @@ namespace Framework
 			TOut* result = NULL;
 			////////////////////
 			return result;
+		}
+
+		template<typename TMap>
+		typename TMap::iterator EfficientAddOrUpdate(TMap& map, const string& key, const Object& value)
+		{
+			typename TMap::iterator lowerBound = map.lower_bound(key);
+
+			if ((lowerBound != map.end()) && (!(map.key_comp()(key, lowerBound->first))))
+			{
+				lowerBound->second = value;
+
+				return lowerBound;
+			}
+			else
+			{
+				typedef typename TMap::value_type MVT;
+
+				return map.insert(lowerBound, MVT(key, value));
+			}
 		}
 	}
 }

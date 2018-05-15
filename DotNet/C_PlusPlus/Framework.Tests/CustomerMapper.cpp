@@ -30,9 +30,21 @@ const string CustomerMapper::SUCCESS_DESCRIPTION("Description");
 
 bool CustomerMapper::ConcreteInsert(Customer* entity, const SuccessfulInvocationDelegate& successfulInvocation, const FailedInvocationDelegate& failedInvocation)
 {
-	BaseMapperHashtable table;
+	BaseMapperHashtable results;
 
-	successfulInvocation(*entity, table);
+	if (entity == NULL)
+	{
+		failedInvocation(*entity, results);
+
+		return false;
+	}
+
+	string data("test");
+
+	EfficientAddOrUpdate(results, SUCCESS_DESCRIPTION, data);
+	EfficientAddOrUpdate(results, SUCCESS_DESCRIPTION, data);
+
+	successfulInvocation(*entity, results);
 
 	return false;
 }

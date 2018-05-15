@@ -15,7 +15,9 @@ namespace CustomerServices
 	class CustomerMapper : public BaseMapperConcrete<Customer>
 	{
 	public:
-		static const string SUCCESS_DESCRIPTION;
+		static const string CUST_NO;
+		static const string CUST_NAME;
+		static const string OPERATION;
 	private:
 		class Implementation;
 		unique_ptr<Implementation> pImpl;

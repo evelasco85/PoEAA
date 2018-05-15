@@ -25,9 +25,9 @@ public:
 		//Only objects instantiated within this class are to be destroyed
 	}
 
-	void AddEditCustomer(const Customer& customer)
+	void AddEditCustomer(Customer& customer)
 	{
-		//EfficientAddOrUpdate(mInternalData, customer., data);
+		EfficientAddOrUpdateByRef(m_InternalData, customer.GetNumber(), customer);
 	}
 };
 
@@ -37,7 +37,9 @@ CustomerMapper::CustomerMapper() :
 
 CustomerMapper::~CustomerMapper() {}
 
-const string CustomerMapper::SUCCESS_DESCRIPTION("Description");
+const string CustomerMapper::CUST_NO("Customer Number");
+const string CustomerMapper::CUST_NAME("Customer Name");
+const string CustomerMapper::OPERATION("Operation");
 
 bool CustomerMapper::ConcreteInsert(Customer* entity, const SuccessfulInvocationDelegate& successfulInvocation, const FailedInvocationDelegate& failedInvocation)
 {
@@ -50,14 +52,14 @@ bool CustomerMapper::ConcreteInsert(Customer* entity, const SuccessfulInvocation
 		return false;
 	}
 
-	string data("test");
+	if (pImpl) pImpl->AddEditCustomer(*entity);
 
-	EfficientAddOrUpdate(results, SUCCESS_DESCRIPTION, data);
-	EfficientAddOrUpdate(results, SUCCESS_DESCRIPTION, data);
-
+	EfficientAddOrUpdate(results, CUST_NO, entity->GetNumber());
+	EfficientAddOrUpdate(results, CUST_NAME, entity->GetName());
+	EfficientAddOrUpdate(results, OPERATION, "Insert");
 	successfulInvocation(*entity, results);
 
-	return false;
+	return true;
 }
 
 bool CustomerMapper::ConcreteUpdate(Customer* entity, const SuccessfulInvocationDelegate& successfulInvocation, const FailedInvocationDelegate& failedInvocation)

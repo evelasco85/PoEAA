@@ -36,18 +36,35 @@ namespace FrameworkTests
 		{
 			CustomerMapper* customerMapper = new CustomerMapper();
 			BaseMapper* genericMapper = customerMapper;
-			
 			Customer* customer = new Customer(NULL);
+			string customerNumber("001");
+			string customerName("John Doe");
+			string resultCustomerNumber;
+			string resultOperation;
+			SuccessfulInvocationDelegate successInvocation = [&](const DomainObject& domainObject, const BaseMapperHashtable& result)
+			{
+				auto custNoResult = result.find(CustomerMapper::CUST_NO);
+
+				if (custNoResult != result.end()) resultCustomerNumber = custNoResult->second;
+
+				auto operationResult = result.find(CustomerMapper::OPERATION);
+
+				if (operationResult != result.end()) resultOperation = operationResult->second;
+			};
+			FailedInvocationDelegate failedInvocation = [=](const DomainObject& domainObject, const BaseMapperHashtable& result)
+			{ /*Failed Invocation*/ };
+
+			customer->SetNumber(customerNumber);
+			customer->SetName(customerName);
+
 			bool updated = genericMapper->Insert(
 				customer,
-				[](const DomainObject&, const BaseMapperHashtable&)
-			{
-				//Successful Invocation
-			},
-				[](const DomainObject&, const BaseMapperHashtable&)
-			{
-				//Failed Invocation
-			});
+				successInvocation,
+				failedInvocation);
+
+			Assert::AreEqual(true, updated, L"Should be equal", LINE_INFO());
+			Assert::AreEqual(string("Insert"), resultOperation, L"Should be equal", LINE_INFO());
+			Assert::AreEqual(customerNumber, resultCustomerNumber, L"Should be equal", LINE_INFO());
 		}
 	};
 }

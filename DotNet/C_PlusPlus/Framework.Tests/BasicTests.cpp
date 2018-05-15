@@ -15,7 +15,7 @@ namespace FrameworkTests
 		
 		TEST_METHOD(PolymorphismTest)
 		{
-			DomainObject *customerDomainObject = new Customer;
+			DomainObject *customerDomainObject = new Customer(NULL);
 			const string guid = customerDomainObject->GetGuid();
 
 			Assert::AreNotEqual(string(""), guid, L"Should not be null", LINE_INFO());
@@ -30,7 +30,7 @@ namespace FrameworkTests
 
 		TEST_METHOD(MoveConstructorTest)
 		{
-			Customer sourceCustomer;
+			Customer sourceCustomer(NULL);
 			string sourceGuidBeforeMove = sourceCustomer.GetGuid();
 			Customer movedToCustomer = move(sourceCustomer);
 			string guid = movedToCustomer.GetGuid();
@@ -42,8 +42,8 @@ namespace FrameworkTests
 
 		TEST_METHOD(MoveAssignmentTest)
 		{
-			Customer sourceCustomer;
-			Customer movedToCustomer;
+			Customer sourceCustomer(NULL);
+			Customer movedToCustomer(NULL);
 			string sourceGuidBeforeMove = sourceCustomer.GetGuid();
 			
 			movedToCustomer = move(sourceCustomer);
@@ -57,8 +57,8 @@ namespace FrameworkTests
 
 		TEST_METHOD(SwapTest)
 		{
-			Customer customer1;
-			Customer customer2;
+			Customer customer1(NULL);
+			Customer customer2(NULL);
 			string customer1Guid = customer1.GetGuid();
 			string customer2Guid = customer2.GetGuid();
 

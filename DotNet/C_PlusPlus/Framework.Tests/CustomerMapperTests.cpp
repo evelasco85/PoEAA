@@ -21,10 +21,10 @@ namespace FrameworkTests
 	public:
 		TEST_METHOD(GetEntityTypeNameTest)
 		{
-			Customer* customer = new Customer();
+			Customer* customer = new Customer(NULL);
 			CustomerMapper* customerMapper = new CustomerMapper();
-			string concreteEntityName = customerMapper->GetEntityTypeName();
 			BaseMapperConcrete<Customer>* genericMapper = customerMapper;
+			string concreteEntityName = customerMapper->GetEntityTypeName();
 			string genericEntityName = genericMapper->GetEntityTypeName();
 			string expectedName("class CustomerServices::Customer");
 
@@ -32,20 +32,22 @@ namespace FrameworkTests
 			Assert::AreEqual(expectedName, genericEntityName, L"Should be equal", LINE_INFO());
 		}
 
-		TEST_METHOD(GenericPersistencyTest)
+		TEST_METHOD(InsertTest)
 		{
-			Customer* customer = new Customer();
-			BaseMapper* genericMapper = new CustomerMapper();
-			SuccessfulInvocationDelegate successfulDelegate = [](const DomainObject&, const BaseMapperHashtable&)
+			CustomerMapper* customerMapper = new CustomerMapper();
+			BaseMapper* genericMapper = customerMapper;
+			
+			Customer* customer = new Customer(NULL);
+			bool updated = genericMapper->Update(
+				customer,
+				[](const DomainObject&, const BaseMapperHashtable&)
 			{
-				//
-			};
-			FailedInvocationDelegate failedDelegate = [](const DomainObject&, const BaseMapperHashtable&)
+				//Successful Invocation
+			},
+				[](const DomainObject&, const BaseMapperHashtable&)
 			{
-				//
-			};
-
-			bool updated = genericMapper->Update(customer, successfulDelegate, failedDelegate);
+				//Failed Invocation
+			});
 		}
 	};
 }

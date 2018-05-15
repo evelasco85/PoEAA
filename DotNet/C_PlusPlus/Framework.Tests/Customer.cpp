@@ -1,8 +1,11 @@
 #include "stdafx.h"
 
+#include "BaseMapper.h"
+
 #include "Customer.h"
 
 using namespace CustomerServices;
+using namespace Framework::DataManipulation;
 
 class Customer::Implementation
 {
@@ -19,8 +22,8 @@ public:
 	}
 };
 
-Customer::Customer() :
-	DomainObject(NULL, NULL),
+Customer::Customer(ConstMapper* mapper) :
+	DomainObject(mapper),
 	pImpl{ make_unique<Implementation>() }
 {
 }

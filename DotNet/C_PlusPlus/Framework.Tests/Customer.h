@@ -6,6 +6,17 @@
 
 using namespace std;
 using namespace Framework::Domain;
+using namespace Framework::DataManipulation;
+
+namespace Framework
+{
+	namespace DataManipulation
+	{
+		/*Class forward declaration*/
+		class BaseMapper;
+		/***************************/
+	}
+}
 
 namespace CustomerServices
 {
@@ -15,7 +26,7 @@ namespace CustomerServices
 		class Implementation;
 		unique_ptr<Implementation> pImpl;
 	public:
-		Customer();
+		Customer(ConstMapper*);
 
 		//Move constructor and assignment
 		Customer(Customer&&);

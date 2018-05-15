@@ -15,12 +15,10 @@ public:
 private:
 	ConstGuid *m_systemId;					//Data non-modifiable
 	ConstMapper *m_mapper;					//Data non-modifiable
-	ConstQueryObject *m_queryObject;		//Data non-modifiable
 public:
-	Implementation(ConstMapper* mapper, ConstQueryObject* queryObject) :
+	Implementation(ConstMapper* mapper) :
 		m_systemId(NewGuid()),
-		m_mapper(mapper),
-		m_queryObject(queryObject)	{ }
+		m_mapper(mapper) { }
 
 	//Move constructor and assignment
 	Implementation(Implementation&&) = default;
@@ -60,8 +58,8 @@ public:
 	}
 };
 
-DomainObject::DomainObject(ConstMapper* mapper, ConstQueryObject* queryObject) :
-	pImpl{ make_unique<Implementation>(mapper, queryObject) } { }
+DomainObject::DomainObject(ConstMapper* mapper) :
+	pImpl{ make_unique<Implementation>(mapper) } { }
 
 DomainObject::DomainObject(DomainObject&& rvalue) :
 	pImpl(move(rvalue.pImpl)) { }

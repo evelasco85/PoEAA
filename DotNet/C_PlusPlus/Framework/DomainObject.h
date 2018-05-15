@@ -12,7 +12,6 @@ namespace Framework
 	{
 		//Forward declaration
 		class BaseMapper;
-		class BaseQueryObject;
 	}
 
 	namespace Domain
@@ -21,12 +20,11 @@ namespace Framework
 		{
 		public:
 			typedef const DataManipulation::BaseMapper ConstMapper;
-			typedef const DataManipulation::BaseQueryObject ConstQueryObject;
 		private:
 			class Implementation;											//State persistency
 			unique_ptr<Implementation> pImpl;								//pImpl is a complete type
 		protected:															//Declaring DomainObject uninstantiable
-			DomainObject(ConstMapper*, ConstQueryObject*);
+			DomainObject(ConstMapper*);
 
 			//Move constructor and assignment
 			DomainObject(DomainObject&&);

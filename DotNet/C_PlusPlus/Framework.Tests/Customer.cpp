@@ -1,4 +1,5 @@
 #include "stdafx.h"
+
 #include "Customer.h"
 
 using namespace CustomerServices;

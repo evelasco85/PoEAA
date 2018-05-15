@@ -14,7 +14,9 @@ namespace Framework
 {
 	namespace Domain
 	{
+		/*Class forward declaration*/
 		class DomainObject;
+		/***************************/
 	}
 
 	namespace DataManipulation
@@ -30,8 +32,9 @@ namespace Framework
 			BaseMapper& operator=(const BaseMapper&) = delete;
 			virtual ~BaseMapper() {}
 
-			//Abstract functions
-			virtual bool Update(Domain::DomainObject* entity, SuccessfulInvocationDelegate& successfulInvocation, FailedInvocationDelegate& failedInvocation) = 0;
+			/*Abstract function declarations*/
+			virtual bool Update(Domain::DomainObject* entity, const SuccessfulInvocationDelegate& successfulInvocation, const FailedInvocationDelegate& failedInvocation) = 0;
+			/********************/
 		};
 	}
 }

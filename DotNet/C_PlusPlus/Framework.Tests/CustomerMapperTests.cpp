@@ -1,9 +1,12 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
-#include "CustomerMapper.h"
-#include "BaseMapperFunctions.h"
-#include "BaseMapper.h"
+
 #include "DomainObject.h"
+#include "BaseMapper.h"
+#include "BaseMapperFunctions.h"
+
+#include "Customer.h"
+#include "CustomerMapper.h"
 
 using namespace std;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -19,7 +22,8 @@ namespace FrameworkTests
 		TEST_METHOD(Test)
 		{
 			Customer* customer = new Customer();
-			BaseMapper* mapper = new CustomerMapper();
+			CustomerMapper* customerMapper = new CustomerMapper();
+			BaseMapper* mapper = customerMapper;
 			SuccessfulInvocationDelegate successfulDelegate = [](const DomainObject&, const BaseMapperHashtable&)
 			{
 				//
@@ -29,11 +33,9 @@ namespace FrameworkTests
 				//
 			};
 
-			mapper->Update(
-				customer,
-				successfulDelegate,
-				failedDelegate
-			);
+			string entityName = customerMapper->GetEntityTypeName();
+			bool updated = mapper->Update(customer, successfulDelegate, failedDelegate);
+			bool concreteUpdated = customerMapper->ConcreteUpdate(customer, successfulDelegate, failedDelegate);
 		}
 	};
 }

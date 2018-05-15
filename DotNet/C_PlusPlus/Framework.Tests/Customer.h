@@ -1,7 +1,8 @@
 #pragma once
 
-#include "DomainObject.h"
 #include <memory> 
+
+#include "DomainObject.h"
 
 using namespace std;
 using namespace Framework::Domain;

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
+
 #include "Customer.h"
 
 using namespace std;

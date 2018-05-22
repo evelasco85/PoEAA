@@ -29,6 +29,11 @@ public:
 	{
 		EfficientAddOrUpdateByRef(m_InternalData, customer.GetNumber(), customer);
 	}
+
+	size_t CollectionCount() const
+	{
+		return m_InternalData.size();
+	}
 };
 
 CustomerMapper::CustomerMapper() :
@@ -40,14 +45,15 @@ CustomerMapper::~CustomerMapper() {}
 const string CustomerMapper::CUST_NO("Customer Number");
 const string CustomerMapper::CUST_NAME("Customer Name");
 const string CustomerMapper::OPERATION("Operation");
+const string CustomerMapper::COLLECTION_COUNT("Collection Count");
 
-bool CustomerMapper::ConcreteInsert(Customer* entity, const SuccessfulInvocationDelegate& successfulInvocation, const FailedInvocationDelegate& failedInvocation)
+bool CustomerMapper::ConcreteInsert(Customer* entity, const SuccessfulInvocationDelegate* successfulInvocation, const FailedInvocationDelegate* failedInvocation)
 {
 	BaseMapperHashtable results;
 
 	if (entity == NULL)
 	{
-		failedInvocation(*entity, results);
+		if(failedInvocation != NULL) (*failedInvocation)(entity, &results);
 
 		return false;
 	}
@@ -57,17 +63,19 @@ bool CustomerMapper::ConcreteInsert(Customer* entity, const SuccessfulInvocation
 	EfficientAddOrUpdate(results, CUST_NO, entity->GetNumber());
 	EfficientAddOrUpdate(results, CUST_NAME, entity->GetName());
 	EfficientAddOrUpdate(results, OPERATION, "Insert");
-	successfulInvocation(*entity, results);
+	EfficientAddOrUpdate(results, COLLECTION_COUNT, to_string(pImpl->CollectionCount()));
+
+	if(successfulInvocation != NULL) (*successfulInvocation)(entity, &results);
 
 	return true;
 }
 
-bool CustomerMapper::ConcreteUpdate(Customer* entity, const SuccessfulInvocationDelegate& successfulInvocation, const FailedInvocationDelegate& failedInvocation)
+bool CustomerMapper::ConcreteUpdate(Customer* entity, const SuccessfulInvocationDelegate* successfulInvocation, const FailedInvocationDelegate* failedInvocation)
 {
 	return false;
 }
 
-bool CustomerMapper::ConcreteDelete(Customer* entity, const SuccessfulInvocationDelegate& successfulInvocation, const FailedInvocationDelegate& failedInvocation)
+bool CustomerMapper::ConcreteDelete(Customer* entity, const SuccessfulInvocationDelegate* successfulInvocation, const FailedInvocationDelegate* failedInvocation)
 {
 	return false;
 }

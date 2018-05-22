@@ -18,6 +18,7 @@ namespace CustomerServices
 		static const string CUST_NO;
 		static const string CUST_NAME;
 		static const string OPERATION;
+		static const string COLLECTION_COUNT;
 	private:
 		class Implementation;
 		unique_ptr<Implementation> pImpl;
@@ -42,9 +43,9 @@ namespace CustomerServices
 		}
 
 		/*Override BaseMapperConcrete<...> abstract functions*/
-		bool ConcreteInsert(Customer* entity, const SuccessfulInvocationDelegate& successfulInvocation, const FailedInvocationDelegate& failedInvocation);
-		bool ConcreteUpdate(Customer* entity, const SuccessfulInvocationDelegate& successfulInvocation, const FailedInvocationDelegate& failedInvocation);
-		bool ConcreteDelete(Customer* entity, const SuccessfulInvocationDelegate& successfulInvocation, const FailedInvocationDelegate& failedInvocation);
+		bool ConcreteInsert(Customer* entity, const SuccessfulInvocationDelegate* successfulInvocation, const FailedInvocationDelegate* failedInvocation);
+		bool ConcreteUpdate(Customer* entity, const SuccessfulInvocationDelegate* successfulInvocation, const FailedInvocationDelegate* failedInvocation);
+		bool ConcreteDelete(Customer* entity, const SuccessfulInvocationDelegate* successfulInvocation, const FailedInvocationDelegate* failedInvocation);
 		/****************************************/
 	};
 }

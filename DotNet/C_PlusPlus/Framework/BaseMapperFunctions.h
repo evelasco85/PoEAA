@@ -17,7 +17,7 @@ namespace Framework
 	{
 		/*Type definifion visibility on Framework:DataManipulation namespace*/
 		typedef unordered_map<string, string> BaseMapperHashtable;
-		typedef function<void(const Domain::DomainObject&, const BaseMapperHashtable&)> InvocationDelegate;
+		typedef function<void(const Domain::DomainObject*, const BaseMapperHashtable*)> InvocationDelegate;
 		typedef InvocationDelegate SuccessfulInvocationDelegate;
 		typedef InvocationDelegate FailedInvocationDelegate;
 		/********************************************************************/

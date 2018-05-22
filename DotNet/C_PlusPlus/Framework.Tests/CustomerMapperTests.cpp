@@ -36,35 +36,43 @@ namespace FrameworkTests
 		{
 			CustomerMapper* customerMapper = new CustomerMapper();
 			BaseMapper* genericMapper = customerMapper;
-			Customer* customer = new Customer(NULL);
-			string customerNumber("001");
-			string customerName("John Doe");
-			string resultCustomerNumber;
-			string resultOperation;
-			SuccessfulInvocationDelegate successInvocation = [&](const DomainObject& domainObject, const BaseMapperHashtable& result)
+			Customer* customer1 = new Customer(NULL);
+			string customer1Number("001");
+			string customer1Name("John Doe");
+			string latestResultCustomerNumber;
+			string latestResultOperation;
+			string latestResultCollectionCount;
+			SuccessfulInvocationDelegate successInvocation = [&](const DomainObject* domainObject, const BaseMapperHashtable* result)
 			{
-				auto custNoResult = result.find(CustomerMapper::CUST_NO);
+				if ((domainObject == NULL) || (result == NULL)) return;
 
-				if (custNoResult != result.end()) resultCustomerNumber = custNoResult->second;
+				auto custNoResult = result->find(CustomerMapper::CUST_NO);
 
-				auto operationResult = result.find(CustomerMapper::OPERATION);
+				if (custNoResult != result->end()) latestResultCustomerNumber = custNoResult->second;
 
-				if (operationResult != result.end()) resultOperation = operationResult->second;
+				auto operationResult = result->find(CustomerMapper::OPERATION);
+
+				if (operationResult != result->end()) latestResultOperation = operationResult->second;
+
+				auto collectionCountResult = result->find(CustomerMapper::COLLECTION_COUNT);
+
+				if (collectionCountResult != result->end()) latestResultCollectionCount = collectionCountResult->second;
 			};
-			FailedInvocationDelegate failedInvocation = [=](const DomainObject& domainObject, const BaseMapperHashtable& result)
+			FailedInvocationDelegate failedInvocation = [=](const DomainObject* domainObject, const BaseMapperHashtable* result)
 			{ /*Failed Invocation*/ };
 
-			customer->SetNumber(customerNumber);
-			customer->SetName(customerName);
+			customer1->SetNumber(customer1Number);
+			customer1->SetName(customer1Name);
 
 			bool updated = genericMapper->Insert(
-				customer,
-				successInvocation,
-				failedInvocation);
+				customer1,
+				&successInvocation,
+				&failedInvocation);
 
 			Assert::AreEqual(true, updated, L"Should be equal", LINE_INFO());
-			Assert::AreEqual(string("Insert"), resultOperation, L"Should be equal", LINE_INFO());
-			Assert::AreEqual(customerNumber, resultCustomerNumber, L"Should be equal", LINE_INFO());
+			Assert::AreEqual(string("1"), latestResultCollectionCount, L"Should be equal", LINE_INFO());
+			Assert::AreEqual(string("Insert"), latestResultOperation, L"Should be equal", LINE_INFO());
+			Assert::AreEqual(customer1Number, latestResultCustomerNumber, L"Should be equal", LINE_INFO());
 		}
 	};
 }

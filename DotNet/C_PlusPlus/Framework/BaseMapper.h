@@ -33,6 +33,7 @@ namespace Framework
 			virtual ~BaseMapper() {}
 
 			/*Abstract function declarations*/
+			virtual const string GetEntityTypeName() const = 0;
 			virtual bool Insert(Domain::DomainObject* entity, const SuccessfulInvocationDelegate* successfulInvocation, const FailedInvocationDelegate* failedInvocation) = 0;
 			virtual bool Update(Domain::DomainObject* entity, const SuccessfulInvocationDelegate* successfulInvocation, const FailedInvocationDelegate* failedInvocation) = 0;
 			virtual bool Delete(Domain::DomainObject* entity, const SuccessfulInvocationDelegate* successfulInvocation, const FailedInvocationDelegate* failedInvocation) = 0;

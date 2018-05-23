@@ -36,9 +36,9 @@ namespace Framework
 			BaseMapperConcrete& operator=(const BaseMapperConcrete&) = delete;
 			virtual ~BaseMapperConcrete();
 
-			const string GetEntityTypeName() const;
-
+			
 			/*Override BaseMapper abstract functions*/
+			const string GetEntityTypeName() const;
 			bool Insert(Domain::DomainObject* entity, const SuccessfulInvocationDelegate* successfulInvocation, const FailedInvocationDelegate* failedInvocation);
 			bool Update(Domain::DomainObject* entity, const SuccessfulInvocationDelegate* successfulInvocation, const FailedInvocationDelegate* failedInvocation);
 			bool Delete(Domain::DomainObject* entity, const SuccessfulInvocationDelegate* successfulInvocation, const FailedInvocationDelegate* failedInvocation);

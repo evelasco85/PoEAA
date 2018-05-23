@@ -42,6 +42,11 @@ public:
 	{
 		return *m_systemId;
 	}
+
+	ConstMapper* GetMapper() const
+	{
+		return m_mapper;
+	}
 };
 
 DomainObject::DomainObject(ConstMapper* mapper) :
@@ -66,4 +71,12 @@ DomainObject::ConstGuid DomainObject::GetGuid() const
 	if (!pImpl) return string("");
 
 	return pImpl->GetGuid();
+}
+
+//Inside a const member function, all non-static data members of the class becomes const.
+DomainObject::ConstMapper* DomainObject::GetMapper() const
+{
+	if (!pImpl) return NULL;
+
+	return pImpl->GetMapper();
 }

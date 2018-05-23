@@ -45,7 +45,7 @@ namespace Framework
 			}
 
 			ConstGuid GetGuid() const;
-			//const 
+			ConstMapper* GetMapper() const;
 		};
 	}
 }

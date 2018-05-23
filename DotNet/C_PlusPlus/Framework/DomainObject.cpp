@@ -13,9 +13,9 @@ public:
 	enum InstantiationType { New = 1, Loaded = 2 };
 private:
 	ConstGuid *m_systemId;				//Data non-modifiable
-	ConstMapper *m_mapper;					//Data non-modifiable
+	Mapper *m_mapper;					//Data non-modifiable
 public:
-	Implementation(ConstMapper* mapper) :
+	Implementation(Mapper* mapper) :
 		m_systemId(GetGuidString(NewGuid())),
 		m_mapper(mapper) { }
 
@@ -43,13 +43,13 @@ public:
 		return *m_systemId;
 	}
 
-	ConstMapper* GetMapper() const
+	Mapper* GetMapper() const
 	{
 		return m_mapper;
 	}
 };
 
-DomainObject::DomainObject(ConstMapper* mapper) :
+DomainObject::DomainObject(Mapper* mapper) :
 	pImpl{ make_unique<Implementation>(mapper) } { }
 
 DomainObject::DomainObject(DomainObject&& rvalue) :
@@ -74,7 +74,7 @@ DomainObject::ConstGuid DomainObject::GetGuid() const
 }
 
 //Inside a const member function, all non-static data members of the class becomes const.
-DomainObject::ConstMapper* DomainObject::GetMapper() const
+DomainObject::Mapper* DomainObject::GetMapper() const
 {
 	if (!pImpl) return NULL;
 

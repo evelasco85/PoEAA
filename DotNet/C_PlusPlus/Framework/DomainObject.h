@@ -20,12 +20,13 @@ namespace Framework
 		{
 		public:
 			typedef const string ConstGuid;
+			typedef DataManipulation::BaseMapper Mapper;
 			typedef const DataManipulation::BaseMapper ConstMapper;
 		private:
 			class Implementation;											//State persistency
 			unique_ptr<Implementation> pImpl;								//pImpl is a complete type
 		protected:															//Declaring DomainObject uninstantiable
-			DomainObject(ConstMapper*);
+			DomainObject(Mapper*);
 
 			//Move constructor and assignment
 			DomainObject(DomainObject&&);
@@ -45,7 +46,7 @@ namespace Framework
 			}
 
 			ConstGuid GetGuid() const;
-			ConstMapper* GetMapper() const;
+			Mapper* GetMapper() const;
 		};
 	}
 }

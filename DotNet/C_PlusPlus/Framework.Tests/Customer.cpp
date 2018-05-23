@@ -34,7 +34,7 @@ public:
 	void SetName(const string& name) { m_Name = name; }
 };
 
-Customer::Customer(ConstMapper* mapper) :
+Customer::Customer(Mapper* mapper) :
 	DomainObject(mapper),
 	pImpl{ make_unique<Implementation>() }
 {

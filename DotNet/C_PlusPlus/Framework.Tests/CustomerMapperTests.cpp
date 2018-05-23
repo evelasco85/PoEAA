@@ -43,17 +43,16 @@ namespace FrameworkTests
 		{
 			CustomerMapper* customerMapper = new CustomerMapper();
 			Customer* customer1 = new Customer(customerMapper);
-			const BaseMapper* genericMapper = customer1->GetMapper();
+			BaseMapper* genericMapper = customer1->GetMapper();
 
-			Assert::IsTrue(genericMapper != NULL, L"Should be NULL", LINE_INFO());
+			Assert::IsTrue(genericMapper != NULL, L"Should not be NULL", LINE_INFO());
 			Assert::AreEqual(string("class CustomerServices::Customer"), genericMapper->GetEntityTypeName(), L"Should be equal", LINE_INFO());
 		}
 
 		TEST_METHOD(InsertTest)
 		{
-			CustomerMapper* customerMapper = new CustomerMapper();
-			BaseMapper* genericMapper = customerMapper;
-			Customer* customer1 = new Customer(NULL);
+			Customer* customer1 = new Customer(new CustomerMapper());
+			BaseMapper* genericMapper = customer1->GetMapper();
 			string customer1Number("001");
 			string customer1Name("John Doe");
 			string latestResultCustomerNumber;

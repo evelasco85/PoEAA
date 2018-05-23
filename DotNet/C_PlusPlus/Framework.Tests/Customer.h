@@ -26,7 +26,7 @@ namespace CustomerServices
 		class Implementation;
 		unique_ptr<Implementation> pImpl;
 	public:
-		Customer(ConstMapper*);
+		Customer(Mapper*);
 
 		//Move constructor and assignment
 		Customer(Customer&&);

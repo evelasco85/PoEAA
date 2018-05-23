@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
 using namespace std;
 
@@ -32,6 +33,24 @@ namespace Framework
 		}
 
 		return new Guid(uuid);
+	}
+
+	static inline const string* GetGuidString(const Guid* guid)
+	{
+		if (guid == NULL) return new string("");
+
+		RPC_CSTR szUuid = NULL;
+		string guidString;
+
+		if (::UuidToStringA(guid, &szUuid) == RPC_S_OK)
+		{
+			guidString = (char*)szUuid;
+			::RpcStringFreeA(&szUuid);
+
+			return new string(guidString);
+		}
+
+		return new string("");
 	}
 #else
 	typedef uuid_t Guid;

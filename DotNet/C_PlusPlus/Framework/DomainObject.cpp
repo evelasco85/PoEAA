@@ -11,13 +11,12 @@ class FRAMEWORK_API DomainObject::Implementation
 {
 public:
 	enum InstantiationType { New = 1, Loaded = 2 };
-	typedef const Guid ConstGuid;
 private:
-	ConstGuid *m_systemId;					//Data non-modifiable
+	const string *m_systemId;				//Data non-modifiable
 	ConstMapper *m_mapper;					//Data non-modifiable
 public:
 	Implementation(ConstMapper* mapper) :
-		m_systemId(NewGuid()),
+		m_systemId(GetGuidString(NewGuid())),
 		m_mapper(mapper) { }
 
 	//Move constructor and assignment
@@ -39,22 +38,9 @@ public:
 		}
 	}
 
-	const string GetGuid() const
+	const string& GetGuid() const
 	{
-		if (m_systemId == NULL) return string("");
-
-		RPC_CSTR szUuid = NULL;
-		string guid;
-
-		if (::UuidToStringA(m_systemId, &szUuid) == RPC_S_OK)
-		{
-			guid = (char*)szUuid;
-			::RpcStringFreeA(&szUuid);
-
-			return string(guid);
-		}
-
-		return string("");
+		return *m_systemId;
 	}
 };
 

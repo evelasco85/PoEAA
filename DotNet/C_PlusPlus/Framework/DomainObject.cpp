@@ -12,7 +12,7 @@ class FRAMEWORK_API DomainObject::Implementation
 public:
 	enum InstantiationType { New = 1, Loaded = 2 };
 private:
-	const string *m_systemId;				//Data non-modifiable
+	ConstGuid *m_systemId;				//Data non-modifiable
 	ConstMapper *m_mapper;					//Data non-modifiable
 public:
 	Implementation(ConstMapper* mapper) :
@@ -38,7 +38,7 @@ public:
 		}
 	}
 
-	const string& GetGuid() const
+	ConstGuid& GetGuid() const
 	{
 		return *m_systemId;
 	}
@@ -61,7 +61,7 @@ DomainObject& DomainObject::operator=(DomainObject&& rvalue)
 DomainObject::~DomainObject() = default;
 
 //Inside a const member function, all non-static data members of the class becomes const.
-const string DomainObject::GetGuid() const
+DomainObject::ConstGuid DomainObject::GetGuid() const
 {
 	if (!pImpl) return string("");
 

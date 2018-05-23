@@ -19,6 +19,7 @@ namespace Framework
 		class FRAMEWORK_API DomainObject									//Public facing operations
 		{
 		public:
+			typedef const string ConstGuid;
 			typedef const DataManipulation::BaseMapper ConstMapper;
 		private:
 			class Implementation;											//State persistency
@@ -43,7 +44,8 @@ namespace Framework
 				swap(lhs.pImpl, rhs.pImpl);
 			}
 
-			const string GetGuid() const;
+			ConstGuid GetGuid() const;
+			//const 
 		};
 	}
 }

@@ -79,12 +79,39 @@ bool CustomerMapper::ConcreteInsert(Customer* entity, const SuccessfulInvocation
 
 bool CustomerMapper::ConcreteUpdate(Customer* entity, const SuccessfulInvocationDelegate* successfulInvocation, const FailedInvocationDelegate* failedInvocation)
 {
-	return false;
+	BaseMapperHashtable results;
+
+	if (entity == NULL)
+	{
+		if (failedInvocation != NULL) (*failedInvocation)(entity, &results);
+
+		return false;
+	}
+
+	EfficientAddOrUpdate(results, OPERATION, "Update");
+
+	if (successfulInvocation != NULL) (*successfulInvocation)(entity, &results);
+
+	return true;
 }
 
 bool CustomerMapper::ConcreteDelete(Customer* entity, const SuccessfulInvocationDelegate* successfulInvocation, const FailedInvocationDelegate* failedInvocation)
 {
-	return false;
+
+	BaseMapperHashtable results;
+
+	if (entity == NULL)
+	{
+		if (failedInvocation != NULL) (*failedInvocation)(entity, &results);
+
+		return false;
+	}
+
+	EfficientAddOrUpdate(results, OPERATION, "Delete");
+
+	if (successfulInvocation != NULL) (*successfulInvocation)(entity, &results);
+
+	return true;
 }
 
 size_t CustomerMapper::GetCollectionCount() const

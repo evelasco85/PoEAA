@@ -80,12 +80,12 @@ namespace FrameworkTests
 			customer1->SetNumber(customer1Number);
 			customer1->SetName(customer1Name);
 
-			bool updated = genericMapper->Insert(
+			bool inserted = genericMapper->Insert(
 				customer1,
 				&successInvocation,
 				&failedInvocation);
 
-			Assert::AreEqual(true, updated, L"Should be equal", LINE_INFO());
+			Assert::AreEqual(true, inserted, L"Should be equal", LINE_INFO());
 			Assert::AreEqual(string("1"), latestResultCollectionCount, L"Should be equal", LINE_INFO());
 			Assert::AreEqual(string("Insert"), latestResultOperation, L"Should be equal", LINE_INFO());
 			Assert::AreEqual(customer1Number, latestResultCustomerNumber, L"Should be equal", LINE_INFO());
@@ -97,8 +97,7 @@ namespace FrameworkTests
 			Customer* customer1 = new Customer(mapper);
 			Customer* customer2 = new Customer(mapper);
 			SuccessfulInvocationDelegate successInvocation = [&](const DomainObject* domainObject, const BaseMapperHashtable* result)
-			{
-			};
+			{ };
 			FailedInvocationDelegate failedInvocation = [=](const DomainObject* domainObject, const BaseMapperHashtable* result)
 			{ /*Failed Invocation*/ };
 			string customerNo1 = "001";
@@ -135,6 +134,31 @@ namespace FrameworkTests
 			Assert::AreEqual(customerName2, retrievedCustomer2->GetName(), L"Should be equal", LINE_INFO());
 
 			Assert::IsTrue(nonExistentCustomer == NULL, L"Should be NULL", LINE_INFO());
+		}
+
+		TEST_METHOD(UpdateTest)
+		{
+			BaseMapper* genericMapper = new CustomerMapper();
+			string latestResultOperation;
+			SuccessfulInvocationDelegate successInvocation = [&](const DomainObject* domainObject, const BaseMapperHashtable* result)
+			{
+				if ((domainObject == NULL) || (result == NULL)) return;
+
+				auto operationResult = result->find(CustomerMapper::OPERATION);
+
+				if (operationResult != result->end()) latestResultOperation = operationResult->second;
+
+			};
+			FailedInvocationDelegate failedInvocation = [=](const DomainObject* domainObject, const BaseMapperHashtable* result)
+			{ /*Failed Invocation*/ };
+
+			bool updated = genericMapper->Update(
+				new Customer(genericMapper),
+				&successInvocation,
+				&failedInvocation);
+
+			Assert::AreEqual(true, updated, L"Should be equal", LINE_INFO());
+			Assert::AreEqual(string("Update"), latestResultOperation, L"Should be equal", LINE_INFO());
 		}
 	};
 }

@@ -152,6 +152,7 @@
     <ClInclude Include="BaseMapper.h" />
     <ClInclude Include="BaseMapperConcrete.h" />
     <ClInclude Include="BaseQueryObject.h" />
+    <ClInclude Include="ContainerUtility.h" />
     <ClInclude Include="DomainObject.h" />
     <ClInclude Include="IdentityMap.h" />
     <ClInclude Include="DllMacros.h" />

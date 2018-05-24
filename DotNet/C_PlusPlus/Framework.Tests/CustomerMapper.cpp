@@ -2,6 +2,7 @@
 
 #include "Customer.h"
 #include "CustomerMapper.h"
+#include "ContainerUtility.h"
 
 using namespace CustomerServices;
 

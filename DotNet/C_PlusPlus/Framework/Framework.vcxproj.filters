@@ -28,6 +28,9 @@
     <Filter Include="Header Files\PlatformSpecific">
       <UniqueIdentifier>{7a6f5271-65df-41d2-804f-bd3aea50345a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Utilities">
+      <UniqueIdentifier>{46df19b9-6973-422a-9e6b-2402b03384f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseMapper.h">
@@ -56,6 +59,9 @@
     </ClInclude>
     <ClInclude Include="BaseMapperConcrete.h">
       <Filter>Header Files\Data Manipulation</Filter>
+    </ClInclude>
+    <ClInclude Include="ContainerUtility.h">
+      <Filter>Header Files\Utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

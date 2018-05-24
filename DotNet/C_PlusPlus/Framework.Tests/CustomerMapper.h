@@ -47,5 +47,8 @@ namespace CustomerServices
 		bool ConcreteUpdate(Customer* entity, const SuccessfulInvocationDelegate* successfulInvocation, const FailedInvocationDelegate* failedInvocation);
 		bool ConcreteDelete(Customer* entity, const SuccessfulInvocationDelegate* successfulInvocation, const FailedInvocationDelegate* failedInvocation);
 		/****************************************/
+
+		size_t GetCollectionCount() const;
+		Customer* GetCustomer(const string&) const;
 	};
 }

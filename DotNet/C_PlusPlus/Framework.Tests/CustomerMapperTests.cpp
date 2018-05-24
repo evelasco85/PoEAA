@@ -90,5 +90,51 @@ namespace FrameworkTests
 			Assert::AreEqual(string("Insert"), latestResultOperation, L"Should be equal", LINE_INFO());
 			Assert::AreEqual(customer1Number, latestResultCustomerNumber, L"Should be equal", LINE_INFO());
 		}
+
+		TEST_METHOD(MultipleInsertionTest)
+		{
+			CustomerMapper* mapper = new CustomerMapper();
+			Customer* customer1 = new Customer(mapper);
+			Customer* customer2 = new Customer(mapper);
+			SuccessfulInvocationDelegate successInvocation = [&](const DomainObject* domainObject, const BaseMapperHashtable* result)
+			{
+			};
+			FailedInvocationDelegate failedInvocation = [=](const DomainObject* domainObject, const BaseMapperHashtable* result)
+			{ /*Failed Invocation*/ };
+			string customerNo1 = "001";
+			string customerName1 = "John Doe";
+			string customerNo2 = "002";
+			string customerName2 = "Jane Doe";
+
+			customer1->SetNumber(customerNo1);
+			customer1->SetName(customerName1);
+			customer2->SetNumber(customerNo2);
+			customer2->SetName(customerName2);
+
+			mapper->ConcreteInsert(
+				customer1,
+				&successInvocation,
+				&failedInvocation);
+			mapper->ConcreteInsert(
+				customer2,
+				&successInvocation,
+				&failedInvocation);
+
+			Customer* retrievedCustomer1 = mapper->GetCustomer(customerNo1);
+			Customer* retrievedCustomer2 = mapper->GetCustomer(customerNo2);
+			Customer* nonExistentCustomer = mapper->GetCustomer("DOES NOT EXISTS");
+
+			Assert::IsTrue(mapper->GetCollectionCount() == 2, L"Should be equal", LINE_INFO());
+
+			Assert::IsTrue(retrievedCustomer1 != NULL, L"Should not be NULL", LINE_INFO());
+			Assert::AreEqual(customerNo1, retrievedCustomer1->GetNumber(), L"Should be equal", LINE_INFO());
+			Assert::AreEqual(customerName1, retrievedCustomer1->GetName(), L"Should be equal", LINE_INFO());
+
+			Assert::IsTrue(retrievedCustomer2 != NULL, L"Should not be NULL", LINE_INFO());
+			Assert::AreEqual(customerNo2, retrievedCustomer2->GetNumber(), L"Should be equal", LINE_INFO());
+			Assert::AreEqual(customerName2, retrievedCustomer2->GetName(), L"Should be equal", LINE_INFO());
+
+			Assert::IsTrue(nonExistentCustomer == NULL, L"Should be NULL", LINE_INFO());
+		}
 	};
 }

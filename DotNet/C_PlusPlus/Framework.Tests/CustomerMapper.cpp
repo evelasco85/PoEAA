@@ -34,6 +34,13 @@ public:
 	{
 		return m_InternalData.size();
 	}
+
+	Customer* GetCustomer(const string& customerNumber) const
+	{
+		const reference_wrapper<Customer> *retVal = GetValue(m_InternalData, customerNumber);
+
+		return (retVal == NULL) ? NULL : &retVal->get();
+	}
 };
 
 CustomerMapper::CustomerMapper() :
@@ -78,4 +85,14 @@ bool CustomerMapper::ConcreteUpdate(Customer* entity, const SuccessfulInvocation
 bool CustomerMapper::ConcreteDelete(Customer* entity, const SuccessfulInvocationDelegate* successfulInvocation, const FailedInvocationDelegate* failedInvocation)
 {
 	return false;
+}
+
+size_t CustomerMapper::GetCollectionCount() const
+{
+	return (!pImpl) ? 0 : pImpl->CollectionCount();
+}
+
+Customer* CustomerMapper::GetCustomer(const string& customerNumber) const
+{
+	return (!pImpl) ? NULL : pImpl->GetCustomer(customerNumber);
 }

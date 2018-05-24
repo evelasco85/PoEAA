@@ -57,9 +57,7 @@ Customer& Customer::operator=(Customer&& rvalue)
 Customer::~Customer() = default;
 
 const string Customer::GetNumber() const {
-	if (!pImpl) return string("");
-
-	return pImpl->GetNumber(); 
+	return (!pImpl) ? string("") : pImpl->GetNumber(); 
 }
 
 void Customer::SetNumber(const string& number) {
@@ -67,9 +65,7 @@ void Customer::SetNumber(const string& number) {
 }
 
 const string Customer::GetName() const {
-	if (!pImpl) return string("");
-
-	return pImpl->GetName(); 
+	return (!pImpl) ? string("") : pImpl->GetName();
 }
 void Customer::SetName(const string& name) {
 	if (pImpl) pImpl->SetName(name);

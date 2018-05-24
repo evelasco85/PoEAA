@@ -30,8 +30,8 @@ namespace Framework
 			return result;
 		}
 
-		template<typename TMap, typename TKeyArg, typename TValueArg>
-		typename TMap::iterator EfficientAddOrUpdate(TMap& map, const TKeyArg& key, const TValueArg& value)
+		template<typename TMap, typename TKeyArg, typename TValue>
+		typename TMap::iterator EfficientAddOrUpdate(TMap& map, const TKeyArg& key, const TValue& value)
 		{
 			typename TMap::iterator lowerBound = map.lower_bound(key);
 
@@ -49,8 +49,8 @@ namespace Framework
 			}
 		}
 
-		template<typename TMap, typename TKeyArg, typename TValueArg>
-		typename TMap::iterator EfficientAddOrUpdateByRef(TMap& map, const TKeyArg& key, TValueArg& value)
+		template<typename TMap, typename TKeyArg, typename TValue>
+		typename TMap::iterator EfficientAddOrUpdateByRef(TMap& map, const TKeyArg& key, TValue& value)
 		{
 			typename TMap::iterator lowerBound = map.lower_bound(key);
 
@@ -66,6 +66,21 @@ namespace Framework
 
 				return map.insert(lowerBound, MVT(key, ref(value)));
 			}
+		}
+
+		template<typename TMap, typename TKeyArg>
+		typename const TMap::mapped_type* GetValue(TMap& map, const TKeyArg& key)
+		{
+			typename TMap::const_iterator lowerBound = map.lower_bound(key);
+			//typename TMap::iterator lowerBound = map.lower_bound(key);
+			const TMap::mapped_type* foundEntity = NULL;
+
+			if ((lowerBound != map.end()) && (!(map.key_comp()(key, lowerBound->first))))
+			{
+				foundEntity = &lowerBound->second;
+			}
+			
+			return foundEntity;
 		}
 	}
 }

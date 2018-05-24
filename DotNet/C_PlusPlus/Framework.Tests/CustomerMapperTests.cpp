@@ -160,5 +160,30 @@ namespace FrameworkTests
 			Assert::AreEqual(true, updated, L"Should be equal", LINE_INFO());
 			Assert::AreEqual(string("Update"), latestResultOperation, L"Should be equal", LINE_INFO());
 		}
+
+		TEST_METHOD(DeleteTest)
+		{
+			BaseMapper* genericMapper = new CustomerMapper();
+			string latestResultOperation;
+			SuccessfulInvocationDelegate successInvocation = [&](const DomainObject* domainObject, const BaseMapperHashtable* result)
+			{
+				if ((domainObject == NULL) || (result == NULL)) return;
+
+				auto operationResult = result->find(CustomerMapper::OPERATION);
+
+				if (operationResult != result->end()) latestResultOperation = operationResult->second;
+
+			};
+			FailedInvocationDelegate failedInvocation = [=](const DomainObject* domainObject, const BaseMapperHashtable* result)
+			{ /*Failed Invocation*/ };
+
+			bool deleted = genericMapper->Delete(
+				new Customer(genericMapper),
+				&successInvocation,
+				&failedInvocation);
+
+			Assert::AreEqual(true, deleted, L"Should be equal", LINE_INFO());
+			Assert::AreEqual(string("Delete"), latestResultOperation, L"Should be equal", LINE_INFO());
+		}
 	};
 }

@@ -30,9 +30,10 @@ public:
 	~Implementation()
 	{
 		//Only objects instantiated within this class are to be destroyed
+
 		/*Remove container elements, but does not delete elements(pointers)*/
 		//m_InternalData.clear();
-		/************************************************/
+		/*******************************************************************/
 
 		/*Alternatively, variation of Item-33*/
 		for_each(m_InternalData.begin(), m_InternalData.end(),
@@ -47,7 +48,7 @@ public:
 		MapRemoveValues(m_InternalData, [](pair<const string, Customer*> element) {
 			return (element.second == NULL);
 		});
-		/****************************/
+		/*************************************/
 	}
 
 	void AddEditCustomer(Customer& customer)

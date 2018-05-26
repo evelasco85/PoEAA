@@ -15,7 +15,7 @@ private:
 	Reference Wrapper: Elements referred to in a container
 	 exists as long as the container exists
 	*/
-	typedef unordered_map<string, reference_wrapper<Customer>> Dictionary;
+	typedef unordered_map<string, Customer*> Dictionary;
 private:
 	Dictionary m_InternalData;
 public:
@@ -30,44 +30,29 @@ public:
 	~Implementation()
 	{
 		//Only objects instantiated within this class are to be destroyed
-		/*Remove container elements, but does not delete*/
+		/*Remove container elements, but does not delete elements(pointers)*/
 		//m_InternalData.clear();
 		/************************************************/
 
 		/*Alternatively, variation of Item-33*/
-		//for_each(m_InternalData.begin(), m_InternalData.end(),
-		//	[](pair<const string, reference_wrapper<Customer>> &element) {
-		//	Customer* customer = &element.second.get();
+		for_each(m_InternalData.begin(), m_InternalData.end(),
+			[](pair<const string, Customer*> &element) {
 
-		//	/*Delete object*/
-		//	delete customer;
-		//	customer = NULL;
-		//	/******************/
-		//});
+			/*Delete object*/
+			delete element.second;
+			element.second = NULL;
+			/******************/
+		});
 
-		/*m_InternalData.erase(
-		remove(
-		m_InternalData.begin(),
-		m_InternalData.end(),
-		[](pair<const string, reference_wrapper<Customer>> element) {
-		Customer* customer = &element.second.get();
-		const string* matchedElement = NULL;
-
-		if (customer != NULL) matchedElement = &element.first;
-
-		return *matchedElement;
-		}),
-		m_InternalData.end());*/
-
-		/*MapRemoveValues(m_InternalData, [](pair<const string, reference_wrapper<Customer>> element) {
-		return ((&element.second.get()) == NULL);
-		});*/
+		MapRemoveValues(m_InternalData, [](pair<const string, Customer*> element) {
+			return (element.second == NULL);
+		});
 		/****************************/
 	}
 
 	void AddEditCustomer(Customer& customer)
 	{
-		EfficientAddOrUpdateByReferenceWrapper(m_InternalData, customer.GetNumber(), customer);
+		EfficientAddOrUpdateByPtr(m_InternalData, customer.GetNumber(), &customer);
 	}
 
 	size_t CollectionCount() const
@@ -77,9 +62,9 @@ public:
 
 	Customer* GetCustomer(const string& customerNumber) const
 	{
-		reference_wrapper<Customer> *retVal = GetValue(m_InternalData, customerNumber);
+		Customer **retVal = GetValue(m_InternalData, customerNumber);
 
-		return (retVal == NULL) ? NULL : &retVal->get();
+		return (retVal == NULL) ? NULL : (Customer*)(*retVal);
 	}
 };
 

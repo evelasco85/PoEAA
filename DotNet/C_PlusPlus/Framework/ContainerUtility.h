@@ -22,6 +22,25 @@ typename TMap::iterator EfficientAddOrUpdate(TMap& map, const TKeyArg& key, TVal
 }
 
 template<typename TMap, typename TKeyArg, typename TValue>
+typename TMap::iterator EfficientAddOrUpdateByPtr(TMap& map, const TKeyArg& key, TValue* value)
+{
+	typename TMap::iterator lowerBound = map.lower_bound(key);
+
+	if ((lowerBound != map.end()) && (!(map.key_comp()(key, lowerBound->first))))
+	{
+		lowerBound->second = value;
+
+		return lowerBound;
+	}
+	else
+	{
+		typedef typename TMap::value_type MVT;
+
+		return map.insert(lowerBound, MVT(key, value));
+	}
+}
+
+template<typename TMap, typename TKeyArg, typename TValue>
 typename TMap::iterator EfficientAddOrUpdateByReferenceWrapper(TMap& map, const TKeyArg& key, TValue& value)
 {
 	typename TMap::iterator lowerBound = map.lower_bound(key);

@@ -190,9 +190,11 @@ namespace FrameworkTests
 		TEST_METHOD(DeleteMapperTest)
 		{
 			BaseMapper* genericMapper = new CustomerMapper();
+			Customer* customer = new Customer(genericMapper);
 
-			genericMapper->Insert(new Customer(genericMapper), NULL, NULL);
-			genericMapper->Insert(new Customer(genericMapper), NULL, NULL);
+			customer->SetNumber("001");
+			customer->SetName("Test");
+			genericMapper->Insert(customer, NULL, NULL);
 
 			delete genericMapper;
 

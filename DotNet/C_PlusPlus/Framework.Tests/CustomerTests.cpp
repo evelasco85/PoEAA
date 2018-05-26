@@ -113,8 +113,8 @@ namespace FrameworkTests
 			customer2->SetNumber(customerNo2);
 			customer2->SetName(customerName2);
 
-			EfficientAddOrUpdateByRef(m_InternalData, customer1->GetNumber(), *customer1);
-			EfficientAddOrUpdateByRef(m_InternalData, customer2->GetNumber(), *customer2);
+			EfficientAddOrUpdateByReferenceWrapper(m_InternalData, customer1->GetNumber(), *customer1);
+			EfficientAddOrUpdateByReferenceWrapper(m_InternalData, customer2->GetNumber(), *customer2);
 
 			Customer* retrievedCustomer1 = &GetValue(m_InternalData, customerNo1)->get();
 			Customer* retrievedCustomer2 = &GetValue(m_InternalData, customerNo2)->get();

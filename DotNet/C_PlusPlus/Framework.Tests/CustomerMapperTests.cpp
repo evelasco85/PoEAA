@@ -185,5 +185,18 @@ namespace FrameworkTests
 			Assert::AreEqual(true, deleted, L"Should be equal", LINE_INFO());
 			Assert::AreEqual(string("Delete"), latestResultOperation, L"Should be equal", LINE_INFO());
 		}
+
+
+		TEST_METHOD(DeleteMapperTest)
+		{
+			BaseMapper* genericMapper = new CustomerMapper();
+
+			genericMapper->Insert(new Customer(genericMapper), NULL, NULL);
+			genericMapper->Insert(new Customer(genericMapper), NULL, NULL);
+
+			delete genericMapper;
+
+			genericMapper = NULL;
+		}
 	};
 }

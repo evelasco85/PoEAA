@@ -1,5 +1,7 @@
 #include "stdafx.h"
 
+#include <algorithm>
+
 #include "Customer.h"
 #include "CustomerMapper.h"
 #include "ContainerUtility.h"
@@ -9,6 +11,10 @@ using namespace CustomerServices;
 class CustomerMapper::Implementation
 {
 private:
+	/*
+	Reference Wrapper: Elements referred to in a container
+	 exists as long as the container exists
+	*/
 	typedef unordered_map<string, reference_wrapper<Customer>> Dictionary;
 private:
 	Dictionary m_InternalData;
@@ -24,11 +30,44 @@ public:
 	~Implementation()
 	{
 		//Only objects instantiated within this class are to be destroyed
+		/*Remove container elements, but does not delete*/
+		//m_InternalData.clear();
+		/************************************************/
+
+		/*Alternatively, variation of Item-33*/
+		//for_each(m_InternalData.begin(), m_InternalData.end(),
+		//	[](pair<const string, reference_wrapper<Customer>> &element) {
+		//	Customer* customer = &element.second.get();
+
+		//	/*Delete object*/
+		//	delete customer;
+		//	customer = NULL;
+		//	/******************/
+		//});
+
+		/*m_InternalData.erase(
+		remove(
+		m_InternalData.begin(),
+		m_InternalData.end(),
+		[](pair<const string, reference_wrapper<Customer>> element) {
+		Customer* customer = &element.second.get();
+		const string* matchedElement = NULL;
+
+		if (customer != NULL) matchedElement = &element.first;
+
+		return *matchedElement;
+		}),
+		m_InternalData.end());*/
+
+		/*MapRemoveValues(m_InternalData, [](pair<const string, reference_wrapper<Customer>> element) {
+		return ((&element.second.get()) == NULL);
+		});*/
+		/****************************/
 	}
 
 	void AddEditCustomer(Customer& customer)
 	{
-		EfficientAddOrUpdateByRef(m_InternalData, customer.GetNumber(), customer);
+		EfficientAddOrUpdateByReferenceWrapper(m_InternalData, customer.GetNumber(), customer);
 	}
 
 	size_t CollectionCount() const
@@ -38,7 +77,7 @@ public:
 
 	Customer* GetCustomer(const string& customerNumber) const
 	{
-		const reference_wrapper<Customer> *retVal = GetValue(m_InternalData, customerNumber);
+		reference_wrapper<Customer> *retVal = GetValue(m_InternalData, customerNumber);
 
 		return (retVal == NULL) ? NULL : &retVal->get();
 	}

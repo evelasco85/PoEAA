@@ -96,7 +96,7 @@ namespace FrameworkTests
 			/************************/
 		}
 
-		TEST_METHOD(ModifyReferencesTest)
+		TEST_METHOD(ModifyReferencesByReferenceWrapperTest)
 		{
 			typedef unordered_map<string, reference_wrapper<Customer>> Dictionary;
 

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
+#include <any>
 
 #include "DomainObject.h"
 #include "BaseMapper.h"
@@ -57,22 +58,22 @@ namespace FrameworkTests
 			string customer1Name("John Doe");
 			string latestResultCustomerNumber;
 			string latestResultOperation;
-			string latestResultCollectionCount;
+			size_t latestResultCollectionCount;
 			SuccessfulInvocationDelegate successInvocation = [&](const DomainObject* domainObject, const BaseMapperHashtable* result)
 			{
 				if ((domainObject == NULL) || (result == NULL)) return;
 
 				auto custNoResult = result->find(CustomerMapper::CUST_NO);
 
-				if (custNoResult != result->end()) latestResultCustomerNumber = custNoResult->second;
+				if (custNoResult != result->end()) latestResultCustomerNumber = any_cast<string>(custNoResult->second);
 
 				auto operationResult = result->find(CustomerMapper::OPERATION);
 
-				if (operationResult != result->end()) latestResultOperation = operationResult->second;
+				if (operationResult != result->end()) latestResultOperation = any_cast<string>(operationResult->second);
 
 				auto collectionCountResult = result->find(CustomerMapper::COLLECTION_COUNT);
 
-				if (collectionCountResult != result->end()) latestResultCollectionCount = collectionCountResult->second;
+				if (collectionCountResult != result->end()) latestResultCollectionCount = any_cast<size_t>(collectionCountResult->second);
 			};
 			FailedInvocationDelegate failedInvocation = [=](const DomainObject* domainObject, const BaseMapperHashtable* result)
 			{ /*Failed Invocation*/ };
@@ -86,7 +87,7 @@ namespace FrameworkTests
 				&failedInvocation);
 
 			Assert::AreEqual(true, inserted, L"Should be equal", LINE_INFO());
-			Assert::AreEqual(string("1"), latestResultCollectionCount, L"Should be equal", LINE_INFO());
+			Assert::AreEqual(size_t(1), latestResultCollectionCount, L"Should be equal", LINE_INFO());
 			Assert::AreEqual(string("Insert"), latestResultOperation, L"Should be equal", LINE_INFO());
 			Assert::AreEqual(customer1Number, latestResultCustomerNumber, L"Should be equal", LINE_INFO());
 		}
@@ -146,7 +147,7 @@ namespace FrameworkTests
 
 				auto operationResult = result->find(CustomerMapper::OPERATION);
 
-				if (operationResult != result->end()) latestResultOperation = operationResult->second;
+				if (operationResult != result->end()) latestResultOperation = any_cast<string>(operationResult->second);
 
 			};
 			FailedInvocationDelegate failedInvocation = [=](const DomainObject* domainObject, const BaseMapperHashtable* result)
@@ -171,7 +172,7 @@ namespace FrameworkTests
 
 				auto operationResult = result->find(CustomerMapper::OPERATION);
 
-				if (operationResult != result->end()) latestResultOperation = operationResult->second;
+				if (operationResult != result->end()) latestResultOperation = any_cast<string>(operationResult->second);
 
 			};
 			FailedInvocationDelegate failedInvocation = [=](const DomainObject* domainObject, const BaseMapperHashtable* result)

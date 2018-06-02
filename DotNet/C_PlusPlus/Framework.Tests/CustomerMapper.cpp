@@ -93,10 +93,10 @@ bool CustomerMapper::ConcreteInsert(Customer* entity, const SuccessfulInvocation
 
 	if (pImpl) pImpl->AddEditCustomer(*entity);
 
-	EfficientAddOrUpdate(results, CUST_NO, entity->GetNumber());
-	EfficientAddOrUpdate(results, CUST_NAME, entity->GetName());
-	EfficientAddOrUpdate(results, OPERATION, "Insert");
-	EfficientAddOrUpdate(results, COLLECTION_COUNT, to_string(pImpl->CollectionCount()));
+	EfficientAddOrUpdate(results, CUST_NO, any(entity->GetNumber()));
+	EfficientAddOrUpdate(results, CUST_NAME, any(entity->GetName()));
+	EfficientAddOrUpdate(results, OPERATION, any(string("Insert")));
+	EfficientAddOrUpdate(results, COLLECTION_COUNT, any(pImpl->CollectionCount()));
 
 	if(successfulInvocation != NULL) (*successfulInvocation)(entity, &results);
 
@@ -114,7 +114,7 @@ bool CustomerMapper::ConcreteUpdate(Customer* entity, const SuccessfulInvocation
 		return false;
 	}
 
-	EfficientAddOrUpdate(results, OPERATION, "Update");
+	EfficientAddOrUpdate(results, OPERATION, any(string("Update")));
 
 	if (successfulInvocation != NULL) (*successfulInvocation)(entity, &results);
 
@@ -133,7 +133,7 @@ bool CustomerMapper::ConcreteDelete(Customer* entity, const SuccessfulInvocation
 		return false;
 	}
 
-	EfficientAddOrUpdate(results, OPERATION, "Delete");
+	EfficientAddOrUpdate(results, OPERATION, any(string("Delete")));
 
 	if (successfulInvocation != NULL) (*successfulInvocation)(entity, &results);
 

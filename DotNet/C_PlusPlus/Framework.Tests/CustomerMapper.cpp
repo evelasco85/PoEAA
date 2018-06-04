@@ -18,6 +18,22 @@ private:
 	typedef unordered_map<string, Customer*> Dictionary;
 private:
 	Dictionary m_InternalData;
+
+	void CleanMapResources(Dictionary& dictionary)
+	{
+		for_each(dictionary.begin(), dictionary.end(),
+			[](pair<const string, Customer*> &element) {
+
+			/*Delete object*/
+			delete element.second;
+			element.second = NULL;
+			/******************/
+		});
+
+		MapRemoveValues(dictionary, [](pair<const string, Customer*> element) {
+			return (element.second == NULL);
+		});
+	}
 public:
 	Implementation() :
 		m_InternalData()
@@ -30,24 +46,9 @@ public:
 	~Implementation()
 	{
 		//Only objects instantiated within this class are to be destroyed
-
-		/*Remove container elements, but does not delete elements(pointers)*/
-		//m_InternalData.clear();
-		/*******************************************************************/
-
 		/*Alternatively, variation of Item-33*/
-		for_each(m_InternalData.begin(), m_InternalData.end(),
-			[](pair<const string, Customer*> &element) {
-
-			/*Delete object*/
-			delete element.second;
-			element.second = NULL;
-			/******************/
-		});
-
-		MapRemoveValues(m_InternalData, [](pair<const string, Customer*> element) {
-			return (element.second == NULL);
-		});
+		CleanMapResources(m_InternalData);
+		/*************************************/
 		/*************************************/
 	}
 

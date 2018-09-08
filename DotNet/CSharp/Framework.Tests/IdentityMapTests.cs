@@ -15,7 +15,7 @@ namespace Framework.Tests
         [TestMethod]
         public void Test_DuplicateEntry()
         {
-            Customer customer1 = new Customer(null) {Number = "001"};
+            Customer customer1 = new Customer(null, null) {Number = "001"};
             IIdentityMap<Customer> map = new IdentityMap<Customer>();
 
             map.AddEntity(customer1);
@@ -27,7 +27,7 @@ namespace Framework.Tests
         [TestMethod]
         public void Test_Identity_Updates()
         {
-            Customer customer1 = new Customer(null) { Number = "001" , Name = "John Doe"};
+            Customer customer1 = new Customer(null, null) { Number = "001" , Name = "John Doe"};
             IIdentityMap<Customer> map = new IdentityMap<Customer>();
 
             map.AddEntity(customer1);
@@ -49,11 +49,11 @@ namespace Framework.Tests
         [TestMethod]
         public void Test_Retrieval_By_Keys()
         {
-            Customer customer1 = new Customer(null) { Number = "001" };
-            Customer customer2 = new Customer(null) { Number = "002" };
-            Customer customer3 = new Customer(null) { Number = "003" };
-            Customer customer4 = new Customer(null) {Number = "004", Name = "John Doe"};
-            Customer customer5 = new Customer(null) { Number = "005" };
+            Customer customer1 = new Customer(null, null) { Number = "001" };
+            Customer customer2 = new Customer(null, null) { Number = "002" };
+            Customer customer3 = new Customer(null, null) { Number = "003" };
+            Customer customer4 = new Customer(null, null) {Number = "004", Name = "John Doe"};
+            Customer customer5 = new Customer(null, null) { Number = "005" };
             IIdentityMap<Customer> map = new IdentityMap<Customer>();
 
             map.AddEntity(customer1);
@@ -75,11 +75,11 @@ namespace Framework.Tests
         [TestMethod]
         public void Test_SearchResult_NotFound()
         {
-            Customer customer1 = new Customer(null) {Number = "001"};
-            Customer customer2 = new Customer(null) {Number = "002"};
-            Customer customer3 = new Customer(null) {Number = "003"};
-            Customer customer4 = new Customer(null) {Number = "004", Name = "John Doe"};
-            Customer customer5 = new Customer(null) {Number = "005"};
+            Customer customer1 = new Customer(null, null) {Number = "001"};
+            Customer customer2 = new Customer(null, null) {Number = "002"};
+            Customer customer3 = new Customer(null, null) {Number = "003"};
+            Customer customer4 = new Customer(null, null) {Number = "004", Name = "John Doe"};
+            Customer customer5 = new Customer(null, null) {Number = "005"};
             IIdentityMap<Customer> map = new IdentityMap<Customer>();
 
             map.AddEntity(customer1);
@@ -100,11 +100,11 @@ namespace Framework.Tests
         [TestMethod]
         public void Test_Clear_Identities()
         {
-            Customer customer1 = new Customer(null) { Number = "001" };
-            Customer customer2 = new Customer(null) { Number = "002" };
-            Customer customer3 = new Customer(null) { Number = "003" };
-            Customer customer4 = new Customer(null) { Number = "004", Name = "John Doe" };
-            Customer customer5 = new Customer(null) { Number = "005" };
+            Customer customer1 = new Customer(null, null) { Number = "001" };
+            Customer customer2 = new Customer(null, null) { Number = "002" };
+            Customer customer3 = new Customer(null, null) { Number = "003" };
+            Customer customer4 = new Customer(null, null) { Number = "004", Name = "John Doe" };
+            Customer customer5 = new Customer(null, null) { Number = "005" };
             IIdentityMap<Customer> map = new IdentityMap<Customer>();
 
             map.AddEntity(customer1);

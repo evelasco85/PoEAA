@@ -19,7 +19,7 @@ namespace Framework.LazyLoad
         public LazyLoadDomainObject(
             TSearchInput criteria,
             IBaseMapper mapper
-            ) : base(mapper)
+            ) : base(mapper, null)
         {
             _criteria = criteria;
         }

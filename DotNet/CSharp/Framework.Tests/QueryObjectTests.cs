@@ -1,27 +1,16 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Framework.Tests.CustomerServices;
-using Framework.Data_Manipulation;
+using static Framework.Tests.CustomerServices.GetCustomersByCivilStatusQuery.Criteria;
 
 namespace Framework.Tests
 {
     [TestClass]
     public class QueryObjectTests
     {
-        private IDataSynchronizationManager _manager;
-
         [TestInitialize]
         public void Initialize()
         {
-            _manager = DataSynchronizationManager.GetInstance();
-
-            _manager.RegisterEntity(
-                new CustomerMapper(),
-                new List<IBaseQueryObject<Customer>> {
-                    {new GetCustomerByIdQuery()},
-                    {new GetCustomerByCivilStatusQuery()}
-                });
         }
 
         [TestMethod]
@@ -29,14 +18,30 @@ namespace Framework.Tests
         {
             GetCustomerByIdQuery query = new GetCustomerByIdQuery
             {
-                SearchInput = GetCustomerByIdQuery.Criteria.SearchById(2)
+                CriteriaInput = GetCustomerByIdQuery.Criteria.SearchById(2)
             };
 
-            IList<Customer> resultsById = query.Execute();
-            Customer matchById = resultsById.First();
+            Customer matchById = query.ConcreteExecute();
 
             Assert.AreEqual("2", matchById.Number);
             Assert.AreEqual("Jane Doe", matchById.Name);
+        }
+
+        [TestMethod]
+        public void TestGetCustomerByCivilStatusQuery()
+        {
+            GetCustomersByCivilStatusQuery query = new GetCustomersByCivilStatusQuery
+            {
+                CriteriaInput = GetCustomersByCivilStatusQuery.Criteria.SearchByStatus(CivilStatus.Married)
+            };
+
+            IList<Customer> matchedCustomers = query.ConcreteExecute();
+
+            Assert.AreEqual(2, matchedCustomers.Count);
+            Assert.AreEqual("5", matchedCustomers[0].Number);
+            Assert.AreEqual("Test Married", matchedCustomers[0].Name);
+            Assert.AreEqual("7", matchedCustomers[1].Number);
+            Assert.AreEqual("Test Married", matchedCustomers[1].Name);
         }
     }
 }

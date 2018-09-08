@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Framework.Data_Manipulation;
+﻿using Framework.Data_Manipulation;
 using Framework.Domain;
 
 namespace Framework.Tests.CustomerServices
@@ -8,7 +7,7 @@ namespace Framework.Tests.CustomerServices
     {
         public class InnerClass { }
 
-        public Customer(IBaseMapper mapper) : base(mapper)
+        public Customer(IBaseMapper mapper, IBaseQueryObject queryObject) : base(mapper, queryObject)
         {
         }
 

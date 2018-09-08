@@ -1,47 +1,62 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Framework.Domain;
+using System;
 
 namespace Framework.Data_Manipulation
 {
+    //Used for inferred declaration in generics(See Repository.Matching<...>(...)
+    public interface ICriteriaTag<TResult> { }
+
     public interface IBaseQueryObject
     {
-        Type SearchInputType { get; }
-        object SearchInputObject { get; set; }
+        Type CriteriaInputType { get; }
+        object CriteriaInputObject { get; set; }
     }
 
     public interface IBaseQueryObject<TEntity> : IBaseQueryObject
+        where TEntity : IDomainObject
     {
-        IList<TEntity> Execute();
+        IBaseMapper<TEntity> GetMapper();
+        object Execute();
     }
 
-    public interface IBaseQueryObject<TEntity, TSearchInput> : IBaseQueryObject<TEntity>
+    public interface IBaseQueryObject<TEntity, TResult, TCriteriaInput> : IBaseQueryObject<TEntity>
+        where TEntity : IDomainObject
+        where TCriteriaInput : ICriteriaTag<TResult>
     {
-        TSearchInput SearchInput { get; set; }
-        IList<TEntity> PerformSearchOperation(TSearchInput searchInput);
+        TCriteriaInput CriteriaInput { get; set; }
+        TResult PerformSearchOperation(IBaseMapper mapper, TCriteriaInput criteriaInput);
+        TResult ConcreteExecute();
     }
 
-    public abstract class BaseQueryObject<TEntity, TSearchInput> :
-        IBaseQueryObject<TEntity, TSearchInput>
+    public abstract class BaseQueryObject<TEntity, TResult, TCriteriaInput> :
+        IBaseQueryObject<TEntity, TResult, TCriteriaInput>
+        where TEntity : IDomainObject
+        where TCriteriaInput : ICriteriaTag<TResult>
     {
-        public TSearchInput SearchInput { get; set; }
+        public TCriteriaInput CriteriaInput { get; set; }
 
-        public object SearchInputObject
+        public object CriteriaInputObject
         {
-            get { return SearchInput; }
-            set { SearchInput = (TSearchInput) value; }
+            get { return CriteriaInput; }
+            set { CriteriaInput = (TCriteriaInput) value; }
         }
 
-        public Type SearchInputType {
-            get { return typeof(TSearchInput); }
+        public Type CriteriaInputType {
+            get { return typeof(TCriteriaInput); }
         }
 
-        public abstract IList<TEntity> PerformSearchOperation(TSearchInput searchInput);
+        public abstract TResult PerformSearchOperation(IBaseMapper mapper, TCriteriaInput criteriaInput);
 
-        public IList<TEntity> Execute()
+        public abstract IBaseMapper<TEntity> GetMapper();
+
+        public TResult ConcreteExecute()
         {
-            IList<TEntity> ultimateResult = PerformSearchOperation(SearchInput);
+            return PerformSearchOperation(GetMapper(), CriteriaInput);
+        }
 
-            return ultimateResult;
+        public object Execute()
+        {
+            return ConcreteExecute();
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Framework.Tests
                 new CustomerMapper(),
                 new List<IBaseQueryObject<Customer>> {
                     {new GetCustomerByIdQuery()},
-                    {new GetCustomerByCivilStatusQuery()}
+                    {new GetCustomersByCivilStatusQuery()}
                 });
         }
 
@@ -28,7 +28,7 @@ namespace Framework.Tests
         public void TestCreateMemento()
         {
             IDomainObjectMementoService service = DomainObjectMementoService.GetInstance();
-            Customer customer = new Customer(null) {Name = "John Doe", Number = "123"};
+            Customer customer = new Customer(null, null) {Name = "John Doe", Number = "123"};
             IDomainObjectMemento memento = service.CreateMemento(customer);
 
             Assert.AreEqual("John Doe", memento.GetPropertyValue("Name"));
@@ -39,7 +39,7 @@ namespace Framework.Tests
         public void TestSetMemento()
         {
             IDomainObjectMementoService service = DomainObjectMementoService.GetInstance();
-            Customer customer = new Customer(null) { Name = "John Doe", Number = "123" };
+            Customer customer = new Customer(null, null) { Name = "John Doe", Number = "123" };
             IDomainObjectMemento snapshotMemento = service.CreateMemento(customer);
 
             //Test original

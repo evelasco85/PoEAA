@@ -15,9 +15,9 @@ namespace Framework.Tests
         public void TestGetModifiedEntities()
         {
             string originalName = "Christine Dela Cruz";
-            Customer customer1 = new Customer(null) { Number = "1", Name = "Juan Dela Cruz" };
-            Customer customer2 = new Customer(null) { Number = "2", Name = originalName };
-            Customer customer3 = new Customer(null) { Number = "3", Name = "Jane Doe" };
+            Customer customer1 = new Customer(null, null) { Number = "1", Name = "Juan Dela Cruz" };
+            Customer customer2 = new Customer(null, null) { Number = "2", Name = originalName };
+            Customer customer3 = new Customer(null, null) { Number = "3", Name = "Jane Doe" };
 
             string originalNumber = "01";
             string originalCustomerNumber = "001";

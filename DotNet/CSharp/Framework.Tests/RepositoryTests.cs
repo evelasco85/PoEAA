@@ -1,16 +1,12 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Framework.Data_Manipulation;
 using Framework.Tests.CustomerServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using static Framework.Tests.CustomerServices.GetCustomersByCivilStatusQuery.Criteria;
 
 namespace Framework.Tests
 {
-    /// <summary>
-    /// Summary description for RepositoryTests
-    /// </summary>
     [TestClass]
     public class RepositoryTests
     {
@@ -25,7 +21,7 @@ namespace Framework.Tests
                 new CustomerMapper(), 
                 new List<IBaseQueryObject<Customer>> {
                     {new GetCustomerByIdQuery()},
-                    {new GetCustomerByCivilStatusQuery()}
+                    {new GetCustomersByCivilStatusQuery()}
                 });
         }
 
@@ -35,18 +31,19 @@ namespace Framework.Tests
             IRepository<Customer> repository = _manager.GetRepository<Customer>();
 
             /*Match by civil status*/
-            GetCustomerByCivilStatusQuery.Criteria criteriaByStatus = GetCustomerByCivilStatusQuery.Criteria.SearchByStatus(GetCustomerByCivilStatusQuery.CivilStatus.Married);
+            GetCustomersByCivilStatusQuery.Criteria criteriaByStatus = GetCustomersByCivilStatusQuery.Criteria.SearchByStatus(CivilStatus.Married);
             IList<Customer> resultsByStatus = repository.Matching(criteriaByStatus);
-            Customer matchByStatus = resultsByStatus.First();
 
-            Assert.AreEqual("5", matchByStatus.Number);
-            Assert.AreEqual("Test Married", matchByStatus.Name);
+            Assert.AreEqual(2, resultsByStatus.Count);
+            Assert.AreEqual("5", resultsByStatus[0].Number);
+            Assert.AreEqual("Test Married", resultsByStatus[0].Name);
+            Assert.AreEqual("7", resultsByStatus[1].Number);
+            Assert.AreEqual("Test Married", resultsByStatus[1].Name);
             /***********************/
 
             /*Match by Id*/
             GetCustomerByIdQuery.Criteria criteriaById = GetCustomerByIdQuery.Criteria.SearchById(2);
-            IList<Customer> resultsById = repository.Matching(criteriaById);
-            Customer matchById = resultsById.First();
+            Customer matchById = repository.Matching(criteriaById);
 
             Assert.AreEqual("2", matchById.Number);
             Assert.AreEqual("Jane Doe", matchById.Name);

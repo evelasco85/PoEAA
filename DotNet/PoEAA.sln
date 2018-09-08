@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CSharp", "CSharp", "{816900
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework", "CSharp\Framework\Framework.csproj", "{425F54F1-3962-4797-A8E5-E4B7AED0EAEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework.Tests", "CSharp\Framework.Tests\Framework.Tests.csproj", "{21DDB39E-F894-4B93-965D-EABEBBC8F4B2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework_CSharp.Tests", "CSharp\Framework.Tests\Framework_CSharp.Tests.csproj", "{21DDB39E-F894-4B93-965D-EABEBBC8F4B2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "C_PlusPlus", "C_PlusPlus", "{CABC51E2-77B4-4D83-A255-6ECA36D6883A}"
 EndProject
@@ -29,6 +29,7 @@ Global
 		{425F54F1-3962-4797-A8E5-E4B7AED0EAEA}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{425F54F1-3962-4797-A8E5-E4B7AED0EAEA}.Debug|x64.Build.0 = Debug|Any CPU
 		{425F54F1-3962-4797-A8E5-E4B7AED0EAEA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{425F54F1-3962-4797-A8E5-E4B7AED0EAEA}.Debug|x86.Build.0 = Debug|Any CPU
 		{425F54F1-3962-4797-A8E5-E4B7AED0EAEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{425F54F1-3962-4797-A8E5-E4B7AED0EAEA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{425F54F1-3962-4797-A8E5-E4B7AED0EAEA}.Release|x64.ActiveCfg = Release|Any CPU
@@ -39,6 +40,7 @@ Global
 		{21DDB39E-F894-4B93-965D-EABEBBC8F4B2}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{21DDB39E-F894-4B93-965D-EABEBBC8F4B2}.Debug|x64.Build.0 = Debug|Any CPU
 		{21DDB39E-F894-4B93-965D-EABEBBC8F4B2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{21DDB39E-F894-4B93-965D-EABEBBC8F4B2}.Debug|x86.Build.0 = Debug|Any CPU
 		{21DDB39E-F894-4B93-965D-EABEBBC8F4B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21DDB39E-F894-4B93-965D-EABEBBC8F4B2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{21DDB39E-F894-4B93-965D-EABEBBC8F4B2}.Release|x64.ActiveCfg = Release|Any CPU

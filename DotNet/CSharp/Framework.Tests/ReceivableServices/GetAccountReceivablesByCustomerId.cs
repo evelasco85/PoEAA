@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Framework.Data_Manipulation;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Framework.Data_Manipulation;
 
 namespace Framework.Tests.ReceivableServices
 {
-    public class GetAccountReceivablesByCustomerId : BaseQueryObject<AccountReceivable, GetAccountReceivablesByCustomerId.Criteria>
+    public class GetAccountReceivablesByCustomerId : BaseQueryObject<
+        AccountReceivable,
+        IList<AccountReceivable>,
+        GetAccountReceivablesByCustomerId.Criteria>
     {
-        public class Criteria
+        public class Criteria : ICriteriaTag<IList<AccountReceivable>>
         {
             public string CustomerId { get; set; }
 
@@ -23,7 +23,12 @@ namespace Framework.Tests.ReceivableServices
             }
         }
 
-        public override IList<AccountReceivable> PerformSearchOperation(GetAccountReceivablesByCustomerId.Criteria searchInput)
+        public override IBaseMapper<AccountReceivable> GetMapper()
+        {
+            return null;
+        }
+
+        public override IList<AccountReceivable> PerformSearchOperation(IBaseMapper mapper, Criteria searchInput)
         {
             IList<AccountReceivable> accountReceivables = new List<AccountReceivable>
             {

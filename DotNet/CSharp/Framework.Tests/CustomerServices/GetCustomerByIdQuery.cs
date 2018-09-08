@@ -4,9 +4,12 @@ using Framework.Data_Manipulation;
 
 namespace Framework.Tests.CustomerServices
 {
-    class GetCustomerByIdQuery : BaseQueryObject<Customer, GetCustomerByIdQuery.Criteria>
+    using TEntity = Customer;
+    using TOutput = Customer;
+
+    public class GetCustomerByIdQuery : BaseQueryObject<TEntity, TOutput, GetCustomerByIdQuery.Criteria>
     {
-        public class Criteria
+        public class Criteria : ICriteriaTag<TOutput>
         {
             public int CustomerId { get; set; }
 
@@ -20,7 +23,12 @@ namespace Framework.Tests.CustomerServices
             }
         }
 
-        public override IList<Customer> PerformSearchOperation(Criteria searchInput)
+        public override IBaseMapper<TEntity> GetMapper()
+        {
+            return DataSynchronizationManager.GetInstance().GetMapper<TEntity>();
+        }
+
+        public override TOutput PerformSearchOperation(IBaseMapper mapper, Criteria searchInput)
         {
             Dictionary<int, string> customerList = new Dictionary<int, string>();
 
@@ -29,13 +37,12 @@ namespace Framework.Tests.CustomerServices
             customerList.Add(3, "John Doe");
 
             Tuple<string, string> searchResult = new Tuple<string, string>(searchInput.CustomerId.ToString(), customerList[searchInput.CustomerId]);
-            IBaseMapper mapper = DataSynchronizationManager.GetInstance().GetMapper<Customer>();
-            Customer customer = new Customer(mapper);
+            TOutput customer = new Customer(mapper, this);
 
             customer.Number = searchResult.Item1;
             customer.Name = searchResult.Item2;
 
-            return new List<Customer>(new[] { customer });
+            return customer;
         }
     }
 }

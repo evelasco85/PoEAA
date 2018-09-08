@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Framework.Data_Manipulation;
+﻿using Framework.Data_Manipulation;
 using Framework.Domain;
+using System;
 
 namespace Framework
 {
     public interface IRepository<TEntity>
         where TEntity : IDomainObject
     {
-        IList<TEntity> Matching<TSearchInput>(TSearchInput criteria);
+        TResult Matching<TResult>(ICriteriaTag<TResult> criteria);
     }
 
     public class Repository<TEntity> : IRepository<TEntity>
@@ -20,37 +19,16 @@ namespace Framework
         {
             _manager = manager;
         }
-        
-        void ApplyDomainObjectSettings(ref IList<TEntity> newResult, IBaseQueryObject query)
+
+        public TResult Matching<TResult>(ICriteriaTag<TResult> criteria)
         {
-            if ((newResult == null) || (!newResult.Any()))
-                return;
+            Type type = criteria.GetType();
+            string searchInputTypename = type.FullName;
+            IBaseQueryObject<TEntity> query = _manager.GetQueryBySearchCriteria<TEntity>(searchInputTypename);
 
-            IBaseMapper<TEntity> mapper = DataSynchronizationManager.GetInstance().GetMapper<TEntity>();
+            query.CriteriaInputObject = criteria;
 
-            ((List<TEntity>)newResult).ForEach(entity =>
-            {
-                ((ISystemManipulation)entity).SetQueryObject(query);
-                ((ISystemManipulation)entity).SetMapper(mapper);
-            });
-        }
-
-        IList<TEntity> Matching(IBaseQueryObject<TEntity> query)
-        {
-            IList<TEntity> results = query.Execute();
-
-            ApplyDomainObjectSettings(ref results, query);
-
-            return results;
-        }
-
-        public IList<TEntity> Matching<TSearchInput>(TSearchInput criteria)
-        {
-            IBaseQueryObject<TEntity> query = _manager.GetQueryBySearchCriteria<TEntity, TSearchInput>();
-
-            query.SearchInputObject = criteria;
-
-            return Matching(query);
+            return (TResult)query.Execute();
         }
     }
 }

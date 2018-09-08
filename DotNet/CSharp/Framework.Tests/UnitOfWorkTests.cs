@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Framework.Data_Manipulation;
-using Framework.Domain;
 using Framework.Tests.CustomerServices;
-using  Framework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using static Framework.Tests.CustomerServices.GetCustomersByCivilStatusQuery.Criteria;
 
 namespace Framework.Tests
 {
@@ -26,7 +21,7 @@ namespace Framework.Tests
                 _mapper,
                 new List<IBaseQueryObject<Customer>> {
                     {new GetCustomerByIdQuery()},
-                    {new GetCustomerByCivilStatusQuery()}
+                    {new GetCustomersByCivilStatusQuery()}
                 });
         }
 
@@ -34,19 +29,19 @@ namespace Framework.Tests
         public void TestCommit_SimpleInsertion()
         {
             IRepository<Customer> repository = _manager.GetRepository<Customer>();
-            GetCustomerByCivilStatusQuery.Criteria criteriaByStatus = GetCustomerByCivilStatusQuery.Criteria.SearchByStatus(GetCustomerByCivilStatusQuery.CivilStatus.Married);
+            GetCustomersByCivilStatusQuery.Criteria criteriaByStatus = GetCustomersByCivilStatusQuery.Criteria.SearchByStatus(CivilStatus.Married);
             GetCustomerByIdQuery.Criteria criteriaById = GetCustomerByIdQuery.Criteria.SearchById(2);
             List<Customer> customerResults = new List<Customer>();
             IUnitOfWork uow = new UnitOfWork();
 
             customerResults.AddRange(repository.Matching(criteriaByStatus));
-            customerResults.AddRange(repository.Matching(criteriaById));
+            customerResults.Add(repository.Matching(criteriaById));
 
             
             IBaseMapper mapper = DataSynchronizationManager.GetInstance().GetMapper<Customer>();
-            Customer customer1 = new Customer(mapper) { Number = "1" };
-            Customer customer2 = new Customer(mapper) { Number = "2" };
-            Customer customer3 = new Customer(mapper) { Number = "3" };
+            Customer customer1 = new Customer(mapper, null) { Number = "1" };
+            Customer customer2 = new Customer(mapper, null) { Number = "2" };
+            Customer customer3 = new Customer(mapper, null) { Number = "3" };
 
 
             //Sequence of observation affects commit order
@@ -75,19 +70,19 @@ namespace Framework.Tests
         public void TestCommit_RemoveInsertRegistration()
         {
             IRepository<Customer> repository = _manager.GetRepository<Customer>();
-            GetCustomerByCivilStatusQuery.Criteria criteriaByStatus = GetCustomerByCivilStatusQuery.Criteria.SearchByStatus(GetCustomerByCivilStatusQuery.CivilStatus.Married);
+            GetCustomersByCivilStatusQuery.Criteria criteriaByStatus = GetCustomersByCivilStatusQuery.Criteria.SearchByStatus(CivilStatus.Married);
             GetCustomerByIdQuery.Criteria criteriaById = GetCustomerByIdQuery.Criteria.SearchById(2);
             List<Customer> customerResults = new List<Customer>();
             IUnitOfWork uow = new UnitOfWork();
 
             customerResults.AddRange(repository.Matching(criteriaByStatus));
-            customerResults.AddRange(repository.Matching(criteriaById));
+            customerResults.Add(repository.Matching(criteriaById));
 
 
             IBaseMapper mapper = DataSynchronizationManager.GetInstance().GetMapper<Customer>();
-            Customer customer1 = new Customer(mapper) { Number = "1" };
-            Customer customer2 = new Customer(mapper) { Number = "2" };
-            Customer customer3 = new Customer(mapper) { Number = "3" };
+            Customer customer1 = new Customer(mapper, null) { Number = "1" };
+            Customer customer2 = new Customer(mapper, null) { Number = "2" };
+            Customer customer3 = new Customer(mapper, null) { Number = "3" };
 
 
             //Sequence of observation affects commit order

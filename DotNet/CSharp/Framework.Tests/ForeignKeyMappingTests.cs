@@ -29,7 +29,7 @@ namespace Framework.Tests
                 new CustomerMapper(), 
                 new List<IBaseQueryObject<Customer>> {
                     {new GetCustomerByIdQuery()},
-                    {new GetCustomerByCivilStatusQuery()}
+                    {new GetCustomersByCivilStatusQuery()}
                 });
 
             _dataSyncManager.RegisterEntity(
@@ -48,8 +48,7 @@ namespace Framework.Tests
 
             /*Match by Id*/
             GetCustomerByIdQuery.Criteria criteriaById = GetCustomerByIdQuery.Criteria.SearchById(3);
-            IList<Customer> resultsById = repository.Matching(criteriaById);
-            Customer matchById = resultsById.First();
+            Customer matchById = repository.Matching(criteriaById);
 
             Assert.AreEqual("3", matchById.Number);
             Assert.AreEqual("John Doe", matchById.Name);

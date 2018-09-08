@@ -3,7 +3,7 @@ using Framework.Tests.CustomerServices;
 
 namespace Framework.Tests.TransactionScripts
 {
-    public class AlterMarriedStatusIntoSingleTS : TransactionScript<GetCustomerByCivilStatusQuery.Criteria, AlterMarriedStatusIntoSingleTS.TransactionResult>
+    public class AlterMarriedStatusIntoSingleTS : TransactionScript<GetCustomersByCivilStatusQuery.Criteria, AlterMarriedStatusIntoSingleTS.TransactionResult>
     {
         public class TransactionResult
         {
@@ -21,7 +21,7 @@ namespace Framework.Tests.TransactionScripts
         public override TransactionResult ExecutionBody()
         {
             IRepository<Customer> repository = RepositoryRegistry.GetRepository<Customer>();
-            GetCustomerByCivilStatusQuery.Criteria criteriaByStatus = Input;
+            GetCustomersByCivilStatusQuery.Criteria criteriaByStatus = Input;
             IUnitOfWork uow = CreateUnitOfWork();
 
             ((List<Customer>) repository.Matching(criteriaByStatus)).ForEach(customer =>

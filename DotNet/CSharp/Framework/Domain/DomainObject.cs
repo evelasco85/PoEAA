@@ -8,12 +8,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Framework.Domain
 {
-    public interface ISystemManipulation
-    {
-        void SetQueryObject(IBaseQueryObject queryObject);
-        void SetMapper(IBaseMapper mapper);
-    }
-
     public interface IDomainObject
     {
         Guid SystemId { get; }
@@ -31,7 +25,7 @@ namespace Framework.Domain
         Loaded
     }
 
-    public class DomainObject : IDomainObject, ISystemManipulation
+    public class DomainObject : IDomainObject
     {
         IBaseMapper _mapper;
         Guid _systemId;
@@ -58,20 +52,12 @@ namespace Framework.Domain
             }
         }
 
-        public DomainObject(IBaseMapper mapper)
+        public DomainObject(IBaseMapper mapper, IBaseQueryObject queryObject)
         {
-            _mapper = mapper;
             _systemId = Guid.NewGuid();
-        }
 
-        public void SetQueryObject(IBaseQueryObject queryObject)
-        {
-            _queryObject = queryObject;
-        }
-
-        public void SetMapper(IBaseMapper mapper)
-        {
             _mapper = mapper;
+            _queryObject = queryObject;
         }
 
         public IDictionary<string, PropertyInfo> GetMonitoredProperties()

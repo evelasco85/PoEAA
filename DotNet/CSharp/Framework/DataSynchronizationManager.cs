@@ -22,7 +22,7 @@ namespace Framework
 
     public interface IQueryObjectRegistry
     {
-        IBaseQueryObject<TEntity> GetQueryBySearchCriteria<TEntity, TSearchInput>()
+        IBaseQueryObject<TEntity> GetQueryBySearchCriteria<TEntity>(string searchInputTypename)
             where TEntity : IDomainObject;
     }
 
@@ -97,7 +97,7 @@ namespace Framework
                 if(query == null)
                     continue;
 
-                queryDictionary.Add(query.SearchInputType.FullName, query);
+                queryDictionary.Add(query.CriteriaInputType.FullName, query);
             }
 
             return queryDictionary;
@@ -133,12 +133,12 @@ namespace Framework
             return GetServiceContainer<TEntity>().Mapper;
         }
 
-        public IBaseQueryObject<TEntity> GetQueryBySearchCriteria<TEntity, TSearchInput>()
+        public IBaseQueryObject<TEntity> GetQueryBySearchCriteria<TEntity>(string searchInputTypename)
           where TEntity : IDomainObject
         {
             IEntityServiceContainer<TEntity> serviceContainer = GetServiceContainer<TEntity>();
 
-            return serviceContainer.QueryDictionary[typeof(TSearchInput).FullName];
+            return serviceContainer.QueryDictionary[searchInputTypename];
         }
 
         public IIdentityMap<TEntity> GetIdentityMap<TEntity>()

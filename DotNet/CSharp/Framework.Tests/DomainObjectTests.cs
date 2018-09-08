@@ -13,7 +13,7 @@ namespace Framework.Tests
         [TestMethod]
         public void TestGetMonitoredProperties()
         {
-            Customer customer = new Customer(null);
+            Customer customer = new Customer(null, null);
 
             IDictionary<string, PropertyInfo> monitoredProperties = customer.GetMonitoredProperties();
 
@@ -25,7 +25,7 @@ namespace Framework.Tests
         [TestMethod]
         public void TestGetCurrentMonitoredPropertyValues()
         {
-            Customer customer = new Customer(null)
+            Customer customer = new Customer(null, null)
             {
                 Name = "Juan Dela Cruz",
                 Number = "010",
@@ -43,7 +43,7 @@ namespace Framework.Tests
         [TestMethod]
         public void TestGetDiffProperties_NotEquals()
         {
-            Customer customer = new Customer(null)
+            Customer customer = new Customer(null, null)
             {
                 Name = "Juan Dela Cruz",
                 Number = "010",
@@ -51,7 +51,7 @@ namespace Framework.Tests
                 Temp = new Customer.InnerClass()
             };
 
-            Customer customer2 = new Customer(null)
+            Customer customer2 = new Customer(null, null)
             {
                 Name = "John Doe",
                 Number = null,
@@ -71,7 +71,7 @@ namespace Framework.Tests
         [TestMethod]
         public void TestGetDiffProperties_Equals()
         {
-            Customer customer = new Customer(null)
+            Customer customer = new Customer(null, null)
             {
                 Name = "Juan Dela Cruz",
                 Number = "010",
@@ -79,7 +79,7 @@ namespace Framework.Tests
                 Temp = new Customer.InnerClass()
             };
 
-            Customer customer2 = new Customer(null)
+            Customer customer2 = new Customer(null, null)
             {
                 Name = "Juan Dela Cruz",
                 Number = "010",
@@ -96,7 +96,7 @@ namespace Framework.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void TestGetDiffProperties_NotEquals_NullArg()
         {
-            Customer customer = new Customer(null)
+            Customer customer = new Customer(null, null)
             {
                 Name = "Juan Dela Cruz",
                 Number = "010",
@@ -111,7 +111,7 @@ namespace Framework.Tests
         [ExpectedException(typeof(ArgumentException))]
         public void TestGetDiffProperties_NotEquals_TypeMismatch()
         {
-            Customer customer = new Customer(null)
+            Customer customer = new Customer(null, null)
             {
                 Name = "Juan Dela Cruz",
                 Number = "010",

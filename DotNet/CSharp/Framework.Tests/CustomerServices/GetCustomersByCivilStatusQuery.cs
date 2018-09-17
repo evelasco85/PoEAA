@@ -15,7 +15,7 @@ namespace Framework.Tests.CustomerServices
         GetCustomersByCivilStatusQuery.Criteria
         >
     {
-        public class Criteria : ICriteriaTag<TOutput>
+        public class Criteria : ICriteriaTag<TEntity, TOutput>
         {
             public enum CivilStatus
             {

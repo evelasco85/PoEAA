@@ -9,7 +9,7 @@ namespace Framework.Tests.CustomerServices
 
     public class GetCustomerByIdQuery : BaseQueryObject<TEntity, TOutput, GetCustomerByIdQuery.Criteria>
     {
-        public class Criteria : ICriteriaTag<TOutput>
+        public class Criteria : ICriteriaTag<TEntity, TOutput>
         {
             public int CustomerId { get; set; }
 

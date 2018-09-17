@@ -7,7 +7,7 @@ namespace Framework
     public interface IRepository<TEntity>
         where TEntity : IDomainObject
     {
-        TResult Matching<TResult>(ICriteriaTag<TResult> criteria);
+        TResult Matching<TResult>(ICriteriaTag<TEntity, TResult> criteria);
     }
 
     public class Repository<TEntity> : IRepository<TEntity>
@@ -20,7 +20,7 @@ namespace Framework
             _manager = manager;
         }
 
-        public TResult Matching<TResult>(ICriteriaTag<TResult> criteria)
+        public TResult Matching<TResult>(ICriteriaTag<TEntity, TResult> criteria)
         {
             Type type = criteria.GetType();
             string searchInputTypename = type.FullName;

@@ -9,7 +9,7 @@ namespace Framework.Tests.ReceivableServices
         IList<AccountReceivable>,
         GetAccountReceivablesByCustomerId.Criteria>
     {
-        public class Criteria : ICriteriaTag<IList<AccountReceivable>>
+        public class Criteria : ICriteriaTag<AccountReceivable, IList<AccountReceivable>>
         {
             public string CustomerId { get; set; }
 

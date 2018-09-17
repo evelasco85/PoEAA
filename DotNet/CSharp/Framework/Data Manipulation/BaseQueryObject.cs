@@ -4,7 +4,7 @@ using System;
 namespace Framework.Data_Manipulation
 {
     //Used for inferred declaration in generics(See Repository.Matching<...>(...)
-    public interface ICriteriaTag<TResult> { }
+    public interface ICriteriaTag<TEntity, TResult> { }
 
     public interface IBaseQueryObject
     {
@@ -21,7 +21,7 @@ namespace Framework.Data_Manipulation
 
     public interface IBaseQueryObject<TEntity, TResult, TCriteriaInput> : IBaseQueryObject<TEntity>
         where TEntity : IDomainObject
-        where TCriteriaInput : ICriteriaTag<TResult>
+        where TCriteriaInput : ICriteriaTag<TEntity, TResult>
     {
         TCriteriaInput CriteriaInput { get; set; }
         TResult PerformSearchOperation(IBaseMapper mapper, TCriteriaInput criteriaInput);
@@ -31,7 +31,7 @@ namespace Framework.Data_Manipulation
     public abstract class BaseQueryObject<TEntity, TResult, TCriteriaInput> :
         IBaseQueryObject<TEntity, TResult, TCriteriaInput>
         where TEntity : IDomainObject
-        where TCriteriaInput : ICriteriaTag<TResult>
+        where TCriteriaInput : ICriteriaTag<TEntity, TResult>
     {
         public TCriteriaInput CriteriaInput { get; set; }
 

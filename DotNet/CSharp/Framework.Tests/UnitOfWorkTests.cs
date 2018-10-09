@@ -9,14 +9,12 @@ namespace Framework.Tests
     [TestClass]
     public class UnitOfWorkTests
     {
-        private IDataSynchronizationManager _manager;
+        private IDomainObjectManager _manager = new DomainObjectManager();
         private CustomerMapper _mapper = new CustomerMapper();
 
         [TestInitialize]
         public void Initialize()
         {
-            _manager = DataSynchronizationManager.GetInstance();
-
             _manager.RegisterEntity(
                 _mapper,
                 new List<IBaseQueryObject<Customer>> {
@@ -38,7 +36,7 @@ namespace Framework.Tests
             customerResults.Add(repository.Matching(criteriaById));
 
             
-            IBaseMapper mapper = DataSynchronizationManager.GetInstance().GetMapper<Customer>();
+            IBaseMapper mapper = _manager.GetMapper<Customer>();
             Customer customer1 = new Customer(mapper, null) { Number = "1" };
             Customer customer2 = new Customer(mapper, null) { Number = "2" };
             Customer customer3 = new Customer(mapper, null) { Number = "3" };
@@ -79,7 +77,7 @@ namespace Framework.Tests
             customerResults.Add(repository.Matching(criteriaById));
 
 
-            IBaseMapper mapper = DataSynchronizationManager.GetInstance().GetMapper<Customer>();
+            IBaseMapper mapper = _manager.GetMapper<Customer>();
             Customer customer1 = new Customer(mapper, null) { Number = "1" };
             Customer customer2 = new Customer(mapper, null) { Number = "2" };
             Customer customer3 = new Customer(mapper, null) { Number = "3" };

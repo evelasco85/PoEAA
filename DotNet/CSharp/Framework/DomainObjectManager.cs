@@ -4,7 +4,6 @@ using System.Linq;
 using System.Management.Instrumentation;
 using System.Reflection;
 using Framework.Data_Manipulation;
-using Framework.Domain;
 
 namespace Framework
 {
@@ -23,26 +22,19 @@ namespace Framework
         IBaseQueryObject<TEntity> GetQueryBySearchCriteria<TEntity>(string searchInputTypename);
     }
 
-    public interface IDataSynchronizationManager : IMapperRegistry, IRepositoryRegistry, IQueryObjectRegistry
+    public interface IDomainObjectManager : IMapperRegistry, IRepositoryRegistry, IQueryObjectRegistry
     {
         void RegisterEntity<TEntity>(IBaseMapper<TEntity> mapper, IList<IBaseQueryObject<TEntity>> queryList);
 
         IDictionary<string, PropertyInfo> GetProperties<TEntity>();
     }
 
-    public class DataSynchronizationManager : IDataSynchronizationManager
+    public class DomainObjectManager : IDomainObjectManager
     {
-        static IDataSynchronizationManager s_instance = new DataSynchronizationManager();
-
         IDictionary<string, object> _serviceContainerDictionary = new Dictionary<string, object>();
 
-        private DataSynchronizationManager()
+        public DomainObjectManager()
         {
-        }
-
-        public static IDataSynchronizationManager GetInstance()
-        {
-            return s_instance;
         }
 
         string GetServiceContainerKey<TEntity>()

@@ -53,7 +53,7 @@
     <Compile Include="LazyLoad\LazyLoader.cs" />
     <Compile Include="LazyLoad\LazyLoadList.cs" />
     <Compile Include="Repository.cs" />
-    <Compile Include="DataSynchronizationManager.cs" />
+    <Compile Include="DomainObjectManager.cs" />
     <Compile Include="Domain\DomainObject.cs" />
     <Compile Include="EntityServiceContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

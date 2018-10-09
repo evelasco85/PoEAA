@@ -11,9 +11,9 @@ namespace Framework
 
     public class Repository<TEntity> : IRepository<TEntity>
     {
-        private readonly IDataSynchronizationManager _manager;
+        private readonly IDomainObjectManager _manager;
 
-        public Repository(IDataSynchronizationManager manager)
+        public Repository(IDomainObjectManager manager)
         {
             _manager = manager;
         }
@@ -26,7 +26,7 @@ namespace Framework
 
             query.CriteriaInputObject = criteria;
 
-            return (TResult)query.Execute();
+            return (TResult)query.Execute(_manager);
         }
     }
 }

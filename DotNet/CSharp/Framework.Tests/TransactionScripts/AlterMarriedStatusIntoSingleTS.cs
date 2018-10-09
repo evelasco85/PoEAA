@@ -10,10 +10,10 @@ namespace Framework.Tests.TransactionScripts
             public IList<Customer> SuccessfullyAlteredCustomers { get; set; }
         }
 
-        public AlterMarriedStatusIntoSingleTS() :
+        public AlterMarriedStatusIntoSingleTS(IDomainObjectManager manager) :
             base(
-            DataSynchronizationManager.GetInstance(),
-            DataSynchronizationManager.GetInstance()
+            manager,
+            manager
             )
         {
         }

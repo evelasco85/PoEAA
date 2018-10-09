@@ -13,8 +13,8 @@ namespace Framework.Data_Manipulation
 
     public interface IBaseQueryObject<TEntity> : IBaseQueryObject
     {
-        IBaseMapper<TEntity> GetMapper();
-        object Execute();
+        IBaseMapper<TEntity> GetMapper(IDomainObjectManager manager);
+        object Execute(IDomainObjectManager manager);
     }
 
     public interface IBaseQueryObject<TEntity, TResult, TCriteriaInput> : IBaseQueryObject<TEntity>
@@ -22,7 +22,7 @@ namespace Framework.Data_Manipulation
     {
         TCriteriaInput CriteriaInput { get; set; }
         TResult PerformSearchOperation(IBaseMapper mapper, TCriteriaInput criteriaInput);
-        TResult ConcreteExecute();
+        TResult ConcreteExecute(IDomainObjectManager manager);
     }
 
     public abstract class BaseQueryObject<TEntity, TResult, TCriteriaInput> :
@@ -43,16 +43,16 @@ namespace Framework.Data_Manipulation
 
         public abstract TResult PerformSearchOperation(IBaseMapper mapper, TCriteriaInput criteriaInput);
 
-        public abstract IBaseMapper<TEntity> GetMapper();
+        public abstract IBaseMapper<TEntity> GetMapper(IDomainObjectManager manager);
 
-        public TResult ConcreteExecute()
+        public TResult ConcreteExecute(IDomainObjectManager manager)
         {
-            return PerformSearchOperation(GetMapper(), CriteriaInput);
+            return PerformSearchOperation(GetMapper(manager), CriteriaInput);
         }
 
-        public object Execute()
+        public object Execute(IDomainObjectManager manager)
         {
-            return ConcreteExecute();
+            return ConcreteExecute(manager);
         }
     }
 }

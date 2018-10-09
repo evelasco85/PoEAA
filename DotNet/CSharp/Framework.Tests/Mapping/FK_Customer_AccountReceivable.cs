@@ -8,11 +8,11 @@ namespace Framework.Tests.Mapping
 {
     public class FK_Customer_AccountReceivable : ForeignKeyMapping<Customer, AccountReceivable>
     {
-        private IDataSynchronizationManager _manager;
+        private IDomainObjectManager _manager;
 
-        public FK_Customer_AccountReceivable()
+        public FK_Customer_AccountReceivable(IDomainObjectManager manager)
         {
-            _manager = DataSynchronizationManager.GetInstance();
+            _manager = manager;
         }
 
         public override IList<AccountReceivable> RetrieveForeignKeyEntities(Customer parent)

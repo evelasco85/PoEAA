@@ -9,13 +9,11 @@ namespace Framework.Tests
     [TestClass]
     public class RepositoryTests
     {
-        private IDataSynchronizationManager _manager;
+        private IDomainObjectManager _manager = new DomainObjectManager();
 
         [TestInitialize]
         public void Initialize()
         {
-            _manager = DataSynchronizationManager.GetInstance();
-
             _manager.RegisterEntity(
                 new CustomerMapper(), 
                 new List<IBaseQueryObject<Customer>> {

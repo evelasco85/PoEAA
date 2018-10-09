@@ -14,15 +14,11 @@ namespace Framework.Domain
 
     public class DomainObjectMementoService : IDomainObjectMementoService
     {
-        static IDomainObjectMementoService s_instance = new DomainObjectMementoService();
+        IDomainObjectManager _manager;
 
-        private DomainObjectMementoService()
+        public DomainObjectMementoService(IDomainObjectManager manager)
         {
-        }
-
-        public static IDomainObjectMementoService GetInstance()
-        {
-            return s_instance;
+            _manager = manager;
         }
 
         public IDomainObjectMemento CreateMemento<TEntity>(TEntity entity)
@@ -54,8 +50,8 @@ namespace Framework.Domain
 
         IDictionary<string, Tuple<PropertyInfo, object>> GetPrimitiveProperties<TEntity>(TEntity entity)
         {
-            IList<PropertyInfo> properties = DataSynchronizationManager
-                .GetInstance()
+            IList<PropertyInfo> properties =
+                _manager
                 .GetProperties<TEntity>()
                 .Values
                 .ToList();

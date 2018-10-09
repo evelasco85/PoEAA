@@ -9,13 +9,11 @@ namespace Framework.Tests
     [TestClass]
     public class DomainObjectMementoServiceTests
     {
-        private IDataSynchronizationManager _manager;
+        private IDomainObjectManager _manager = new DomainObjectManager();
 
         [TestInitialize]
         public void Initialize()
         {
-            _manager = DataSynchronizationManager.GetInstance();
-
             _manager.RegisterEntity(
                 new CustomerMapper(),
                 new List<IBaseQueryObject<Customer>> {
@@ -27,7 +25,7 @@ namespace Framework.Tests
         [TestMethod]
         public void TestCreateMemento()
         {
-            IDomainObjectMementoService service = DomainObjectMementoService.GetInstance();
+            IDomainObjectMementoService service = new DomainObjectMementoService(_manager);
             Customer customer = new Customer(null, null) {Name = "John Doe", Number = "123"};
             IDomainObjectMemento memento = service.CreateMemento(customer);
 
@@ -38,7 +36,7 @@ namespace Framework.Tests
         [TestMethod]
         public void TestSetMemento()
         {
-            IDomainObjectMementoService service = DomainObjectMementoService.GetInstance();
+            IDomainObjectMementoService service = new DomainObjectMementoService(_manager);
             Customer customer = new Customer(null, null) { Name = "John Doe", Number = "123" };
             IDomainObjectMemento snapshotMemento = service.CreateMemento(customer);
 

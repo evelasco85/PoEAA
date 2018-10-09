@@ -4,9 +4,12 @@ using System.Linq;
 
 namespace Framework.Tests.ReceivableServices
 {
+    using TEntity = AccountReceivable;
+    using TOutput = IList<AccountReceivable>;
+
     public class GetAccountReceivablesByCustomerId : BaseQueryObject<
-        AccountReceivable,
-        IList<AccountReceivable>,
+        TEntity,
+        TOutput,
         GetAccountReceivablesByCustomerId.Criteria>
     {
         public class Criteria : ICriteriaTag<AccountReceivable, IList<AccountReceivable>>
@@ -23,7 +26,7 @@ namespace Framework.Tests.ReceivableServices
             }
         }
 
-        public override IBaseMapper<AccountReceivable> GetMapper()
+        public override IBaseMapper<TEntity> GetMapper(IDomainObjectManager manager)
         {
             return null;
         }

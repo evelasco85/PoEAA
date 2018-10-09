@@ -21,7 +21,7 @@ namespace Framework.Tests
                 CriteriaInput = GetCustomerByIdQuery.Criteria.SearchById(2)
             };
 
-            Customer matchById = query.ConcreteExecute();
+            Customer matchById = query.ConcreteExecute(null);
 
             Assert.AreEqual("2", matchById.Number);
             Assert.AreEqual("Jane Doe", matchById.Name);
@@ -35,7 +35,7 @@ namespace Framework.Tests
                 CriteriaInput = GetCustomersByCivilStatusQuery.Criteria.SearchByStatus(CivilStatus.Married)
             };
 
-            IList<Customer> matchedCustomers = query.ConcreteExecute();
+            IList<Customer> matchedCustomers = query.ConcreteExecute(null);
 
             Assert.AreEqual(2, matchedCustomers.Count);
             Assert.AreEqual("5", matchedCustomers[0].Number);

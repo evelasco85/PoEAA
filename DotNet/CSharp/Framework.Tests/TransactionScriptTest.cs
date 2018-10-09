@@ -11,13 +11,11 @@ namespace Framework.Tests
     [TestClass]
     public class TransactionScriptTest
     {
-        private IDataSynchronizationManager _manager;
+        private IDomainObjectManager _manager = new DomainObjectManager();
 
         [TestInitialize]
         public void Initialize()
         {
-            _manager = DataSynchronizationManager.GetInstance();
-
             _manager.RegisterEntity(
                 new CustomerMapper(),
                 new List<IBaseQueryObject<Customer>> {
@@ -29,7 +27,7 @@ namespace Framework.Tests
         [TestMethod]
         public void TestRunScript()
         {
-            AlterMarriedStatusIntoSingleTS transactionScript = new AlterMarriedStatusIntoSingleTS();
+            AlterMarriedStatusIntoSingleTS transactionScript = new AlterMarriedStatusIntoSingleTS(_manager);
 
             transactionScript.Input = GetCustomersByCivilStatusQuery.Criteria.SearchByStatus(CivilStatus.Married);
 

@@ -16,13 +16,12 @@ namespace Framework.Tests
     [TestClass]
     public class ForeignKeyMappingTests
     {
-        private IDataSynchronizationManager _dataSyncManager;
+        private IDomainObjectManager _dataSyncManager = new DomainObjectManager();
         private IForeignKeyMappingManager _fkMappingManager;
 
         [TestInitialize]
         public void Initialize()
         {
-            _dataSyncManager = DataSynchronizationManager.GetInstance();
             _fkMappingManager = ForeignKeyMappingManager.GetInstance();
 
             _dataSyncManager.RegisterEntity(
@@ -38,7 +37,7 @@ namespace Framework.Tests
                     {new GetAccountReceivablesByCustomerId()}
                 });
 
-            _fkMappingManager.RegisterForeignKeyMapping(new FK_Customer_AccountReceivable());
+            _fkMappingManager.RegisterForeignKeyMapping(new FK_Customer_AccountReceivable(_dataSyncManager));
         }
 
         [TestMethod]

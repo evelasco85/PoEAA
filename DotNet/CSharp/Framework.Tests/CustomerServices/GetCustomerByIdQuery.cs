@@ -23,9 +23,11 @@ namespace Framework.Tests.CustomerServices
             }
         }
 
-        public override IBaseMapper<TEntity> GetMapper()
+        public override IBaseMapper<TEntity> GetMapper(IDomainObjectManager manager)
         {
-            return DataSynchronizationManager.GetInstance().GetMapper<TEntity>();
+            if (manager == null) return null;
+
+            return manager.GetMapper<TEntity>();
         }
 
         public override TOutput PerformSearchOperation(IBaseMapper mapper, Criteria searchInput)

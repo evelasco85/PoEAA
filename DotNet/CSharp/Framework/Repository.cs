@@ -5,13 +5,11 @@ using System;
 namespace Framework
 {
     public interface IRepository<TEntity>
-        where TEntity : IDomainObject
     {
         TResult Matching<TResult>(ICriteriaTag<TEntity, TResult> criteria);
     }
 
     public class Repository<TEntity> : IRepository<TEntity>
-        where TEntity : IDomainObject
     {
         private readonly IDataSynchronizationManager _manager;
 

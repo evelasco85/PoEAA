@@ -7,13 +7,9 @@ namespace Framework
     public interface IForeignKeyMappingManager
     {
         void RegisterForeignKeyMapping<TParentEntity, TChildEntity>(
-            IForeignKeyMapping<TParentEntity, TChildEntity> mapping)
-            where TParentEntity : IDomainObject
-            where TChildEntity : IDomainObject;
+            IForeignKeyMapping<TParentEntity, TChildEntity> mapping);
 
-        IList<TChildEntity> GetForeignKeyValues<TParentEntity, TChildEntity>(TParentEntity entity)
-            where TParentEntity : IDomainObject
-            where TChildEntity : IDomainObject;
+        IList<TChildEntity> GetForeignKeyValues<TParentEntity, TChildEntity>(TParentEntity entity);
     }
 
     public class ForeignKeyMappingManager : IForeignKeyMappingManager
@@ -33,8 +29,6 @@ namespace Framework
 
         public void RegisterForeignKeyMapping<TParentEntity, TChildEntity>(
             IForeignKeyMapping<TParentEntity, TChildEntity> mapping)
-            where TParentEntity : IDomainObject
-            where TChildEntity : IDomainObject
         {
             string parentName = typeof(TParentEntity).FullName;
 
@@ -49,8 +43,6 @@ namespace Framework
         }
 
         public IList<TChildEntity> GetForeignKeyValues<TParentEntity, TChildEntity>(TParentEntity entity)
-            where TParentEntity : IDomainObject
-            where TChildEntity : IDomainObject
         {
             string parentName = typeof(TParentEntity).FullName;
 

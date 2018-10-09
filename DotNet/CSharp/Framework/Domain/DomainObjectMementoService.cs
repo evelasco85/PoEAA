@@ -7,11 +7,9 @@ namespace Framework.Domain
 {
     public interface IDomainObjectMementoService
     {
-        IDomainObjectMemento CreateMemento<TEntity>(TEntity entity)
-            where TEntity : IDomainObject;
+        IDomainObjectMemento CreateMemento<TEntity>(TEntity entity);
 
-        void SetMemento<TEntity>(ref TEntity entity, IDomainObjectMemento memento)
-            where TEntity : IDomainObject;
+        void SetMemento<TEntity>(ref TEntity entity, IDomainObjectMemento memento);
     }
 
     public class DomainObjectMementoService : IDomainObjectMementoService
@@ -28,7 +26,6 @@ namespace Framework.Domain
         }
 
         public IDomainObjectMemento CreateMemento<TEntity>(TEntity entity)
-            where TEntity : IDomainObject
         {
             if (entity == null)
                 throw new ArgumentNullException("'entity' parameter is required");
@@ -40,7 +37,6 @@ namespace Framework.Domain
         }
 
         public void SetMemento<TEntity>(ref TEntity entity, IDomainObjectMemento memento)
-            where TEntity : IDomainObject
         {
             if (entity == null)
                 throw new ArgumentNullException("'entity' parameter is required");
@@ -57,7 +53,6 @@ namespace Framework.Domain
         }
 
         IDictionary<string, Tuple<PropertyInfo, object>> GetPrimitiveProperties<TEntity>(TEntity entity)
-            where TEntity : IDomainObject
         {
             IList<PropertyInfo> properties = DataSynchronizationManager
                 .GetInstance()

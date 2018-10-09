@@ -7,7 +7,6 @@ namespace Framework.Data_Manipulation
     public delegate void FailedInvocationDelegate(IDomainObject domainObject, Hashtable results);
 
     public interface IBaseMapper_Instantiator<TEntity>
-     where TEntity : IDomainObject
     {
     }
 
@@ -40,7 +39,6 @@ namespace Framework.Data_Manipulation
     }
 
     public interface IBaseMapper<TEntity> : IBaseMapper, IBaseMapper_Instantiator<TEntity>
-        where TEntity : IDomainObject
     {
         bool Update(ref TEntity entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
         bool Insert(ref TEntity entity, SuccessfulInvocationDelegate successfulInvocation, FailedInvocationDelegate failedInvocation);
@@ -48,7 +46,6 @@ namespace Framework.Data_Manipulation
     }
 
     public abstract class BaseMapper<TEntity> : BaseMapper, IBaseMapper<TEntity>
-        where TEntity : IDomainObject
     {
         public override string GetEntityTypeName()
         {

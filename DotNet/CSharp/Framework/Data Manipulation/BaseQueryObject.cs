@@ -1,5 +1,4 @@
-﻿using Framework.Domain;
-using System;
+﻿using System;
 
 namespace Framework.Data_Manipulation
 {
@@ -13,14 +12,12 @@ namespace Framework.Data_Manipulation
     }
 
     public interface IBaseQueryObject<TEntity> : IBaseQueryObject
-        where TEntity : IDomainObject
     {
         IBaseMapper<TEntity> GetMapper();
         object Execute();
     }
 
     public interface IBaseQueryObject<TEntity, TResult, TCriteriaInput> : IBaseQueryObject<TEntity>
-        where TEntity : IDomainObject
         where TCriteriaInput : ICriteriaTag<TEntity, TResult>
     {
         TCriteriaInput CriteriaInput { get; set; }
@@ -30,7 +27,6 @@ namespace Framework.Data_Manipulation
 
     public abstract class BaseQueryObject<TEntity, TResult, TCriteriaInput> :
         IBaseQueryObject<TEntity, TResult, TCriteriaInput>
-        where TEntity : IDomainObject
         where TCriteriaInput : ICriteriaTag<TEntity, TResult>
     {
         public TCriteriaInput CriteriaInput { get; set; }

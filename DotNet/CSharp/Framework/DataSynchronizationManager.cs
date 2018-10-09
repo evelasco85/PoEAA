@@ -10,35 +10,24 @@ namespace Framework
 {
     public interface IMapperRegistry
     {
-        IBaseMapper<TEntity> GetMapper<TEntity>()
-            where TEntity : IDomainObject;
+        IBaseMapper<TEntity> GetMapper<TEntity>();
     }
 
     public interface IRepositoryRegistry
     {
-        IRepository<TEntity> GetRepository<TEntity>()
-            where TEntity : IDomainObject;
+        IRepository<TEntity> GetRepository<TEntity>();
     }
 
     public interface IQueryObjectRegistry
     {
-        IBaseQueryObject<TEntity> GetQueryBySearchCriteria<TEntity>(string searchInputTypename)
-            where TEntity : IDomainObject;
-    }
-
-    public interface IIdentityMapRegistry
-    {
-        IIdentityMap<TEntity> GetIdentityMap<TEntity>()
-            where TEntity : IDomainObject;
+        IBaseQueryObject<TEntity> GetQueryBySearchCriteria<TEntity>(string searchInputTypename);
     }
 
     public interface IDataSynchronizationManager : IMapperRegistry, IRepositoryRegistry, IQueryObjectRegistry
     {
-        void RegisterEntity<TEntity>(IBaseMapper<TEntity> mapper, IList<IBaseQueryObject<TEntity>> queryList)
-            where TEntity : IDomainObject;
+        void RegisterEntity<TEntity>(IBaseMapper<TEntity> mapper, IList<IBaseQueryObject<TEntity>> queryList);
 
-        IDictionary<string, PropertyInfo> GetProperties<TEntity>()
-            where TEntity : IDomainObject;
+        IDictionary<string, PropertyInfo> GetProperties<TEntity>();
     }
 
     public class DataSynchronizationManager : IDataSynchronizationManager
@@ -57,18 +46,15 @@ namespace Framework
         }
 
         string GetServiceContainerKey<TEntity>()
-            where TEntity : IDomainObject
         {
             return typeof(TEntity).FullName;
         }
 
         public void RegisterEntity<TEntity>(IBaseMapper<TEntity> mapper, IList<IBaseQueryObject<TEntity>> queryList)
-            where TEntity : IDomainObject
         {
             IEntityServiceContainer<TEntity> serviceContainer = new EntityServiceContainer<TEntity>
             {
                 Mapper = mapper,
-                IdentityMap = new IdentityMap<TEntity>(),
                 Repository = new Repository<TEntity>(this),
                 QueryDictionary = ConvertQueryListToDictionary(queryList),
                 PrimitiveProperties = GetPrimitiveProperties<TEntity>()
@@ -83,7 +69,6 @@ namespace Framework
         }
 
         IDictionary<string, IBaseQueryObject<TEntity>> ConvertQueryListToDictionary<TEntity>(IList<IBaseQueryObject<TEntity>> queryList)
-            where TEntity : IDomainObject
         {
             IDictionary<string, IBaseQueryObject<TEntity>>  queryDictionary = new Dictionary<string, IBaseQueryObject<TEntity>>();
 
@@ -109,7 +94,6 @@ namespace Framework
         }
 
         IEntityServiceContainer<TEntity> GetServiceContainer<TEntity>()
-            where TEntity : IDomainObject
         {
             string key = GetServiceContainerKey<TEntity>();
 
@@ -122,35 +106,23 @@ namespace Framework
         }
 
         public IRepository<TEntity> GetRepository<TEntity>()
-            where TEntity : IDomainObject
         {
             return GetServiceContainer<TEntity>().Repository;
         }
 
         public IBaseMapper<TEntity> GetMapper<TEntity>()
-           where TEntity : IDomainObject
         {
             return GetServiceContainer<TEntity>().Mapper;
         }
 
         public IBaseQueryObject<TEntity> GetQueryBySearchCriteria<TEntity>(string searchInputTypename)
-          where TEntity : IDomainObject
         {
             IEntityServiceContainer<TEntity> serviceContainer = GetServiceContainer<TEntity>();
 
             return serviceContainer.QueryDictionary[searchInputTypename];
         }
 
-        public IIdentityMap<TEntity> GetIdentityMap<TEntity>()
-            where TEntity : IDomainObject
-        {
-            IEntityServiceContainer<TEntity> serviceContainer = GetServiceContainer<TEntity>();
-
-            return serviceContainer.IdentityMap;
-        }
-
         public IDictionary<string, PropertyInfo> GetProperties<TEntity>()
-           where TEntity : IDomainObject
         {
             IEntityServiceContainer<TEntity> serviceContainer = GetServiceContainer<TEntity>();
 

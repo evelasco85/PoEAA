@@ -1,7 +1,4 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using Framework.Tests.CustomerServices;
+﻿using Framework.Tests.CustomerServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Framework.Tests

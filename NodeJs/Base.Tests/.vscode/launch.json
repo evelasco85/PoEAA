@@ -7,6 +7,24 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Mocha Tests",
+            "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+            "args": [
+                //"-u",
+                //"tdd",
+                "--timeout",
+                "999999",
+                "--colors",
+                "${workspaceFolder}"
+            ],
+            "internalConsoleOptions": "openOnSessionStart",
+            "skipFiles": [
+                "<node_internals>/**"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Launch Program",
             "program": "${workspaceFolder}/QueryObjectTests.js",
             "skipFiles": [

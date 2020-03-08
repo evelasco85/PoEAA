@@ -2,13 +2,18 @@
 
 class BaseQueryObject{
     constructor(searchInputType){
-        const subclassName = this.constructor.name;
-        const searchInputTypeName = searchInputType.name;
+        if((this.constructor.name) && (searchInputType) && (searchInputType.name))
+        {
+            const subclassName = this.constructor.name;
+            const searchInputTypeName = searchInputType.name;
 
-        this._searchInputTypeName = `${subclassName}.${searchInputTypeName}`;
+            this._searchInputTypeName = `${subclassName}.${searchInputTypeName}`;
+        }
+        else
+            this._searchInputTypeName = '';
     }
 
-    searchInputTypeName(){ return this._searchInputTypeName; }
+    get searchInputTypeName(){ return this._searchInputTypeName; }
 
     get searchInput(){ return this._searchInput; }
 
@@ -26,21 +31,32 @@ class BaseQueryObject{
         return new Promise((resolve, reject) =>{
             process.nextTick(() => {               
                 if(typeof this._performSearchOperation === 'function'){
-                    this._performSearchOperation(this._searchInput, (error, result) =>{
+                    try{
+                        this._performSearchOperation(this._searchInput, (error, result) =>{
+                            if(error){
+                                if(cb){
+                                    cb(error);
+                                }
+    
+                                return reject(error);
+                            }
+                            
+                            if(cb){
+                                cb(null, result);
+                            }
+    
+                            resolve(result);
+                        });
+                    }
+                    catch(error){
                         if(error){
                             if(cb){
                                 cb(error);
                             }
-
-                            return reject(error);
-                        }
-                        
-                        if(cb){
-                            cb(null, result);
                         }
 
-                        resolve(result);
-                    });
+                        return reject(error);
+                    }
                 }  
             });
         });

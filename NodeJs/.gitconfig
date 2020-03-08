@@ -1,0 +1,7 @@
+#bash commands:
+#	git config --global diff.tool meld
+#	git config --global difftool.prompt false
+
+[difftool "meld"]
+    prompt=false
+    cmd=meld "$LOCAL" "$REMOTE"

@@ -29,33 +29,30 @@ class BaseQueryObject{
     execute(cb){
         //Exposing callbacks and promises in public API's
         return new Promise((resolve, reject) =>{
-            process.nextTick(() => {               
+            process.nextTick(() => {    
+                const fnError = (error, cb) => {
+                    if(cb){
+                        cb(error);
+                    }
+
+                    reject(error);
+                };
+
                 if(typeof this._performSearchOperation === 'function'){
                     try{
                         this._performSearchOperation(this._searchInput, (error, result) =>{
-                            if(error){
-                                if(cb){
-                                    cb(error);
-                                }
-    
-                                return reject(error);
-                            }
+                            // Single equals check for both `null` and `undefined`
+                            if(error != null)
+                                return fnError(error, cb);
                             
-                            if(cb){
+                            if(cb)
                                 cb(null, result);
-                            }
     
                             resolve(result);
                         });
                     }
                     catch(error){
-                        if(error){
-                            if(cb){
-                                cb(error);
-                            }
-                        }
-
-                        return reject(error);
+                        return fnError(error, cb);
                     }
                 }  
             });

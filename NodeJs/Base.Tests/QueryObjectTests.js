@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 const BaseQueryObject = require('./../Base/BaseQueryObject');
-const GetCustomerByIdQuery = require('./QueryObjects/GetCustomerByIdQuery');
+const GetCustomerByIdQuery = require('./CustomerImplementations/GetCustomerByIdQuery');
 
 
 describe('GetCustomerByIdQuery', function() {
@@ -26,8 +26,8 @@ describe('GetCustomerByIdQuery', function() {
           .execute()
           .then(result => {
             assert.equal(result.length, 1);
-            assert.equal(result[0].id, 2);
-            assert.equal(result[0].name, "Jane Doe");
+            assert.equal(result[0].getId(), 2);
+            assert.equal(result[0].getName(), "Jane Doe");
             done();
           })
           .catch(err => {

@@ -4,10 +4,10 @@ class BaseQueryObject{
     constructor(searchInputType){
         if((this.constructor.name) && (searchInputType) && (searchInputType.name))
         {
-            const className = this.constructor.name;
+            const concreteClassName = this.constructor.name;
             const typeName = searchInputType.name;
 
-            this._searchInputTypeName = `${className}.${typeName}`;
+            this._searchInputTypeName = `${concreteClassName}.${typeName}`;
         }
         else
             this._searchInputTypeName = '';

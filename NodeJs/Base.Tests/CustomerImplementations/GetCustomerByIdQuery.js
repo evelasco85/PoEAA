@@ -1,6 +1,7 @@
 'use strict';
 
-const BaseQueryObject = require('./../../Base/BaseQueryObject');
+const BaseQueryObject = require('../../Base/BaseQueryObject');
+const CustomerFactory = require('../CustomerImplementations/CustomerFactory');
 
 class Criteria{
     constructor(customerId){
@@ -25,14 +26,15 @@ class GetCustomerByIdQuery extends BaseQueryObject{
          if(searchInput == null)
             return cb(null, null);
 
+        const createCustomer = CustomerFactory.factoryImplementation;
         const customerList = [
-            {id: 1, name: "Jual dela Cruz"},
-            {id: 2, name: "Jane Doe"},
-            {id: 3, name: "John Doe"}
+            createCustomer(1, "Jual dela Cruz"),
+            createCustomer(2, "Jane Doe"),
+            createCustomer(3, "John Doe")
         ];
 
         const result = customerList.filter(function(customer){
-            return customer.id === searchInput.customerId;
+            return customer.getId() === searchInput.customerId;
         });
 
         return cb(null, result);

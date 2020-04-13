@@ -1,7 +1,10 @@
-#bash commands:
-#	git config --global diff.tool meld
-#	git config --global difftool.prompt false
-
+[diff]
+    tool = meld
+[difftool]
+    prompt = false
 [difftool "meld"]
-    prompt=false
-    cmd=meld "$LOCAL" "$REMOTE"
+    cmd = meld "$LOCAL" "$REMOTE"
+[merge]
+    tool = meld
+[mergetool "meld"]
+    cmd = meld "$LOCAL" "$BASE" "$REMOTE" --output "$MERGED"

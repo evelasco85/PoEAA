@@ -30,7 +30,7 @@ class BaseQueryObject{
     /*****************/
 
     execute(cb){
-        //Exposing callbacks and promises in public API's
+        //Exposing callbacks and promises for public facing API's
         return new Promise((resolve, reject) =>{
             process.nextTick(() => {    
                 const fnError = (error, cb) => {

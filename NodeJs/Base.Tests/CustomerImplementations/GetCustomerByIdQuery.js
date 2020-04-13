@@ -20,10 +20,9 @@ class GetCustomerByIdQuery extends BaseQueryObject{
         return new Criteria(customerId);
     }
 
-    //Override base method
-    _performSearchOperation(searchInput, cb){
-         // Check for both `null` and `undefined`
-         if(searchInput == null)
+    //Override base method    
+    _performSearchOperation(searchInput, cb){                               //Will be invoked by base class
+         if(searchInput == null)                                            // Check for both `null` and `undefined`
             return cb(null, null);
 
         const createCustomer = CustomerFactory.factoryImplementation;

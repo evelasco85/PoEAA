@@ -2,6 +2,7 @@
 
 const BaseQueryObject = require('../../Base/BaseQueryObject');
 const CustomerFactory = require('../CustomerImplementations/CustomerFactory');
+const createCustomer = CustomerFactory.createCustomer;
 
 class Criteria{
     constructor(customerId){
@@ -13,19 +14,18 @@ class Criteria{
 
 class GetCustomerByIdQuery extends BaseQueryObject{
     constructor(){
-        super(Criteria);
+        super(CustomerFactory, Criteria);
     }
 
     static createCriteria(customerId){
         return new Criteria(customerId);
     }
 
-    //Override base method    
-    _performSearchOperation(searchInput, cb){                               //Will be invoked by base class
+    /*Override base method*/    
+    _performSearchOperation(searchInput, resultCallback){                               //Will be invoked by base class
          if(searchInput == null)                                            // Check for both `null` and `undefined`
-            return cb(null, null);
+            return resultCallback(null, null);
 
-        const createCustomer = CustomerFactory.factoryImplementation;
         const customerList = [
             createCustomer(1, "Jual dela Cruz"),
             createCustomer(2, "Jane Doe"),
@@ -36,8 +36,9 @@ class GetCustomerByIdQuery extends BaseQueryObject{
             return customer.getId() === searchInput.customerId;
         });
 
-        return cb(null, result);
+        return resultCallback(null, result);
     }
+    /**********************/
   }
 
   module.exports = GetCustomerByIdQuery;

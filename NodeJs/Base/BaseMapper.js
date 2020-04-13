@@ -2,42 +2,29 @@
 
 const BaseFactory = require('./BaseFactory');
 
-class BaseQueryObject{
-    constructor(factory, searchInputType){
+class BaseMapper{
+    constructor(factory){
         BaseFactory.validateFactory(factory);
 
         this._factory = factory;
-
-        if((this.constructor.name) && (searchInputType) && (searchInputType.name))
-        {
-            const concreteClassName = this.constructor.name;
-            const typeName = searchInputType.name;
-
-            this._searchInputTypeName = `${concreteClassName}.${typeName}`;
-        }
-        else
-            this._searchInputTypeName = '';
     }
 
-    /*Properties*/
-    get entityName() { return this._factory.entityName; }
-
-    get searchInputTypeName(){ return this._searchInputTypeName; }
-
-    get searchInput(){ return this._searchInput; }
-
-    set searchInput(searchInput){
-        this._searchInput = searchInput;
+    /*Abstract methods*/    
+    _concreteUpdate(searchInput, resultCallback){
+        throw new Error("'_concreteUpdate' overriding is required"); 
     }
-    /************/
 
-    /*Abstract method*/
-    _performSearchOperation(searchInput, resultCallback){
-        throw new Error("'_performSearchOperation' overriding is required"); 
+    _concreteInsert(searchInput, resultCallback){
+        throw new Error("'_concreteInsert' overriding is required"); 
+    }
+
+    _concreteDelete(searchInput, resultCallback){
+        throw new Error("'_concreteDelete' overriding is required"); 
     }
     /*****************/
 
-    execute(resultCallback){
+    update(entity, resultCallback)
+    {
         //Exposing callbacks and promises for public facing API's
         return new Promise((resolve, reject) =>{
             process.nextTick(() => {    
@@ -49,9 +36,9 @@ class BaseQueryObject{
                     reject(error);
                 };
 
-                if(typeof this._performSearchOperation === 'function'){
+                if(typeof this._concreteUpdate === 'function'){
                     try{
-                        this._performSearchOperation(this._searchInput, (error, result) =>{
+                        this._concreteUpdate(this._searchInput, (error, result) =>{
                             // Single equals check for both `null` and `undefined`
                             if(error != null)
                                 return fnError(error, resultCallback);
@@ -71,4 +58,4 @@ class BaseQueryObject{
     }
 }
 
-module.exports = BaseQueryObject;
+module.exports = BaseMapper;

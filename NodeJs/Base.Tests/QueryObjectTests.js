@@ -3,7 +3,7 @@
 const assert = require('assert');
 const BaseQueryObject = require('./../Base/BaseQueryObject');
 const GetCustomerByIdQuery = require('./CustomerImplementations/GetCustomerByIdQuery');
-
+const CustomerFactory = require('./CustomerImplementations/CustomerFactory');
 
 describe('GetCustomerByIdQuery', function() {
   describe('#searchInputTypeName', function() {
@@ -42,14 +42,29 @@ describe('GetCustomerByIdQuery', function() {
       query.searchInput = GetCustomerByIdQuery.createCriteria(2);
       
       assert.equal(query.searchInputTypeName, "GetCustomerByIdQuery.Criteria");
+      query.execute((err, result) => {
+        assert.equal(result.length, 1);
+        assert.equal(result[0].getId(), 2);
+        assert.equal(result[0].getName(), "Jane Doe");
+      });
       done();
     });
   });
-});  
+  describe('#getEntityName()', function() {
+    it('Execute through callback', function(done) {
+      const query = new GetCustomerByIdQuery();
+      
+      assert.equal(query.entityName, "customer");
+      done();
+    });
+  });
+});
+
   describe('BaseQueryObject', function() {
     describe('#execute()', function() {
       it('Execute through callback(w/error)', function(done) {
-        const query = new BaseQueryObject(null);
+        
+        const query = new BaseQueryObject(CustomerFactory, null);
         
         query.searchInput = null;
         
@@ -65,9 +80,11 @@ describe('GetCustomerByIdQuery', function() {
         });
       });
     });
+
     describe('#execute()', function() {
       it('Execute through promises(w/error)', function(done) {
-        const query = new BaseQueryObject(null);
+        const CustomerFactory = require('./CustomerImplementations/CustomerFactory');
+        const query = new BaseQueryObject(CustomerFactory, null);
         
         query.searchInput = null;
         

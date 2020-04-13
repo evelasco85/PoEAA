@@ -1,5 +1,5 @@
 {
     "devDependencies": {
-        "mocha": "^7.1.0"
+        "mocha": "^7.1.1"
     }
 }

@@ -28,7 +28,6 @@ describe('GetCustomerByIdQuery', function() {
             assert.equal(result.length, 1);
             assert.equal(result[0].id, 2);
             assert.equal(result[0].name, "Jane Doe");
-  
             done();
           })
           .catch(err => {

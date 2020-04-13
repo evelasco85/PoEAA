@@ -4,15 +4,16 @@ class BaseQueryObject{
     constructor(searchInputType){
         if((this.constructor.name) && (searchInputType) && (searchInputType.name))
         {
-            const subclassName = this.constructor.name;
-            const searchInputTypeName = searchInputType.name;
+            const className = this.constructor.name;
+            const typeName = searchInputType.name;
 
-            this._searchInputTypeName = `${subclassName}.${searchInputTypeName}`;
+            this._searchInputTypeName = `${className}.${typeName}`;
         }
         else
             this._searchInputTypeName = '';
     }
 
+    /*Properties*/    
     get searchInputTypeName(){ return this._searchInputTypeName; }
 
     get searchInput(){ return this._searchInput; }
@@ -20,11 +21,13 @@ class BaseQueryObject{
     set searchInput(searchInput){
         this._searchInput = searchInput;
     }
+    /************/
 
-    //Abstract method
+    /*Abstract method*/    
     _performSearchOperation(searchInput, cb){
         throw new Error("'_performSearchOperation' overriding is required"); 
     }
+    /*****************/
 
     execute(cb){
         //Exposing callbacks and promises in public API's

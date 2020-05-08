@@ -1,6 +1,7 @@
 'use strict';
 
 const BaseFactory = require('./BaseFactory');
+const TypeCheck = require('./Services/TypeCheckService');
 
 class BaseMapper{
     constructor(factory){
@@ -23,19 +24,14 @@ class BaseMapper{
     }
     /*****************/
 
-    update(entity, resultCallback){
-        _execute(_concreteUpdate, entity, resultCallback);
-    }
-
-    insert(entity, resultCallback){
-        _execute(_concreteInsert, entity, resultCallback);
-    }
-
     _execute(operation, entity, resultCallback)
     {
         //Exposing callbacks and promises for public facing API's
         return new Promise((resolve, reject) =>{
-            process.nextTick(() => {    
+            process.nextTick(() => {
+                if(!TypeCheck.isFunction(operation))
+                    resolve(null);
+
                 const fnError = (error, resultCallback) => {
                     if(resultCallback){
                         resultCallback(error);
@@ -43,24 +39,25 @@ class BaseMapper{
 
                     reject(error);
                 };
+                
+                try{
+                    if(!TypeCheck.isInstanceOf(entity, BaseFactory))
+                        throw new Error("'factory' instance requires 'BaseFactory' base type");
 
-                if(typeof operation === 'function'){
-                    try{
-                        operation(entity, (error, result) =>{
-                            // Single equals check for both `null` and `undefined`
-                            if(error != null)
-                                return fnError(error, resultCallback);
-                            
-                            if(resultCallback)
-                                resultCallback(null, result);
-    
-                            resolve(result);
-                        });
-                    }
-                    catch(error){
-                        return fnError(error, resultCallback);
-                    }
-                }  
+                    operation(entity, (error, result) =>{
+                        // Single equals check for both `null` and `undefined`
+                        if(error != null)
+                            return fnError(error, resultCallback);
+                        
+                        if(resultCallback)
+                            resultCallback(null, result);
+
+                        resolve(result);
+                    });
+                }
+                catch(error){
+                    return fnError(error, resultCallback);
+                }
             });
         });
     }
@@ -68,6 +65,14 @@ class BaseMapper{
     delete(entity, resultCallback){
         _execute(_concreteDelete, entity, resultCallback);
     }    
+
+    update(entity, resultCallback){
+        _execute(_concreteUpdate, entity, resultCallback);
+    }
+
+    insert(entity, resultCallback){
+        _execute(_concreteInsert, entity, resultCallback);
+    }
 }
 
 module.exports = BaseMapper;

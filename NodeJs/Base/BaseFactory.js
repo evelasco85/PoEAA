@@ -1,4 +1,5 @@
 'use strict';
+const TypeCheck = require('./Services/TypeCheckService');
 
 class BaseFactory{
     constructor(entityName){
@@ -14,7 +15,7 @@ class BaseFactory{
         if(factory == null)
             throw new Error("'factory' argument is required"); 
 
-        if((factory instanceof BaseFactory) == false)
+        if(!TypeCheck.isInstanceOf(factory, BaseFactory))
             throw new Error("'factory' instance requires 'BaseFactory' base type");
     }
     /*******************************/

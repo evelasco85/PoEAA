@@ -1,28 +1,26 @@
 'use strict';
 
 const BaseFactory = require('./BaseFactory');
+const TypeCheck = require('./Services/TypeCheckService');
 
 class BaseQueryObject{
-    constructor(factory, searchInputType){
+    constructor(factory, criteriaType){
         BaseFactory.validateFactory(factory);
 
+        this._className = this.constructor.name;
         this._factory = factory;
-
-        if((this.constructor.name) && (searchInputType) && (searchInputType.name))
-        {
-            const concreteClassName = this.constructor.name;
-            const typeName = searchInputType.name;
-
-            this._searchInputTypeName = `${concreteClassName}.${typeName}`;
-        }
-        else
-            this._searchInputTypeName = '';
+        this._criteriaType = criteriaType;
     }
 
     /*Properties*/
     get entityName() { return this._factory.entityName; }
 
-    get searchInputTypeName(){ return this._searchInputTypeName; }
+    get criteriaTypeName(){
+        if((this._className) && (this._criteriaType) && (this._criteriaType.name))
+            return `${this._className}.${this._criteriaType.name}`;
+        else
+            return '';
+        }
 
     get searchInput(){ return this._searchInput; }
 
@@ -41,6 +39,9 @@ class BaseQueryObject{
         //Exposing callbacks and promises for public facing API's
         return new Promise((resolve, reject) =>{
             process.nextTick(() => {    
+                if(!TypeCheck.isFunction(this._performSearchOperation))
+                    resolve(null);
+
                 const fnError = (error, resultCallback) => {
                     if(resultCallback){
                         resultCallback(error);
@@ -49,23 +50,25 @@ class BaseQueryObject{
                     reject(error);
                 };
 
-                if(typeof this._performSearchOperation === 'function'){
-                    try{
-                        this._performSearchOperation(this._searchInput, (error, result) =>{
-                            // Single equals check for both `null` and `undefined`
-                            if(error != null)
-                                return fnError(error, resultCallback);
-                            
-                            if(resultCallback)
-                                resultCallback(null, result);
+                try{
+                    if((this._searchInput != null) && (!TypeCheck.checkType(this._searchInput, this._criteriaType)))
+                        throw new Error('"searchInput" is not a valid type'); 
+                    
+                    this._performSearchOperation(this._searchInput, (error, result) =>{
+                    
+                        // Single equals check for both `null` and `undefined`
+                        if(error != null)
+                            return fnError(error, resultCallback);
+
+                        if(resultCallback)
+                            resultCallback(null, result);
     
-                            resolve(result);
-                        });
-                    }
-                    catch(error){
-                        return fnError(error, resultCallback);
-                    }
-                }  
+                        resolve(result);
+                    });
+                }
+                catch(error){
+                    return fnError(error, resultCallback);
+                }
             });
         });
     }

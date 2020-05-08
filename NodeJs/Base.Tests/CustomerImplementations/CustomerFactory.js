@@ -33,6 +33,7 @@ class CustomerFactory extends BaseFactory{
     }
 }
 
+//Apply singleton
 const factory = new CustomerFactory();
 
 module.exports = factory;

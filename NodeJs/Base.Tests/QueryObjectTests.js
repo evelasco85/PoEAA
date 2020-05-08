@@ -12,7 +12,7 @@ describe('GetCustomerByIdQuery', function() {
       
       query.searchInput = GetCustomerByIdQuery.createCriteria(2);
       
-      assert.equal(query.searchInputTypeName, "GetCustomerByIdQuery.Criteria");
+      assert.equal(query.criteriaTypeName, "GetCustomerByIdQuery.Criteria");
       done();
     });
   });
@@ -41,7 +41,7 @@ describe('GetCustomerByIdQuery', function() {
       
       query.searchInput = GetCustomerByIdQuery.createCriteria(2);
       
-      assert.equal(query.searchInputTypeName, "GetCustomerByIdQuery.Criteria");
+      assert.equal(query.criteriaTypeName, "GetCustomerByIdQuery.Criteria");
       query.execute((err, result) => {
         assert.equal(result.length, 1);
         assert.equal(result[0].getId(), 2);
@@ -68,7 +68,7 @@ describe('GetCustomerByIdQuery', function() {
         
         query.searchInput = null;
         
-        assert.equal(query.searchInputTypeName, "");
+        assert.equal(query.criteriaTypeName, "");
         query.execute((err, result) =>{
           // Single equals check for both `null` and `undefined`
           if(err != null)
@@ -88,7 +88,7 @@ describe('GetCustomerByIdQuery', function() {
         
         query.searchInput = null;
         
-        assert.equal(query.searchInputTypeName, "");
+        assert.equal(query.criteriaTypeName, "");
         query
           .execute()
           .catch(err => {
@@ -96,10 +96,10 @@ describe('GetCustomerByIdQuery', function() {
             if(err != null)
             {
               assert.equal(err.message, "'_performSearchOperation' overriding is required");
-            }
-
-            done();
+            }            
           });
+
+          done();
       });
     });
   });
